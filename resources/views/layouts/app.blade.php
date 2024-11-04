@@ -21,5 +21,6 @@
     </div>
 
     @include('components.js')
+    @include('sweetalert::alert')
 </body>
 </html>
