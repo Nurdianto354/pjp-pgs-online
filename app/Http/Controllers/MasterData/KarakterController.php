@@ -3,34 +3,34 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Models\MasterData\Materi;
+use App\Models\MasterData\Karakter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class MateriController extends Controller
+class KarakterController extends Controller
 {
     public function index()
     {
-        $datas = Materi::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = Karakter::where('status', true)->orderBy('created_at', 'DESC')->get();
 
-        return view('pages.master_data.materi.index', compact('datas'));
+        return view('pages.master_data.karakter.index', compact('datas'));
     }
 
     public function create(Request $request)
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Materi";
+        $title  = "Data Karakter";
 
         DB::beginTransaction();
         try {
             if($request->id != null && $request->id != '') {
-                $data = Materi::findOrFail($request->id);
+                $data = Karakter::findOrFail($request->id);
                 $action = "perbarui";
             } else {
-                $data = new Materi();
+                $data = new Karakter();
                 $data->created_at = Carbon::now();
                 $data->status     = true;
             }
@@ -58,7 +58,7 @@ class MateriController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = Materi::findOrFail($id);
+            $data = Karakter::findOrFail($id);
             $data->status = false;
             $data->save();
 
@@ -71,7 +71,6 @@ class MateriController extends Controller
         } catch (\Throwable $th) {
             Log::info($th);
             DB::rollBack();
-
             return response()->json([
                 'status'     => 'error',
                 'keterangan' => 'karena ada kesalahan di sistem'

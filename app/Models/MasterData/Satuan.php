@@ -5,12 +5,12 @@ namespace App\Models\MasterData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Materi extends Model
+class Satuan extends Model
 {
     use HasFactory;
 
     protected $connection   = 'mysql';
-    protected $table        = 'm_materi';
+    protected $table        = 'm_satuan';
     protected $primaryKey   = 'id';
     protected $keyType      = 'int';
     public $incrementing    = true;

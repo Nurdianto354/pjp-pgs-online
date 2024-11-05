@@ -57,6 +57,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('master_data.karakter.index') }}" class="nav-link {{ setActive('master-data/karakter/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Karakter</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('master_data.satuan.index') }}" class="nav-link {{ setActive('master-data/satuan/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Satuan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="./index2.html" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Anggota</p>
