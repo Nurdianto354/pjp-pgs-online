@@ -69,14 +69,14 @@
                         <hr>
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
-                                <form id="formInput" name="formInput" method="GET" action="{{ route('kurikulum.create') }}">
+                                <form method="GET" action="{{ route('kurikulum.create') }}">
                                     <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                     <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">
                                     <button type="submit" class="btn btn-sm btn-success mr-1 text-right">
                                         <i class="fa fa-plus"></i> Tambah
                                     </button>
                                 </form>
-                                <form id="formInput" name="formInput" method="GET" action="{{ route('kurikulum.create') }}">
+                                <form method="GET" action="{{ route('kurikulum.create') }}">
                                     <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                     <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
                                     <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">

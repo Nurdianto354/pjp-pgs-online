@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MasterData\Karakter;
 use App\Models\MasterData\Kelas;
+use App\Models\MasterData\Materi;
 use App\Models\MasterData\TahunAjaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -43,6 +45,14 @@ class KurikulumController extends Controller
         $kelasId = $request['kelas_id'];
         $tahunAjaranId = $request['tahun_ajaran_id'];
 
-        return view('pages.kurikulum.create', compact('title', 'kelasId', 'tahunAjaranId'));
+        $listKarakter = Karakter::where('status', true)->orderBy('nama', 'ASC')->get();
+        $listMateri = Materi::where('status', true)->orderBy('nama', 'ASC')->get();
+
+        return view('pages.kurikulum.create', compact('title', 'kelasId', 'tahunAjaranId', 'listKarakter', 'listMateri'));
+    }
+
+    public function store(Request $request)
+    {
+
     }
 }

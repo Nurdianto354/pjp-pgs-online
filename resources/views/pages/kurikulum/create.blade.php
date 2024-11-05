@@ -29,6 +29,41 @@
                         </h3>
                     </div>
                     <div class="card-body">
+                        <form method="POST" action="{{ route('kurikulum.store') }}">
+                            @csrf
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="karakter">Pilih Karakter</label>
+                                        <select name="karakter" id="karakter" data-placeholder="Pilih Karakter" style="width: 100%;">
+                                            @foreach ($listKarakter as $karakter)
+                                                <option value="{{ $karakter->id }}">
+                                                    {{ $karakter->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="karakter">Pilih Materi</label>
+                                        <select name="materi" id="materi" data-placeholder="Pilih Materi" style="width: 100%;">
+                                            @foreach ($listMateri as $materi)
+                                                <option value="{{ $materi->id }}">
+                                                    {{ $materi->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button class="btn btn-sm btn-success" type="submit">
+                                    <i class="fa-solid fa-floppy-disk"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -36,3 +71,16 @@
     </div>
 </section>
 @endsection
+@section('js')
+<script>
+    $(document).ready(function() {
+        $('#karakter').select2({
+           theme: 'bootstrap4'
+        });
+        $('#materi').select2({
+           theme: 'bootstrap4'
+        });
+    });
+</script>
+@endsection
+
