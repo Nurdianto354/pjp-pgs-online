@@ -57,6 +57,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('master_data.tahun_ajaran.index') }}" class="nav-link {{ setActive('master-data/tahun-ajaran/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tahun Ajaran</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('master_data.karakter.index') }}" class="nav-link {{ setActive('master-data/karakter/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Karakter</p>
@@ -77,7 +83,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('target.index') }}" class="nav-link {{ setActive('target/*') }}">
+                    <a href="{{ route('kurikulum.index') }}" class="nav-link {{ setActive('kurikulum/*') }}">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Kurikulum</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-bullseye"></i>
                         <p>Target</p>
                     </a>
