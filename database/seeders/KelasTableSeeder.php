@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\MasterData\Classes;
+use App\Models\MasterData\Kelas;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
-class ClassTableSeeder extends Seeder
+class KelasTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,8 +22,8 @@ class ClassTableSeeder extends Seeder
         ];
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Paud '.$convertNumToAlpa[$i],
+            Kelas::create([
+                'nama' => 'Paud '.$convertNumToAlpa[$i],
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -31,8 +31,8 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 6; $i++) {
-            Classes::create([
-                'name' => 'Tilawati '.$i,
+            Kelas::create([
+                'nama' => 'Tilawati '.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -40,8 +40,8 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Al-Quran A-'.$i,
+            Kelas::create([
+                'nama' => 'Al-Quran A-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -49,8 +49,8 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Al-Quran B-'.$i,
+            Kelas::create([
+                'nama' => 'Al-Quran B-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -58,8 +58,8 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Al-Quran C-'.$i,
+            Kelas::create([
+                'nama' => 'Al-Quran C-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -67,8 +67,8 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Praremaja A-'.$i,
+            Kelas::create([
+                'nama' => 'Praremaja A-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -76,8 +76,8 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Praremaja B-'.$i,
+            Kelas::create([
+                'nama' => 'Praremaja B-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -85,23 +85,23 @@ class ClassTableSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 2; $i++) {
-            Classes::create([
-                'name' => 'Praremaja C-'.$i,
+            Kelas::create([
+                'nama' => 'Praremaja C-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
         }
 
-        Classes::create([
-            'name' => 'Remaja',
+        Kelas::create([
+            'nama' => 'Remaja',
             'status' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
-        Classes::create([
-            'name' => 'Pranikah',
+        Kelas::create([
+            'nama' => 'Pranikah',
             'status' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

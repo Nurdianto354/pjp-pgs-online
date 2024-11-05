@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Models\MasterData\Classes;
+use App\Models\MasterData\Kelas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ClassController extends Controller
+class KelasController extends Controller
 {
     public function index()
     {
-        $datas = Classes::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = Kelas::where('status', true)->orderBy('created_at', 'DESC')->get();
 
-        return view('pages.master_data.index', compact('datas'));
+        return view('pages.master_data.kelas.index', compact('datas'));
     }
 
     public function create(Request $request)
@@ -27,15 +27,15 @@ class ClassController extends Controller
         DB::beginTransaction();
         try {
             if($request->id != null && $request->id != '') {
-                $data = Classes::findOrFail($request->id);
+                $data = Kelas::findOrFail($request->id);
                 $action = "perbarui";
             } else {
-                $data = new Classes();
+                $data = new Kelas();
                 $data->created_at = Carbon::now();
                 $data->status     = true;
             }
 
-            $data->name         = $request->name;
+            $data->nama         = $request->nama;
             $data->updated_at   = Carbon::now();
             $data->save();
 
@@ -58,7 +58,7 @@ class ClassController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = Classes::findOrFail($id);
+            $data = Kelas::findOrFail($id);
             $data->status = false;
             $data->save();
 

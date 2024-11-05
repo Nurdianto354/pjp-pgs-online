@@ -5,12 +5,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data Kelas</h1>
+                <h1 class="m-0">Data Materi</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">Master Data</li>
-                    <li class="breadcrumb-item active"><a href="{{ route('master_data.class.index') }}">Data Kelas</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('master_data.materi.index') }}">Data Materi</a></li>
                 </ol>
             </div>
         </div>
@@ -23,8 +23,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-database"></i>
-                            Data Kelas
+                            <i class="fas fa-table"></i>
+                            Data Materi
                         </h3>
                     </div>
                     <div class="card-body">
@@ -35,7 +35,8 @@
                             <thead>
                                 <tr class="text-center">
                                     <th style="width: 5%;">No</th>
-                                    <th>Kelas</th>
+                                    <th>Materi</th>
+                                    <th>Kategori</th>
                                     <th>Status</th>
                                     <th>di Buat</th>
                                     <th>di Perbarui</th>
@@ -46,7 +47,8 @@
                                 @foreach($datas as $key => $data)
                                     <tr>
                                         <td>{{ ++$key }}</td>
-                                        <td>{{ $data->name }}</td>
+                                        <td>{{ $data->nama }}</td>
+                                        <td>{{ $listKategories[$data->kategori] }}</td>
                                         <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
                                         <td class="text-center">{{ date("d-m-Y", strtotime($data->created_at)) }}</td>
                                         <td class="text-center">{{ date("d-m-Y", strtotime($data->updated_at)) }}</td>
@@ -54,10 +56,10 @@
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-warning btn-sm update-data"
                                                     data-toggle="modal" data-target="#modalInput"
-                                                    data-id="{{ $data->id }}" data-name="{{ $data->name }}">
+                                                    data-id="{{ $data->id }}" data-nama="{{ $data->nama }}" data-kategori="{{ $data->kategori }}">
                                                     <i class="far fa-edit"></i> Ubah
                                                 </button>
-                                                <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-name="{{ $data->name }}">
+                                                <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
                                                     <i class="far fa-trash-alt"></i> Hapus
                                                 </button>
                                             </div>
@@ -83,18 +85,27 @@
                 </div>
             </div>
             <div class="modal-header">
-                <h5 class="modal-title"><span id="title"></span> Data Kelas</h5>
+                <h5 class="modal-title"><span id="title"></span> Data Materi</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form name="input-data" method="POST" action="{{ route('master_data.class.create')}}" onsubmit="return validateForm()">
+                <form name="input-data" method="POST" action="{{ route('master_data.materi.create')}}" onsubmit="return validateForm()">
                     @csrf
                     <input type="hidden" id="id" name="id">
                     <div class="form-group">
-                        <label>Kelas</label>
-                        <input type="text" class="form-control" placeholder="Input kelas" id="name" name="name">
+                        <label>Materi</label>
+                        <input type="text" class="form-control" placeholder="Input materi" id="nama" name="nama">
                     </div>
-                    <small class="form-text text-danger error-name" style="margin-top: -15px;">Harap masukan kelas !</small>
+                    <small class="form-text text-danger error-nama" style="margin-top: -15px;">Harap masukan materi !</small>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select class="form-control" name="kategori" id="kategori">
+                            <option value="">Pilih Kategori</option>
+                            @foreach ($listKategories as $index => $kategori)
+                                <option value="{{ $index }}">{{ $kategori }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger mb-2 mr-sm-2" data-dismiss="modal">
                             <i class="fa-solid fa-xmark"></i> Batal
@@ -112,7 +123,7 @@
     $(document).ready(function () {
         $('.loading').hide();
 
-        $('.error-name').hide();
+        $('.error-nama').hide();
     });
 
     function validateForm() {
@@ -120,7 +131,7 @@
         let status = true;
 
         const fields = [
-            { selector: '#name', errorSelector: '.error-name' },
+            { selector: '#nama', errorSelector: '.error-nama' },
         ];
 
         fields.forEach(field => {
@@ -148,9 +159,10 @@
         $('#title').text('Tambah');
 
         $('#id').val('');
-        $('#name').val('');
+        $('#nama').val('');
+        $('#kategori').val('');
 
-        $('.error-name').hide();
+        $('.error-nama').hide();
     });
 
     $('.update-data').on("click", function () {
@@ -160,23 +172,25 @@
         $('#title').text('Update')
 
         var id = $(this).data('id');
-        var name = $(this).data('name');
+        var nama = $(this).data('nama');
+        var kategori = $(this).data('kategori');
 
         $('#id').val(id);
-        $('#name').val(name);
+        $('#nama').val(nama);
+        $('#kategori').val(kategori);
 
-        $('.error-name').hide();
+        $('.error-nama').hide();
     });
 
     $(document).on('click', '.delete-data', function(e) {
         let id   = $(this).data('id');
-        let name = $(this).data('name');
+        let nama = $(this).data('nama');
 
         e.preventDefault();
 
         Swal.fire({
             title: "Apakah kamu yakin ?",
-            text: "Ingin menghapus data kelas "+name+" ini !",
+            text: "Ingin menghapus data materi "+nama+" ini !",
             icon: "warning",
             showDenyButton: true,
             cancelButtonColor: "#DC3741",
@@ -187,19 +201,19 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type    : "POST",
-                    url     : "{{ url('/master-data/class/delete') }}/" + id,
+                    url     : "{{ url('/master-data/materi/delete') }}/" + id,
                     success: function(data) {
                         if(data.status == "success") {
                             toastMixin.fire({
                                 icon: 'success',
-                                title: 'Berhasil menghapus data kelas '+name,
+                                title: 'Berhasil menghapus data materi '+nama,
                             });
 
                             location.reload();
                         } else if(data.status == "error") {
                             toastMixin.fire({
                                 icon: 'error',
-                                title: 'Gagal, menghapus data kelas '+name,
+                                title: 'Gagal, menghapus data materi '+nama,
                             });
                         }
                     }

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MasterData\ClassController;
+use App\Http\Controllers\MasterData\KelasController;
+use App\Http\Controllers\MasterData\MateriController;
+use App\Http\Controllers\TargetController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +28,19 @@ Auth::routes(['register' => false]);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::prefix('master-data')->group(function () {
-    Route::controller(ClassController::class)->prefix('class')->group(function () {
-        Route::get('index', 'index')->name('master_data.class.index');
-        Route::post('create', 'create')->name('master_data.class.create');
-        Route::post('delete/{id}', 'destroy')->name('master_data.class.destroy');
+    Route::controller(KelasController::class)->prefix('kelas')->group(function () {
+        Route::get('index', 'index')->name('master_data.kelas.index');
+        Route::post('create', 'create')->name('master_data.kelas.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.kelas.destroy');
     });
+
+    Route::controller(MateriController::class)->prefix('materi')->group(function () {
+        Route::get('index', 'index')->name('master_data.materi.index');
+        Route::post('create', 'create')->name('master_data.materi.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.materi.destroy');
+    });
+});
+
+Route::controller(TargetController::class)->prefix('target')->group(function () {
+    Route::get('index', 'index')->name('target.index');
 });

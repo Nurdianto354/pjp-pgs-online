@@ -35,8 +35,8 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item {{ setActiveMenu('master_data/*') }}">
-                    <a href="#" class="nav-link {{ setActive('master_data/*') }}">
+                <li class="nav-item {{ setActiveMenu('master-data/*') }}">
+                    <a href="#" class="nav-link {{ setActive('master-data/*') }}">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             Master Data
@@ -45,13 +45,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('master_data.class.index') }}" class="nav-link {{ setActive('master_data/class/*') }}">
+                            <a href="{{ route('master_data.kelas.index') }}" class="nav-link {{ setActive('master-data/kelas/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Kelas</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index.html" class="nav-link">
+                            <a href="{{ route('master_data.materi.index') }}" class="nav-link {{ setActive('master-data/materi/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Materi</p>
                             </a>
@@ -65,27 +65,22 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Absensi
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
+                    <a href="{{ route('target.index') }}" class="nav-link {{ setActive('target/*') }}">
+                        <i class="nav-icon fas fa-bullseye"></i>
+                        <p>Target</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Paud</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Materi</p>
-                            </a>
-                        </li>
-                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="./index2.html" class="nav-link">
+                        <i class="nav-icon fa-solid fa-chart-line"></i>
+                        <p>Pencapaian Target</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="./index2.html" class="nav-link">
+                        <i class="nav-icon far fa-calendar-check"></i>
+                        <p>Absensi</p>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
