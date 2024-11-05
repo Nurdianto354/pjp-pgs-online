@@ -64,4 +64,5 @@ Route::prefix('master-data')->group(function () {
 
 Route::controller(KurikulumController::class)->prefix('kurikulum')->group(function () {
     Route::get('index', 'index')->name('kurikulum.index');
+    Route::get('create', 'create')->name('kurikulum.create');
 });
