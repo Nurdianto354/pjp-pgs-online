@@ -11,6 +11,7 @@ use App\Models\MasterData\Satuan;
 use App\Models\MasterData\TahunAjaran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,6 +19,7 @@ class KurikulumTargetController extends Controller
 {
     public function index(Request $request)
     {
+        Log::info($request);
         $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();
 
         $kelasId   = $kelas->id;
@@ -42,7 +44,7 @@ class KurikulumTargetController extends Controller
         $listKelas = Kelas::where('status', true)->get();
 
         $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_ajaran_id', $tahunAjaranId]])->pluck('id')->first();
-        $datas = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')->where('kurikulum_target_id', $id)->orderBy('created_at', 'DESC')->get();
+        $datas = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')->where('kurikulum_target_id', $id)->orderBy('created_at', 'ASC')->get();
 
         return view('pages.kurikulum_target.index', compact('listKelas', 'listTahunAjaran', 'id', 'kelasId', 'kelasNama', 'tahunAjaranId', 'datas'));
     }
@@ -64,13 +66,13 @@ class KurikulumTargetController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->has('id')) {
+        if ($request['id'] != null) {
             $data = KurikulumTarget::findOrFail($request['id']);
-            $data->created_at = Carbon::now();
 
             $action = "memperbarui kurikulum target";
         } else {
             $data = new KurikulumTarget();
+            $data->created_at = Carbon::now();
 
             $action = "menambahkan kurikulum target";
         }
@@ -85,20 +87,29 @@ class KurikulumTargetController extends Controller
             $data->updated_at = Carbon::now();
             $data->save();
 
-            foreach ($request['karakter'] as $index => $karakter) {
-                $dataDetail = new KurikulumTargetDetail();
-                $dataDetail->kurikulum_target_id = $data->id;
-                $dataDetail->karakter_id         = $karakter;
-                $dataDetail->materi_id           = $request['materi'][$index];
-                $dataDetail->target              = $request['target'][$index];
-                $dataDetail->satuan_id           = $request['satuan'][$index];
-                $dataDetail->save();
+            if ($request->has('karakter') && $request->has('materi') && $request->has('satuan')) {
+                foreach ($request['target'] as $index => $target) {
+                    if ($request['id_detail'][$index] != null) {
+                        $dataDetail = KurikulumTargetDetail::findOrFail($request['id_detail'][$index]);
+                    } else {
+                        $dataDetail = new KurikulumTargetDetail();
+                        $dataDetail->created_at = Carbon::now();
+                    }
+
+                    $dataDetail->kurikulum_target_id = $data->id;
+                    $dataDetail->karakter_id         = $request['karakter'][$index];
+                    $dataDetail->materi_id           = $request['materi'][$index];
+                    $dataDetail->target              = $target;
+                    $dataDetail->satuan_id           = $request['satuan'][$index];
+                    $dataDetail->updated_at          = Carbon::now();
+                    $dataDetail->save();
+                }
             }
 
             DB::commit();
 
             toast('Berhasil ' . $action . ' kelas ' . $kelasNama . ' tahun ajaran ' . $tahunAjaranNama, 'success');
-            return redirect(route('kurikulum_target.index'));
+            return redirect()->route('kurikulum_target.index', ['kelas_id' => $request['kelas_id'], 'kelas_nama' => $kelasNama, 'tahun_ajaran_id' => $request['tahun_ajaran_id']]);
         } catch (\Throwable $th) {
             Log::info($th);
             DB::rollBack();
@@ -106,6 +117,16 @@ class KurikulumTargetController extends Controller
             toast('Gagal ' . $action . ' kelas ' . $kelasNama . ' tahun ajaran ' . $tahunAjaranNama, 'error');
             return back();
         }
+    }
+
+    public function getDataDetail(Request $request)
+    {
+        $datas = KurikulumTargetDetail::where('kurikulum_target_id', $request['id'])->orderBy('created_at', 'ASC')->get();
+
+        return response()->json([
+            'datas' => $datas,
+        ]);
+
     }
 
     public function destroy($id)

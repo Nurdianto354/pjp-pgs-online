@@ -65,6 +65,7 @@ Route::prefix('master-data')->group(function () {
 Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')->group(function () {
     Route::get('index', 'index')->name('kurikulum_target.index');
     Route::get('create', 'create')->name('kurikulum_target.create');
+    Route::get('data-detail', 'getDataDetail')->name('kurikulum_target.data_detail');
     Route::post('store', 'store')->name('kurikulum_target.store');
     Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
 });
