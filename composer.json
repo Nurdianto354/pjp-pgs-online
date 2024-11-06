@@ -12,6 +12,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "phpoffice/phpspreadsheet": "^1.12",
         "realrashid/sweet-alert": "^7.2",
         "spatie/laravel-permission": "^5.11"
     },

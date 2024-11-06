@@ -19,7 +19,6 @@ class KurikulumTargetController extends Controller
 {
     public function index(Request $request)
     {
-        Log::info($request);
         $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();
 
         $kelasId   = $kelas->id;
