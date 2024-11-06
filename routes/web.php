@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KurikulumController;
+use App\Http\Controllers\KurikulumTargetController;
 use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
 use App\Http\Controllers\MasterData\MateriController;
@@ -62,8 +62,9 @@ Route::prefix('master-data')->group(function () {
     });
 });
 
-Route::controller(KurikulumController::class)->prefix('kurikulum')->group(function () {
-    Route::get('index', 'index')->name('kurikulum.index');
-    Route::get('create', 'create')->name('kurikulum.create');
-    Route::post('store', 'store')->name('kurikulum.store');
+Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')->group(function () {
+    Route::get('index', 'index')->name('kurikulum_target.index');
+    Route::get('create', 'create')->name('kurikulum_target.create');
+    Route::post('store', 'store')->name('kurikulum_target.store');
+    Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
 });

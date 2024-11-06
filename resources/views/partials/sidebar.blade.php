@@ -83,15 +83,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('kurikulum.index') }}" class="nav-link {{ setActive('kurikulum/*') }}">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>Kurikulum</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-bullseye"></i>
-                        <p>Target</p>
+                    <a href="{{ route('kurikulum_target.index') }}" class="nav-link {{ setActive('kurikulum-target/*') }}">
+                        <i class="nav-icon fas fa-clipboard-list"></i>
+                        <p>Kurikulum & Target</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -108,7 +102,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Master User
                             <i class="right fas fa-angle-left"></i>
