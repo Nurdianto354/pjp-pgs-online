@@ -1,3 +1,6 @@
+<?php
+    $user = Auth::user();
+?>
 <aside class="main-sidebar elevation-4 sidebar-light-success">
     <a href="index3.html" class="brand-link">
         <img src="{{ asset('assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
@@ -11,7 +14,7 @@
                 <img src="{{ asset('assets/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{ ucwords(strtolower($user->nama)) }}</a>
             </div>
         </div>
 
@@ -100,8 +103,8 @@
                         <p>Absensi</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item {{ setActiveMenu('master-user/*') }}">
+                    <a href="#" class="nav-link {{ setActive('master-user/*') }}">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Master User
@@ -110,21 +113,21 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
+                            <a href="{{ route('master_user.user.index') }}" class="nav-link  {{ setActive('master-user/user/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>User</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('master_user.role.index') }}" class="nav-link  {{ setActive('master-user/role/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Role</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index.html" class="nav-link">
+                            <a href="{{ route('master_user.permission.index') }}" class="nav-link  {{ setActive('master-user/permission/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Permission</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>User</p>
                             </a>
                         </li>
                     </ul>

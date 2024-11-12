@@ -7,6 +7,9 @@ use App\Http\Controllers\MasterData\KelasController;
 use App\Http\Controllers\MasterData\MateriController;
 use App\Http\Controllers\MasterData\SatuanController;
 use App\Http\Controllers\MasterData\TahunAjaranController;
+use App\Http\Controllers\MasterUser\PermissionController;
+use App\Http\Controllers\MasterUser\RoleController;
+use App\Http\Controllers\MasterUser\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -67,4 +70,24 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
     Route::get('data-detail', 'getDataDetail')->name('kurikulum_target.data_detail');
     Route::post('store', 'store')->name('kurikulum_target.store');
     Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
+});
+
+Route::prefix('master-user')->group(function () {
+    Route::controller(UserController::class)->prefix('user')->group(function () {
+        Route::get('index', 'index')->name('master_user.user.index');
+        Route::post('create', 'create')->name('master_user.user.create');
+        Route::post('delete/{id}', 'destroy')->name('master_user.user.destroy');
+    });
+
+    Route::controller(RoleController::class)->prefix('role')->group(function () {
+        Route::get('index', 'index')->name('master_user.role.index');
+        Route::post('create', 'create')->name('master_user.role.create');
+        Route::post('delete/{id}', 'destroy')->name('master_user.role.destroy');
+    });
+
+    Route::controller(PermissionController::class)->prefix('permission')->group(function () {
+        Route::get('index', 'index')->name('master_user.permission.index');
+        Route::post('create', 'create')->name('master_user.permission.create');
+        Route::post('delete/{id}', 'destroy')->name('master_user.permission.destroy');
+    });
 });
