@@ -28,6 +28,48 @@
                         </h3>
                     </div>
                     <div class="card-body">
+                        <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalInput" id="tambahData">
+                            <i class="fa fa-plus"></i> Tambah
+                        </button>
+                        <table id="dataTables" class="table table-bordered table-striped">
+                            <thead>
+                                <tr class="text-center">
+                                    <th style="width: 5%;">No</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Nama</th>
+                                    <th>Status</th>
+                                    <th>di Buat</th>
+                                    <th>di Perbarui</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($datas as $key => $data)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $data->username }}</td>
+                                        <td>{{ $data->email }}</td>
+                                        <td>{{ $data->nama }}</td>
+                                        <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
+                                        <td class="text-center">{{ date("d-m-Y", strtotime($data->created_at)) }}</td>
+                                        <td class="text-center">{{ date("d-m-Y", strtotime($data->updated_at)) }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-warning btn-sm update-data"
+                                                    data-toggle="modal" data-target="#modalInput"
+                                                    data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                    <i class="far fa-edit"></i> Ubah
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                    <i class="far fa-trash-alt"></i> Hapus
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

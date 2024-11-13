@@ -10,6 +10,7 @@ use App\Http\Controllers\MasterData\TahunAjaranController;
 use App\Http\Controllers\MasterUser\PermissionController;
 use App\Http\Controllers\MasterUser\RoleController;
 use App\Http\Controllers\MasterUser\UserController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::controller(ProfilController::class)->prefix('profil')->group(function () {
+    Route::get('index', 'index')->name('profil.index');
+});
 
 Route::prefix('master-data')->group(function () {
     Route::controller(KelasController::class)->prefix('kelas')->group(function () {
@@ -82,12 +87,12 @@ Route::prefix('master-user')->group(function () {
     Route::controller(RoleController::class)->prefix('role')->group(function () {
         Route::get('index', 'index')->name('master_user.role.index');
         Route::post('create', 'create')->name('master_user.role.create');
-        Route::post('delete/{id}', 'destroy')->name('master_user.role.destroy');
+        Route::delete('delete/{id}', 'destroy')->name('master_user.role.destroy');
     });
 
     Route::controller(PermissionController::class)->prefix('permission')->group(function () {
         Route::get('index', 'index')->name('master_user.permission.index');
         Route::post('create', 'create')->name('master_user.permission.create');
-        Route::post('delete/{id}', 'destroy')->name('master_user.permission.destroy');
+        Route::delete('delete/{id}', 'destroy')->name('master_user.permission.destroy');
     });
 });

@@ -2,19 +2,20 @@
     $user = Auth::user();
 ?>
 <aside class="main-sidebar elevation-4 sidebar-light-success">
-    <a href="index3.html" class="brand-link">
-        <img src="{{ asset('assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">PJP PGS II Online</span>
+    <a href="{{ route('dashboard') }}" class="brand-link ml-3">
+        <span class="elevation-3" style="box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0) !important">PJP</span>
+        <span class="brand-text font-weight-light">Online</span>
     </a>
 
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('assets/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                @if (empty($user->photo))
+                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('assets/img/blank-profile.png')}}" alt="Foto Profil">
+                @endif
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ ucwords(strtolower($user->nama)) }}</a>
+                <a href="{{ route('profil.index') }}" class="d-block">{{ ucwords(strtolower($user->nama)) }}</a>
             </div>
         </div>
 
