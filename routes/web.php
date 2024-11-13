@@ -75,6 +75,8 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
     Route::get('data-detail', 'getDataDetail')->name('kurikulum_target.data_detail');
     Route::post('store', 'store')->name('kurikulum_target.store');
     Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
+    Route::get('export-template', 'exportTemplate')->name('kurikulum_target.export_template');
+    Route::post('import-data', 'importData')->name('kurikulum_target.import_data');
 });
 
 Route::prefix('master-user')->group(function () {

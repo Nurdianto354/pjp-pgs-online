@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">Master Data</li>
-                    <li class="breadcrumb-item active"><a href="{{ route('kurikulum_target.index') }}">Data Kurikulum</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('kurikulum_target.index') }}">Data Kurikulum & Target</a></li>
                 </ol>
             </div>
         </div>
@@ -92,9 +92,13 @@
                                 <button type="button" class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#modalImportData">
                                     <i class="fas fa-file-import"></i> Import Data
                                 </button>
-                                <a href="#" class="btn btn-sm btn-outline-success ml-1">
-                                    <i class="fa fa-download"></i> Download Template
-                                </a>
+                                <form method="GET" action="{{ route('kurikulum_target.export_template') }}">
+                                    <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
+                                    <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-success ml-1">
+                                        <i class="fa fa-download"></i> Download Template
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -132,6 +136,40 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="modalImportData" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="margin-bottom: -25px;">
+                    <i class="fa-solid fa-file-import"></i>
+                    Import Data Kurikulum & Target {{ $kelasNama }}
+                    <p class="small">Pilih file untuk memulai import data</p>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form action="{{ route('kurikulum_target.import_data') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Pilih File</label>
+                        <input type="file" name="file" class="form-control" required>
+                        <small>file size import max 2mb</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">
+                        <img src="{{ asset('assets/icon/svg/cancel.svg') }}" style="width: 20px;">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-sm btn-success">
+                        <i class="fa-solid fa-file-arrow-up"></i>
+                        Import
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @section('js')
 <script>
