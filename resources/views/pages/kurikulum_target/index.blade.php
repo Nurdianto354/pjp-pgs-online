@@ -9,7 +9,6 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">Master Data</li>
                     <li class="breadcrumb-item active"><a href="{{ route('kurikulum_target.index') }}">Data Kurikulum & Target</a></li>
                 </ol>
             </div>

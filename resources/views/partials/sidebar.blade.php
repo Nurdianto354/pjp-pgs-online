@@ -67,7 +67,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
+                            <a href="{{ route('master_data.anggota.index') }}" class="nav-link {{ setActive('master-data/anggota/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Anggota</p>
                             </a>
@@ -87,7 +87,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./index2.html" class="nav-link">
+                    <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
                         <i class="nav-icon far fa-calendar-check"></i>
                         <p>Absensi</p>
                     </a>

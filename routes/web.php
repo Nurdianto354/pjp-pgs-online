@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KurikulumTargetController;
+use App\Http\Controllers\MasterData\AnggotaController;
 use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
 use App\Http\Controllers\MasterData\MateriController;
@@ -67,6 +69,12 @@ Route::prefix('master-data')->group(function () {
         Route::post('create', 'create')->name('master_data.satuan.create');
         Route::post('delete/{id}', 'destroy')->name('master_data.satuan.destroy');
     });
+
+    Route::controller(AnggotaController::class)->prefix('anggota')->group(function () {
+        Route::get('index', 'index')->name('master_data.anggota.index');
+        Route::post('create', 'create')->name('master_data.anggota.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.anggota.destroy');
+    });
 });
 
 Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')->group(function () {
@@ -77,6 +85,13 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
     Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
     Route::get('export-template', 'exportTemplate')->name('kurikulum_target.export_template');
     Route::post('import-data', 'importData')->name('kurikulum_target.import_data');
+});
+
+Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {
+    Route::get('index', 'index')->name('absensi.index');
+    Route::get('add-attendance-date', 'addAttendanceDate')->name('absensi.add_attendance_date');
+    Route::get('create', 'create')->name('absensi.create');
+    Route::post('store', 'store')->name('absensi.store');
 });
 
 Route::prefix('master-user')->group(function () {

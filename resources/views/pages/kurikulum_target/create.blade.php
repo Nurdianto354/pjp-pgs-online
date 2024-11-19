@@ -55,7 +55,6 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">Master Data</li>
                     <li class="breadcrumb-item"><a href="{{ route('kurikulum_target.index') }}">Data Kurikulum & Target</a></li>
                     <li class="breadcrumb-item active">{{ $title }} Kurikulum & Target</li>
                 </ol>
@@ -71,7 +70,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-clipboard-list"></i>
-                            {{ $title }} Kurikulum & Target
+                            {{ $title }} Kurikulum & Target Kelas <span class="text-bold">{{ $kelasNama }}</span> Tahun Ajaran <span class="text-bold">{{ $tahunAjaranNama }}</span>
                         </h3>
                     </div>
                     <div class="card-body">

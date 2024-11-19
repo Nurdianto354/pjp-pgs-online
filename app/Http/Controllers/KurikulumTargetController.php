@@ -60,17 +60,20 @@ class KurikulumTargetController extends Controller
 
     public function create(Request $request)
     {
-        $title = "Tambah";
+        $title = !empty($request['id']) ? "Perbarui" : "Tambah";
 
         $id = $request['id'];
         $kelasId = $request['kelas_id'];
         $tahunAjaranId = $request['tahun_ajaran_id'];
 
+        $kelasNama = Kelas::where([['status', true], ['id', $kelasId]])->pluck('nama')->first();
+        $tahunAjaranNama = TahunAjaran::where([['status', true], ['id', $tahunAjaranId]])->pluck('nama')->first();
+
         $listKarakter = Karakter::where('status', true)->orderBy('nama', 'ASC')->get();
         $listMateri   = Materi::where('status', true)->orderBy('nama', 'ASC')->get();
         $listSatuan   = Satuan::where('status', true)->orderBy('nama', 'ASC')->get();
 
-        return view('pages.kurikulum_target.create', compact('title', 'id', 'kelasId', 'tahunAjaranId', 'listKarakter', 'listMateri', 'listSatuan'));
+        return view('pages.kurikulum_target.create', compact('title', 'id', 'kelasId', 'kelasNama', 'tahunAjaranId', 'tahunAjaranNama', 'listKarakter', 'listMateri', 'listSatuan'));
     }
 
     public function store(Request $request)
