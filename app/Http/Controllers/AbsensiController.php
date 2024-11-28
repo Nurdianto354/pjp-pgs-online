@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absensi\Absensi;
+use App\Models\Absensi\AbsensiDetail;
 use App\Models\MasterData\Anggota;
 use App\Models\MasterData\Kelas;
 use Carbon\Carbon;
@@ -28,10 +29,21 @@ class AbsensiController extends Controller
             $kelasNama = $request->kelas_nama;
         }
 
-        $listKelas = Kelas::where('status', true)->get();
+        $listKelas   = Kelas::where('status', true)->get();
         $listAnggota = Anggota::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])->orderBy('nama_panggilan', 'ASC')->get();
+        $listAbsensi = Absensi::where([['kelas_id', $kelasId], ['status', true]])->orderBy('tanggal', 'DESC')->get();
 
-        return view('pages.absensi.index', compact('kelasId', 'kelasNama', 'listKelas', 'listAnggota'));
+        $listAbsensiDetail = [];
+
+        foreach ($listAbsensi as $data) {
+            $listDetail = AbsensiDetail::select('id', 'anggota_id', 'absensi')->where('absensi_id', $data->id)->get()->toArray();
+
+            foreach ($listDetail as $value) {
+                $listAbsensiDetail[$data->id][$value['anggota_id']] = $value;
+            }
+        }
+
+        return view('pages.absensi.index', compact('kelasId', 'kelasNama', 'listKelas', 'listAnggota', 'listAbsensi', 'listAbsensiDetail'));
     }
 
     public function addAttendanceDate(Request $request)
@@ -44,38 +56,50 @@ class AbsensiController extends Controller
         try {
             if ($request->id != null && $request->id != '') {
                 $action = "perbarui";
+                $tanggal = strtotime($request->tanggal);
 
-                $data = Absensi::findOrFail($request->id);
-                $tanggalSebelumnya = $data->tanggal;
+                $check = Absensi::where([['id', '!=', $request->id], ['tanggal', $tanggal], ['status', true]])->first();
 
-                $data->tanggal    = strtotime($request->tanggal);
-                $data->status     = true;
-                $data->updated_at = Carbon::now();
-                $data->save();
+                if (empty($check)) {
+                    $data = Absensi::findOrFail($request->id);
+                    $dateCurrent = $data->tanggal;
 
-                $title .= " dari tanggal ".date('d-m-Y', $tanggalSebelumnya)." ke ".date('d-m-Y', $request->tanggal);
+                    $data->tanggal    = strtotime($request->tanggal);
+                    $data->status     = true;
+                    $data->updated_at = Carbon::now();
+                    $data->save();
+
+                    $title .= " dari tanggal ".date('d-m-Y', $dateCurrent)." sampai ".date('d-m-Y', strtotime($request->tanggal));
+                } else {
+                    toast('Gagal '.$action.' karena tanggal absensi '.date('d-m-Y', $tanggal).' sudah ada.','error');
+                    return back();
+                }
             } else {
                 $tanggalMulai = strtotime($request->tanggal_mulai);
                 $tanggalAkhir = strtotime($request->tanggal_akhir);
 
-                if (strtotime($tanggalMulai) > strtotime($tanggalAkhir)) {
+                if ($tanggalMulai > $tanggalAkhir) {
                     toast('Gagal. menambahkan tanggal absensi, karena tanggal akhir lebih kecil dari tanggal mulai','error');
                     return back();
                 }
 
                 while ($tanggalMulai <= $tanggalAkhir) {
-                    $data = Absensi::findOrFail($request->id);
-                    $data->kelas_id   = $request->kelas_id;
-                    $data->tanggal    = strtotime($tanggalMulai);
-                    $data->status     = true;
-                    $data->created_at = Carbon::now();
-                    $data->updated_at = Carbon::now();
-                    $data->save();
+                    $data = Absensi::where([['tanggal', $tanggalMulai], ['status', '1']])->first();
+
+                    if (empty($data)) {
+                        $data = new Absensi();
+                        $data->kelas_id   = $request->kelas_id;
+                        $data->tanggal    = $tanggalMulai;
+                        $data->status     = true;
+                        $data->created_at = Carbon::now();
+                        $data->updated_at = Carbon::now();
+                        $data->save();
+                    }
 
                     $tanggalMulai = strtotime('+1 day', $tanggalMulai);
                 }
 
-                $title .= " dari tanggal ".date('d-m-Y', $request->tanggal_mulai)." sampai ".date('d-m-Y', $request->tanggal_akhir);
+                $title .= " dari tanggal ".date('d-m-Y', strtotime($request->tanggal_mulai))." ke ".date('d-m-Y', strtotime($request->tanggal_akhir));
             }
 
             DB::commit();
@@ -93,21 +117,65 @@ class AbsensiController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function deleteAttendanceDate($id)
     {
-        $title = !empty($request['id']) ? "Perbarui" : "Tambah";
+        DB::beginTransaction();
+        try {
+            $data = Absensi::findOrFail($id);
+            $data->status = false;
+            $data->save();
 
-        $id = $request['id'];
-        $kelasId = $request['kelas_id'];
+            DB::commit();
 
-        $kelasNama = Kelas::where([['status', true], ['id', $kelasId]])->pluck('nama')->first();
-        $listAnggota = Anggota::where([['status', true], ['kelas_id', $kelasId]])->get();
-
-        return view('pages.absensi.create', compact('title', 'id', 'kelasId', 'kelasNama', 'listAnggota'));
+            return response()->json([
+                'status'     => 'success',
+                'keterangan' => '',
+            ]);
+        } catch (\Throwable $th) {
+            Log::info($th);
+            DB::rollBack();
+            return response()->json([
+                'status'     => 'error',
+                'keterangan' => 'karena ada kesalahan di sistem'
+            ]);
+        }
     }
 
     public function store(Request $request)
     {
+        $success = true;
+        $message = "Data has been saved successfully";
 
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                'kelas_id'   => 'required|integer',
+                'absensi_id' => 'required|integer',
+                'anggota_id' => 'required|integer',
+                'absensi'    => 'required|string',
+            ]);
+
+            if ($request->id != null && $request->id != '') {
+                $data = AbsensiDetail::findOrFail($request->id);
+            } else {
+                $data = new AbsensiDetail();
+                $data->created_at = Carbon::now();
+            }
+
+            $data->kelas_id   = $request->kelas_id;
+            $data->absensi_id = $request->absensi_id;
+            $data->anggota_id = $request->anggota_id;
+            $data->absensi    = $request->absensi;
+            $data->updated_at = Carbon::now();
+            $data->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e;
+            DB::rollback();
+        }
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 }

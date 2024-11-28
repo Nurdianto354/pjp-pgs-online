@@ -29,7 +29,7 @@
                     <div class="card-body">
                         <div class="nav flex-column nav-tabs h-100">
                             @foreach ($listKelas as $kelas)
-                                <form method="GET" action="{{ route('kurikulum_target.index') }}">
+                                <form method="GET" action="{{ route('absensi.index') }}">
                                     <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
                                     <input type="hidden" name="kelas_nama" value="{{ $kelas->nama }}">
                                     <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\Absensi\Absensi::getTab($kelas->id, $kelasId) ? 'active' : '' }}">
@@ -53,7 +53,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-end">
-                                    <button type="button" class="btn btn-sm btn-success mx-1 text-right" data-toggle="modal" data-target="#modalInput" id="tambahData" data-kelas_id="{{ $kelasId }}">
+                                    <button type="button" class="btn btn-sm btn-success mx-1 text-right btn-tambah"
+                                        data-toggle="modal"
+                                        data-target="#modalInput"
+                                        data-kelas_id="{{ $kelasId }}"
+                                    >
                                         <i class="fa fa-plus"></i> Tambah Tanggal
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#modalImportData">
@@ -69,23 +73,89 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="dataTables" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th>Aksi</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Siswa</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($listAnggota as $anggota)
-                                        <tr>
-                                            <td>{{ $anggota->nama_panggilan }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr class="text-center" style="height: 20px;">
+                                                <th>Aksi</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th>Siswa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listAnggota as $anggota)
+                                                <tr>
+                                                    <td>{{ $anggota->nama_panggilan }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-sm-10 table-responsive" style="padding-left: 0px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr class="text-center">
+                                                @foreach ($listAbsensi as $data)
+                                                    <th style="padding: 8px 0px;">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-sm btn-outline-warning btn-perbarui"
+                                                                title="perbarui"
+                                                                data-toggle="modal"
+                                                                data-target="#modalInput"
+                                                                data-absensi_id="{{ $data->id }}"
+                                                                data-kelas_id="{{ $kelasId }}"
+                                                                data-tanggal="{{ date('Y-m-d', $data->tanggal) }}"
+                                                            >
+                                                                <i class="far fa-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger btn-hapus" title="hapus"
+                                                                data-id="{{ $data->id }}"
+                                                                data-tanggal="{{ date('d-m-Y', $data->tanggal) }}"
+                                                            >
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </th>
+                                                @endforeach
+                                            </tr>
+                                            <tr class="text-center">
+                                                @foreach ($listAbsensi as $data)
+                                                    <th class="text-nowrap">{{ date('d-m-Y', $data->tanggal) }}</th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listAnggota as $anggota)
+                                                <tr>
+                                                    @foreach ($listAbsensi as $data)
+                                                        <?php
+                                                            $id = $listAbsensiDetail[$data->id][$anggota->id]['id'] ?? null;
+                                                            $absensi = $listAbsensiDetail[$data->id][$anggota->id]['absensi'] ?? null;
+                                                        ?>
+                                                        <td style="padding: 5px 2px;">
+                                                            <div class="form-group" style="margin: 0px;">
+                                                                <select class="form-control kehadiran" name="kehadiran"
+                                                                    data-id="{{ $id }}"
+                                                                    data-kelas_id="{{ $kelasId }}"
+                                                                    data-absensi_id="{{ $data->id }}"
+                                                                    data-anggota_id="{{ $anggota->id }}"
+                                                                >
+                                                                    <option value="" {{ $absensi === '' ? 'selected' : '' }}></option>
+                                                                    <option value="H" {{ $absensi === 'H' ? 'selected' : '' }}>H</option>
+                                                                    <option value="A" {{ $absensi === 'A' ? 'selected' : '' }}>A</option>
+                                                                    <option value="I" {{ $absensi === 'I' ? 'selected' : '' }}>I</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    @endforeach
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +184,7 @@
                     @csrf
                     <input type="hidden" id="id" name="id">
                     <input type="hidden" id="kelasId" name="kelas_id">
-                    <div class="row">
+                    <div class="row date-add">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Tanggal Mulai</label>
@@ -128,6 +198,15 @@
                                 <input type="date" class="form-control" placeholder="Input tanggal akhir" id="tanggalAkhir" name="tanggal_akhir">
                             </div>
                             <small class="form-text text-danger error-tanggal-akhir" style="margin-top: -15px;">Harap masukan tanggal akhir !</small>
+                        </div>
+                    </div>
+                    <div class="row date-update">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Tanggal</label>
+                                <input type="date" class="form-control" placeholder="Input tanggal" id="tanggal" name="tanggal">
+                            </div>
+                            <small class="form-text text-danger error-tanggal" style="margin-top: -15px;">Harap masukan tanggal !</small>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -156,25 +235,36 @@
 
         $('.error-tanggal-mulai').hide();
         $('.error-tanggal-akhir').hide();
+        $('.error-tanggal').hide();
     });
 
     function validateForm() {
         $('.loading').show();
         let status = true;
+        let id = $('#id').val();
 
-        const fields = [
-            { selector: '#tanggalMulai', errorSelector: '.error-tanggal-mulai' },
-            { selector: '#tanggalAkhir', errorSelector: '.error-tanggal-akhir' },
-        ];
+        if (id == null || id == '') {
+            const fields = [
+                { selector: '#tanggalMulai', errorSelector: '.error-tanggal-mulai' },
+                { selector: '#tanggalAkhir', errorSelector: '.error-tanggal-akhir' },
+            ];
 
-        fields.forEach(field => {
-            const value = $(field.selector).val();
+            fields.forEach(field => {
+                const value = $(field.selector).val();
+
+                if (value === null || value === '') {
+                    $(field.errorSelector).show();
+                    status = false;
+                }
+            });
+        } else {
+            const value = $('#tanggal').val();
 
             if (value === null || value === '') {
-                $(field.errorSelector).show();
+                $('#tanggal').show();
                 status = false;
             }
-        });
+        }
 
         if (!status) {
             $('.loading').hide();
@@ -183,7 +273,7 @@
         return status;
     }
 
-    $('#tambahData').on('click', function () {
+    $('.btn-tambah').on('click', function () {
         $('.loading').hide();
 
         $('#btnSave').html('<i class="fa-solid fa-check"></i> Tambah');
@@ -196,8 +286,102 @@
         $('#tanggalMulai').val('');
         $('#tanggalAkhir').val('');
 
+        $('.date-add').show();
+        $('.date-update').hide();
         $('.error-tanggal-mulai').hide();
         $('.error-tanggal-akhir').hide();
+    });
+
+    $('.btn-perbarui').on('click', function () {
+        $('.loading').hide();
+
+        $('#btnSave').html('<i class="fa-solid fa-check"></i> Perbarui');
+        $('#title').text('Perbarui');
+
+        var id = $(this).data('id');
+        var kelasId = $(this).data('kelas_id');
+        var tanggal = $(this).data('tanggal');
+
+        $('#id').val(id);
+        $('#kelasId').val(kelasId);
+        $('#tanggal').val(tanggal);
+
+        $('.date-add').hide();
+        $('.date-update').show();
+        $('.error-tanggal-mulai').hide();
+        $('.error-tanggal-akhir').hide();
+    });
+
+    $(document).on('click', '.btn-hapus', function(e) {
+        let id   = $(this).data('id');
+        var tanggal = $(this).data('tanggal');
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: "Apakah kamu yakin ?",
+            text: "Ingin menghapus absensi tanggal "+tanggal+" ini !",
+            icon: "warning",
+            showDenyButton: true,
+            cancelButtonColor: "#DC3741",
+            confirmButtonColor: "#007BFF",
+            confirmButtonText: '<i class="fa-solid fa-check"></i> Iya',
+            denyButtonText: '<i class="fa-solid fa-xmark"></i> Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type    : "POST",
+                    url     : "{{ url('/absensi/delete-attendance-date') }}/" + id,
+                    success: function(data) {
+                        if(data.status == "success") {
+                            toastMixin.fire({
+                                icon: 'success',
+                                title: 'Berhasil menghapus absensi tanggal '+tanggal,
+                            });
+
+                            location.reload();
+                        } else if(data.status == "error") {
+                            toastMixin.fire({
+                                icon: 'error',
+                                title: 'Gagal, menghapus absensi tanggal '+tanggal,
+                            });
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                return false;
+            }
+        });
+    });
+
+    $('.kehadiran').change(function(){
+        var id = $(this).data('id');
+        var kelasId = $(this).data('kelas_id');
+        var absensiId = $(this).data('absensi_id');
+        var anggotaId = $(this).data('anggota_id');
+        var absensi = $(this).val();
+
+        $.ajax({
+            type    : "POST",
+            url     : "{{ url('/absensi/store') }}",
+            data    : {
+                id          : id,
+                kelas_id    : kelasId,
+                absensi_id  : absensiId,
+                anggota_id  : anggotaId,
+                absensi     : absensi
+            },
+            success: function(data) {
+                if (data.success) {
+                    // alert("Data has been saved successfully!");
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("An error occurred while processing your request.");
+            }
+        });
     });
 </script>
 @endsection

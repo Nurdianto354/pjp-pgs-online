@@ -15,11 +15,13 @@ class CreateAbsensiDetailsTable extends Migration
     {
         Schema::create('absensi_detail', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('kelas_id');
             $table->unsignedBigInteger('absensi_id');
             $table->unsignedBigInteger('anggota_id');
-            $table->tinyInteger('absensi');
+            $table->char('absensi', 1)->nullable();
             $table->timestamps();
 
+            $table->foreign('kelas_id')->references('id')->on('m_kelas')->onDelete('cascade');
             $table->foreign('absensi_id')->references('id')->on('absensi')->onDelete('cascade');
             $table->foreign('anggota_id')->references('id')->on('m_anggota')->onDelete('cascade');
         });

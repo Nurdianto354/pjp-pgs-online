@@ -90,7 +90,7 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
 Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {
     Route::get('index', 'index')->name('absensi.index');
     Route::get('add-attendance-date', 'addAttendanceDate')->name('absensi.add_attendance_date');
-    Route::get('create', 'create')->name('absensi.create');
+    Route::post('delete-attendance-date/{id}', 'deleteAttendanceDate')->name('absensi.delete_attendance_date');
     Route::post('store', 'store')->name('absensi.store');
 });
 
