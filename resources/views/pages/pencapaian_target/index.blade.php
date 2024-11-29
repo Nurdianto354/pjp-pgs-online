@@ -129,7 +129,7 @@
                                                 @foreach ($datas as $data)
                                                     <td style="padding: 5px 10px;">
                                                         <div class="form-group" style="margin: 0px;">
-                                                            <input class="form-control" type="number" placeholder="">
+                                                            <input class="form-control" min="0" type="number" placeholder="" value="0">
                                                         </div>
                                                     </td>
                                                 @endforeach
