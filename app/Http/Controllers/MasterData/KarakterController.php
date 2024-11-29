@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class KarakterController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $datas = Karakter::where('status', true)->orderBy('created_at', 'DESC')->get();

@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class SatuanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $datas = Satuan::where('status', true)->orderBy('created_at', 'DESC')->get();

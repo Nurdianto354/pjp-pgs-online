@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./index2.html" class="nav-link">
+                    <a href="{{ route('pencapaian_target.index') }}" class="nav-link {{ setActive('pencapaian-target/*') }}">
                         <i class="nav-icon fa-solid fa-chart-line"></i>
                         <p>Pencapaian Target</p>
                     </a>

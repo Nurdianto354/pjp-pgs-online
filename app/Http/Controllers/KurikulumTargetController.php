@@ -27,6 +27,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class KurikulumTargetController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();

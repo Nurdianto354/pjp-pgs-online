@@ -7,13 +7,17 @@ use App\Models\Absensi\AbsensiDetail;
 use App\Models\MasterData\Anggota;
 use App\Models\MasterData\Kelas;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AbsensiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();

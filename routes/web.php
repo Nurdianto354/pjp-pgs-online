@@ -12,6 +12,7 @@ use App\Http\Controllers\MasterData\TahunAjaranController;
 use App\Http\Controllers\MasterUser\PermissionController;
 use App\Http\Controllers\MasterUser\RoleController;
 use App\Http\Controllers\MasterUser\UserController;
+use App\Http\Controllers\PencapaianTargetController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +86,10 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
     Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
     Route::get('export-template', 'exportTemplate')->name('kurikulum_target.export_template');
     Route::post('import-data', 'importData')->name('kurikulum_target.import_data');
+});
+
+Route::controller(PencapaianTargetController::class)->prefix('pencapaian-target')->group(function () {
+    Route::get('index', 'index')->name('pencapaian_target.index');
 });
 
 Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {

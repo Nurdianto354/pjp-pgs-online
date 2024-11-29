@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Log;
 
 class AnggotaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $listKelas = Kelas::where('status', true)->get();
