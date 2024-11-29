@@ -58,7 +58,7 @@
                                         <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                         <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
                                         <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaran->id }}">
-                                        <button type="submit" class="btn btn-outline-success col-sm text-left {{ App\Models\KurikulumTarget\KurikulumTarget::getTab($tahunAjaran->id, $tahunAjaranId) ? 'active' : '' }}">
+                                        <button type="submit" class="btn btn-outline-success col-sm text-left {{ App\Models\PencapaianTarget\PencapaianTarget::getTab($tahunAjaran->id, $tahunAjaranId) ? 'active' : '' }}">
                                             {{ $tahunAjaran->nama }}
                                         </button>
                                     </form>
@@ -93,15 +93,14 @@
                                                 $karakterId = null;
                                                 $karakterName = null
                                             @endphp
-
-                                            @foreach ($datas as $data)
-                                                @if ($karakterId != $data->karakter_id)
+                                            @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                @if ($karakterId != $targetKurikulum->karakter_id)
                                                     @if ($karakterId != null)
                                                         <th colspan="{{ $colspan }}" class="text-nowrap">{{ $karakterName }}</th>
                                                     @endif
                                                     @php
-                                                        $karakterId = $data->karakter_id;
-                                                        $karakterName = $data->getKarakter->nama;
+                                                        $karakterId = $targetKurikulum->karakter_id;
+                                                        $karakterName = $targetKurikulum->getKarakter->nama;
                                                         $colspan = 1;
                                                     @endphp
                                                 @else
@@ -113,23 +112,33 @@
                                             <th colspan="{{ $colspan }}" class="text-nowrap">{{ $karakterName }}</th>
                                         </tr>
                                         <tr class="text-center">
-                                            @foreach ($datas as $data)
-                                                <th class="text-nowrap">{{ $data->getMateri->nama }}</th>
+                                            @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                <th class="text-nowrap">{{ $targetKurikulum->getMateri->nama }}</th>
                                             @endforeach
                                         </tr>
                                         <tr class="text-center">
-                                            @foreach ($datas as $data)
-                                                <th class="text-nowrap">{{ $data->target . " " . $data->getSatuan->nama }}</th>
+                                            @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                <th class="text-nowrap">{{ $targetKurikulum->target . " " . $targetKurikulum->getSatuan->nama }}</th>
                                             @endforeach
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($listAnggota as $anggota)
                                             <tr>
-                                                @foreach ($datas as $data)
+                                                @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                    @php
+                                                        $id = $listPencapaianTarget[$anggota->id][$targetKurikulum->id]['id'] ?? null;
+                                                        $target = $listPencapaianTarget[$anggota->id][$targetKurikulum->id]['target'] ?? null;
+                                                    @endphp
                                                     <td style="padding: 5px 10px;">
                                                         <div class="form-group" style="margin: 0px;">
-                                                            <input class="form-control" min="0" type="number" placeholder="" value="0">
+                                                            <input class="form-control nilai-pencapaian" min="0" type="number" placeholder="0" name="target" value="{{ $target }}"
+                                                                data-id="{{ $id }}"
+                                                                data-kelas_id="{{ $kelasId }}"
+                                                                data-tahun_ajaran_id="{{ $tahunAjaranId }}"
+                                                                data-anggota_id="{{ $anggota->id }}"
+                                                                data-kurikulum_target_detail_id="{{ $targetKurikulum->id }}"
+                                                            >
                                                         </div>
                                                     </td>
                                                 @endforeach
@@ -147,3 +156,34 @@
 </section>
 @endsection
 @section('js')
+<script>
+    $(".nilai-pencapaian").on("change", function() {
+        let id = $(this).data('id');
+        let kelasId = $(this).data('kelas_id');
+        let tahunAjaranId = $(this).data('tahun_ajaran_id');
+        let anggotaId = $(this).data('anggota_id');
+        let kurikulumTargetId = $(this).data('kurikulum_target_id');
+        let kurikulumTargetDetailId = $(this).data('kurikulum_target_detail_id');
+        let target = $(this).val();
+
+        $.ajax({
+            url    : "{{ url('/pencapaian-target/store') }}",
+            method : 'POST',
+            data   : {
+                id                          : id,
+                kelas_id                    : kelasId,
+                tahun_ajaran_id             : tahunAjaranId,
+                anggota_id                  : anggotaId,
+                kurikulum_target_detail_id  : kurikulumTargetDetailId,
+                target                      : target
+            },
+            success: function(response) {
+                console.log('Response from server:', response);
+            },
+            error: function(xhr, status, error) {
+                console.log('AJAX error:', error);
+            }
+        });
+    });
+</script>
+@endsection

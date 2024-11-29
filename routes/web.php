@@ -90,6 +90,7 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
 
 Route::controller(PencapaianTargetController::class)->prefix('pencapaian-target')->group(function () {
     Route::get('index', 'index')->name('pencapaian_target.index');
+    Route::post('store', 'store')->name('pencapaian_target.store');
 });
 
 Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {

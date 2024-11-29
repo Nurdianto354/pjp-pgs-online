@@ -130,10 +130,10 @@
                                             @foreach ($listAnggota as $anggota)
                                                 <tr>
                                                     @foreach ($listAbsensi as $data)
-                                                        <?php
+                                                        @php
                                                             $id = $listAbsensiDetail[$data->id][$anggota->id]['id'] ?? null;
                                                             $absensi = $listAbsensiDetail[$data->id][$anggota->id]['absensi'] ?? null;
-                                                        ?>
+                                                        @endphp
                                                         <td style="padding: 5px 2px;">
                                                             <div class="form-group" style="margin: 0px;">
                                                                 <select class="form-control kehadiran" name="kehadiran"

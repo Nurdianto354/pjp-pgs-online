@@ -39,11 +39,11 @@ class AbsensiController extends Controller
 
         $listAbsensiDetail = [];
 
-        foreach ($listAbsensi as $data) {
-            $listDetail = AbsensiDetail::select('id', 'anggota_id', 'absensi')->where('absensi_id', $data->id)->get()->toArray();
+        foreach ($listAbsensi as $absensi) {
+            $datas = AbsensiDetail::select('id', 'anggota_id', 'absensi')->where('absensi_id', $absensi->id)->get()->toArray();
 
-            foreach ($listDetail as $value) {
-                $listAbsensiDetail[$data->id][$value['anggota_id']] = $value;
+            foreach ($datas as $data) {
+                $listAbsensiDetail[$absensi->id][$data['anggota_id']] = $data;
             }
         }
 
