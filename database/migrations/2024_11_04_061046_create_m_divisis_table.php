@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnggotasTable extends Migration
+class CreateMDivisisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,11 @@ class CreateAnggotasTable extends Migration
      */
     public function up()
     {
-        Schema::create('m_anggota', function (Blueprint $table) {
+        Schema::create('m_divisi', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nama_lengkap');
-            $table->string('nama_panggilan');
-            $table->unsignedBigInteger('kelas_id');
-            $table->string('tempat_lahir');
-            $table->date('tanggal_lahir');
+            $table->string('nama');
             $table->boolean('status');
             $table->timestamps();
-
-            $table->foreign('kelas_id')->references('id')->on('m_kelas')->onDelete('cascade');
         });
     }
 
@@ -34,6 +28,6 @@ class CreateAnggotasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('m_anggota');
+        Schema::dropIfExists('m_divisi');
     }
 }

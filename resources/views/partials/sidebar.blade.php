@@ -37,21 +37,15 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('master_data.kelas.index') }}" class="nav-link {{ setActive('master-data/kelas/*') }}">
+                            <a href="{{ route('master_data.tahun_ajaran.index') }}" class="nav-link {{ setActive('master-data/tahun-ajaran/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Kelas</p>
+                                <p>Tahun Ajaran</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('master_data.materi.index') }}" class="nav-link {{ setActive('master-data/materi/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Materi</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('master_data.tahun_ajaran.index') }}" class="nav-link {{ setActive('master-data/tahun-ajaran/*') }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tahun Ajaran</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -67,12 +61,24 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('master_data.anggota.index') }}" class="nav-link {{ setActive('master-data/anggota/*') }}">
+                            <a href="{{ route('master_data.divisi.index') }}" class="nav-link {{ setActive('master-data/divisi/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Anggota</p>
+                                <p>Divisi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('master_data.kelas.index') }}" class="nav-link {{ setActive('master-data/kelas/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Kelas</p>
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('murid.index') }}" class="nav-link {{ setActive('murid/*') }}">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>Murid</p>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('kurikulum_target.index') }}" class="nav-link {{ setActive('kurikulum-target/*') }}">

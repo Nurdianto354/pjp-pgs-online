@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\MasterData;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\MasterData\Anggota;
+use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Kelas;
+use App\Models\Murid\Murid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class AnggotaController extends Controller
+class MuridController extends Controller
 {
     public function __construct()
     {
@@ -20,32 +21,38 @@ class AnggotaController extends Controller
     public function index()
     {
         $listKelas = Kelas::where('status', true)->get();
-        $datas = Anggota::with('getKelas')->get();
+        $listDivisi = Divisi::where('status', true)->get();
 
-        return view('pages.master_data.anggota.index', compact('listKelas', 'datas'));
+        $datas = Murid::with('getKelas')->get();
+
+        return view('pages.murid.index', compact('listKelas', 'listDivisi', 'datas'));
     }
 
     public function create(Request $request)
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Anggota";
+        $title  = "Data Murid";
 
         DB::beginTransaction();
         try {
             if ($request->id != null && $request->id != '') {
-                $data = Anggota::findOrFail($request->id);
+                $data = Murid::findOrFail($request->id);
                 $action = "perbarui";
             } else {
-                $data = new Anggota();
+                $data = new Murid();
                 $data->created_at = Carbon::now();
             }
 
             $data->nama_lengkap   = $request->nama_lengkap;
             $data->nama_panggilan = $request->nama_panggilan;
+            $data->jenis_kelamin  = $request->jenis_kelamin;
+            $data->divisi_id      = $request->divisi_id;
             $data->kelas_id       = $request->kelas_id;
             $data->tempat_lahir   = $request->tempat_lahir;
             $data->tanggal_lahir  = $request->tanggal_lahir;
+            $data->alamat         = $request->alamat;
+            $data->no_telp        = $request->no_telp;
             $data->status         = true;
             $data->updated_at     = Carbon::now();
             $data->save();
@@ -69,7 +76,7 @@ class AnggotaController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = Anggota::findOrFail($id);
+            $data = Murid::findOrFail($id);
             $data->status = false;
             $data->save();
 

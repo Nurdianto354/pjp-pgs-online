@@ -76,75 +76,100 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($listAnggota as $anggota)
-                                            <tr>
-                                                <td>{{ $anggota->nama_panggilan }}</td>
+                                        @if (count($listMurid) > 0)
+                                            @foreach ($listMurid as $murid)
+                                                <tr>
+                                                    <td>{{ $murid->nama_panggilan }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr class="text-center">
+                                                <td>Data murid tidak ada</td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-sm-10 table-responsive" style="padding-left: 0px;">
                                 <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr class="text-center">
-                                            @php
-                                                $colspan = 0;
-                                                $karakterId = null;
-                                                $karakterName = null
-                                            @endphp
-                                            @foreach ($listTargetKurikulum as $targetKurikulum)
-                                                @if ($karakterId != $targetKurikulum->karakter_id)
-                                                    @if ($karakterId != null)
-                                                        <th colspan="{{ $colspan }}" class="text-nowrap">{{ $karakterName }}</th>
-                                                    @endif
-                                                    @php
-                                                        $karakterId = $targetKurikulum->karakter_id;
-                                                        $karakterName = $targetKurikulum->getKarakter->nama;
-                                                        $colspan = 1;
-                                                    @endphp
-                                                @else
-                                                    @php
-                                                        $colspan++;
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-                                            <th colspan="{{ $colspan }}" class="text-nowrap">{{ $karakterName }}</th>
-                                        </tr>
-                                        <tr class="text-center">
-                                            @foreach ($listTargetKurikulum as $targetKurikulum)
-                                                <th class="text-nowrap">{{ $targetKurikulum->getMateri->nama }}</th>
-                                            @endforeach
-                                        </tr>
-                                        <tr class="text-center">
-                                            @foreach ($listTargetKurikulum as $targetKurikulum)
-                                                <th class="text-nowrap">{{ $targetKurikulum->target . " " . $targetKurikulum->getSatuan->nama }}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($listAnggota as $anggota)
-                                            <tr>
+                                    @if (count($listTargetKurikulum) > 0)
+                                        <thead>
+                                            <tr class="text-center">
+                                                @php
+                                                    $colspan = 0;
+                                                    $karakterId = null;
+                                                    $karakterName = null
+                                                @endphp
                                                 @foreach ($listTargetKurikulum as $targetKurikulum)
-                                                    @php
-                                                        $id = $listPencapaianTarget[$anggota->id][$targetKurikulum->id]['id'] ?? null;
-                                                        $target = $listPencapaianTarget[$anggota->id][$targetKurikulum->id]['target'] ?? null;
-                                                    @endphp
-                                                    <td style="padding: 5px 10px;">
-                                                        <div class="form-group" style="margin: 0px;">
-                                                            <input class="form-control nilai-pencapaian" min="0" type="number" placeholder="0" name="target" value="{{ $target }}"
-                                                                data-id="{{ $id }}"
-                                                                data-kelas_id="{{ $kelasId }}"
-                                                                data-tahun_ajaran_id="{{ $tahunAjaranId }}"
-                                                                data-anggota_id="{{ $anggota->id }}"
-                                                                data-kurikulum_target_detail_id="{{ $targetKurikulum->id }}"
-                                                            >
-                                                        </div>
-                                                    </td>
+                                                    @if ($karakterId != $targetKurikulum->karakter_id)
+                                                        @if ($karakterId != null)
+                                                            <th colspan="{{ $colspan }}" class="text-nowrap">{{ $karakterName }}</th>
+                                                        @endif
+                                                        @php
+                                                            $karakterId = $targetKurikulum->karakter_id;
+                                                            $karakterName = $targetKurikulum->getKarakter->nama;
+                                                            $colspan = 1;
+                                                        @endphp
+                                                    @else
+                                                        @php
+                                                            $colspan++;
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                                <th colspan="{{ $colspan }}" class="text-nowrap">{{ $karakterName }}</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                    <th class="text-nowrap">{{ $targetKurikulum->getMateri->nama }}</th>
                                                 @endforeach
                                             </tr>
-                                        @endforeach
-                                    </tbody>
+                                            <tr class="text-center">
+                                                @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                    <th class="text-nowrap">{{ $targetKurikulum->target . " " . $targetKurikulum->getSatuan->nama }}</th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listMurid as $murid)
+                                                <tr>
+                                                    @foreach ($listTargetKurikulum as $targetKurikulum)
+                                                        @php
+                                                            $id = $listPencapaianTarget[$murid->id][$targetKurikulum->id]['id'] ?? null;
+                                                            $target = $listPencapaianTarget[$murid->id][$targetKurikulum->id]['target'] ?? null;
+                                                        @endphp
+                                                        <td style="padding: 5px 10px;">
+                                                            <div class="form-group" style="margin: 0px;">
+                                                                <input class="form-control nilai-pencapaian" min="0" type="number" placeholder="0" name="target" value="{{ $target }}"
+                                                                    data-id="{{ $id }}"
+                                                                    data-kelas_id="{{ $kelasId }}"
+                                                                    data-tahun_ajaran_id="{{ $tahunAjaranId }}"
+                                                                    data-murid_id="{{ $murid->id }}"
+                                                                    data-kurikulum_target_detail_id="{{ $targetKurikulum->id }}"
+                                                                >
+                                                            </div>
+                                                        </td>
+                                                    @endforeach
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    @else
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                            </tr>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                            </tr>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="text-center">
+                                                <td>Target kurikulum belum dibuat atau tidak ada</td>
+                                            </tr>
+                                        </tbody>
+                                    @endif
                                 </table>
                             </div>
                         </div>
@@ -161,7 +186,7 @@
         let id = $(this).data('id');
         let kelasId = $(this).data('kelas_id');
         let tahunAjaranId = $(this).data('tahun_ajaran_id');
-        let anggotaId = $(this).data('anggota_id');
+        let anggotaId = $(this).data('murid_id');
         let kurikulumTargetId = $(this).data('kurikulum_target_id');
         let kurikulumTargetDetailId = $(this).data('kurikulum_target_detail_id');
         let target = $(this).val();
@@ -173,7 +198,7 @@
                 id                          : id,
                 kelas_id                    : kelasId,
                 tahun_ajaran_id             : tahunAjaranId,
-                anggota_id                  : anggotaId,
+                murid_id                  : anggotaId,
                 kurikulum_target_detail_id  : kurikulumTargetDetailId,
                 target                      : target
             },

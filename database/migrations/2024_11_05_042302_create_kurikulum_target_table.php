@@ -19,7 +19,6 @@ class CreateKurikulumTargetTable extends Migration
             $table->unsignedBigInteger('tahun_ajaran_id');
             $table->timestamps();
 
-
             $table->foreign('kelas_id')->references('id')->on('m_kelas')->onDelete('cascade');
             $table->foreign('tahun_ajaran_id')->references('id')->on('m_tahun_ajaran')->onDelete('cascade');
         });

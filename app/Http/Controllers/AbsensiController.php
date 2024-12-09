@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Absensi\Absensi;
 use App\Models\Absensi\AbsensiDetail;
-use App\Models\MasterData\Anggota;
 use App\Models\MasterData\Kelas;
+use App\Models\Murid\Murid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,20 +34,20 @@ class AbsensiController extends Controller
         }
 
         $listKelas   = Kelas::where('status', true)->get();
-        $listAnggota = Anggota::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])->orderBy('nama_panggilan', 'ASC')->get();
+        $listMurid   = Murid::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])->orderBy('nama_panggilan', 'ASC')->get();
         $listAbsensi = Absensi::where([['kelas_id', $kelasId], ['status', true]])->orderBy('tanggal', 'DESC')->get();
 
         $listAbsensiDetail = [];
 
         foreach ($listAbsensi as $absensi) {
-            $datas = AbsensiDetail::select('id', 'anggota_id', 'absensi')->where('absensi_id', $absensi->id)->get()->toArray();
+            $datas = AbsensiDetail::select('id', 'murid_id', 'absensi')->where('absensi_id', $absensi->id)->get()->toArray();
 
             foreach ($datas as $data) {
-                $listAbsensiDetail[$absensi->id][$data['anggota_id']] = $data;
+                $listAbsensiDetail[$absensi->id][$data['murid_id']] = $data;
             }
         }
 
-        return view('pages.absensi.index', compact('kelasId', 'kelasNama', 'listKelas', 'listAnggota', 'listAbsensi', 'listAbsensiDetail'));
+        return view('pages.absensi.index', compact('kelasId', 'kelasNama', 'listKelas', 'listMurid', 'listAbsensi', 'listAbsensiDetail'));
     }
 
     public function addAttendanceDate(Request $request)
@@ -155,7 +155,7 @@ class AbsensiController extends Controller
             $request->validate([
                 'kelas_id'   => 'required|integer',
                 'absensi_id' => 'required|integer',
-                'anggota_id' => 'required|integer',
+                'murid_id' => 'required|integer',
                 'absensi'    => 'required|string',
             ]);
 
@@ -168,7 +168,7 @@ class AbsensiController extends Controller
 
             $data->kelas_id   = $request->kelas_id;
             $data->absensi_id = $request->absensi_id;
-            $data->anggota_id = $request->anggota_id;
+            $data->murid_id = $request->murid_id;
             $data->absensi    = $request->absensi;
             $data->updated_at = Carbon::now();
             $data->save();

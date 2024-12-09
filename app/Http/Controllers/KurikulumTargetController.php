@@ -421,15 +421,14 @@ class KurikulumTargetController extends Controller
         $reader = IOFactory::createReader($inputFileType);
         $spreadsheet = $reader->load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet();
-        $highestRow = $sheetData->getHighestRow();
         $highestColumn = $sheetData->getHighestColumn();
         $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
 
         $kelas = $sheetData->getCellByColumnAndRow(1, 3)->getValue();
         $tahunAjaran = $sheetData->getCellByColumnAndRow(1, 4)->getValue();
 
-        $kelasId = Kelas::where([['nama', 'like', '%'.$kelas.'%'], ['status', true]])->pluck('id')->first();
-        $tahunAjaranId = TahunAjaran::where([['nama', 'like', '%'.$tahunAjaran.'%'], ['status', true]])->pluck('id')->first();
+        $kelasId = Kelas::where([['nama', 'LIKE', '%'.$kelas.'%'], ['status', true]])->pluck('id')->first();
+        $tahunAjaranId = TahunAjaran::where([['nama', 'LIKE', '%'.$tahunAjaran.'%'], ['status', true]])->pluck('id')->first();
 
         if (empty($kelasId) || empty($tahunAjaranId)) {
             toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran.', karena kelas atau tahun ajaran tidak di temukan', 'Error');
@@ -467,12 +466,15 @@ class KurikulumTargetController extends Controller
             $data->updated_at       = Carbon::now();
             $data->save();
 
-            for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            for ($col = 1; $col <= $highestColumnIndex-1; $col++) {
                 $row = 6;
 
-                $namaKarakter = $sheetData->getCellByColumnAndRow($col, $row)->getValue(); $row++;
-                $namaMateri   = $sheetData->getCellByColumnAndRow($col, $row)->getValue(); $row++;
-                $namaSatuan   = $sheetData->getCellByColumnAndRow($col, $row)->getValue(); $row++;
+                $namaKarakter = $sheetData->getCellByColumnAndRow($col, $row)->getValue();
+                $row++;
+                $namaMateri   = $sheetData->getCellByColumnAndRow($col, $row)->getValue();
+                $row++;
+                $namaSatuan   = $sheetData->getCellByColumnAndRow($col, $row)->getValue();
+                $row++;
                 $target       = $sheetData->getCellByColumnAndRow($col, $row)->getValue();
 
                 if (empty($namaKarakter) || empty($namaMateri) || empty($namaSatuan) || empty($target)) {

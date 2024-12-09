@@ -5,6 +5,7 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 trait AuthenticatesUsers
@@ -154,7 +155,7 @@ trait AuthenticatesUsers
      */
     public function username()
     {
-        return 'email';
+        return 'username';
     }
 
     /**

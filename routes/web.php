@@ -3,7 +3,7 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KurikulumTargetController;
-use App\Http\Controllers\MasterData\AnggotaController;
+use App\Http\Controllers\MasterData\DivisiController;
 use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
 use App\Http\Controllers\MasterData\MateriController;
@@ -12,6 +12,7 @@ use App\Http\Controllers\MasterData\TahunAjaranController;
 use App\Http\Controllers\MasterUser\PermissionController;
 use App\Http\Controllers\MasterUser\RoleController;
 use App\Http\Controllers\MasterUser\UserController;
+use App\Http\Controllers\MuridController;
 use App\Http\Controllers\PencapaianTargetController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Auth;
@@ -41,22 +42,16 @@ Route::controller(ProfilController::class)->prefix('profil')->group(function () 
 });
 
 Route::prefix('master-data')->group(function () {
-    Route::controller(KelasController::class)->prefix('kelas')->group(function () {
-        Route::get('index', 'index')->name('master_data.kelas.index');
-        Route::post('create', 'create')->name('master_data.kelas.create');
-        Route::post('delete/{id}', 'destroy')->name('master_data.kelas.destroy');
+    Route::controller(TahunAjaranController::class)->prefix('tahun-ajaran')->group(function () {
+        Route::get('index', 'index')->name('master_data.tahun_ajaran.index');
+        Route::post('create', 'create')->name('master_data.tahun_ajaran.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.tahun_ajaran.destroy');
     });
 
     Route::controller(MateriController::class)->prefix('materi')->group(function () {
         Route::get('index', 'index')->name('master_data.materi.index');
         Route::post('create', 'create')->name('master_data.materi.create');
         Route::post('delete/{id}', 'destroy')->name('master_data.materi.destroy');
-    });
-
-    Route::controller(TahunAjaranController::class)->prefix('tahun-ajaran')->group(function () {
-        Route::get('index', 'index')->name('master_data.tahun_ajaran.index');
-        Route::post('create', 'create')->name('master_data.tahun_ajaran.create');
-        Route::post('delete/{id}', 'destroy')->name('master_data.tahun_ajaran.destroy');
     });
 
     Route::controller(KarakterController::class)->prefix('karakter')->group(function () {
@@ -71,11 +66,23 @@ Route::prefix('master-data')->group(function () {
         Route::post('delete/{id}', 'destroy')->name('master_data.satuan.destroy');
     });
 
-    Route::controller(AnggotaController::class)->prefix('anggota')->group(function () {
-        Route::get('index', 'index')->name('master_data.anggota.index');
-        Route::post('create', 'create')->name('master_data.anggota.create');
-        Route::post('delete/{id}', 'destroy')->name('master_data.anggota.destroy');
+    Route::controller(DivisiController::class)->prefix('divisi')->group(function () {
+        Route::get('index', 'index')->name('master_data.divisi.index');
+        Route::post('create', 'create')->name('master_data.divisi.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.divisi.destroy');
     });
+
+    Route::controller(KelasController::class)->prefix('kelas')->group(function () {
+        Route::get('index', 'index')->name('master_data.kelas.index');
+        Route::post('create', 'create')->name('master_data.kelas.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.kelas.destroy');
+    });
+});
+
+Route::controller(MuridController::class)->prefix('murid')->group(function () {
+    Route::get('index', 'index')->name('murid.index');
+    Route::post('create', 'create')->name('murid.create');
+    Route::post('delete/{id}', 'destroy')->name('murid.destroy');
 });
 
 Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')->group(function () {

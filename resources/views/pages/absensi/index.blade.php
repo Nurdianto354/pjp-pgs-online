@@ -60,7 +60,7 @@
                                     >
                                         <i class="fa fa-plus"></i> Tambah Tanggal
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#modalImportData">
+                                    {{-- <button type="button" class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#modalImportData">
                                         <i class="fas fa-file-import"></i> Import Data
                                     </button>
                                     <form method="GET" action="{{ route('kurikulum_target.export_template') }}">
@@ -68,7 +68,7 @@
                                         <button type="submit" class="btn btn-sm btn-outline-success ml-1">
                                             <i class="fa fa-download"></i> Download Template
                                         </button>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </div>
                         </div>
@@ -85,74 +85,96 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($listAnggota as $anggota)
-                                                <tr>
-                                                    <td>{{ $anggota->nama_panggilan }}</td>
+                                            @if (count($listMurid) > 0)
+                                                @foreach ($listMurid as $murid)
+                                                    <tr>
+                                                        <td>{{ $murid->nama_panggilan }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr class="text-center">
+                                                    <td>Data murid tidak ada</td>
                                                 </tr>
-                                            @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="col-sm-10 table-responsive" style="padding-left: 0px;">
                                     <table class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr class="text-center">
-                                                @foreach ($listAbsensi as $data)
-                                                    <th style="padding: 8px 0px;">
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-sm btn-outline-warning btn-perbarui"
-                                                                title="perbarui"
-                                                                data-toggle="modal"
-                                                                data-target="#modalInput"
-                                                                data-absensi_id="{{ $data->id }}"
-                                                                data-kelas_id="{{ $kelasId }}"
-                                                                data-tanggal="{{ date('Y-m-d', $data->tanggal) }}"
-                                                            >
-                                                                <i class="far fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger btn-hapus" title="hapus"
-                                                                data-id="{{ $data->id }}"
-                                                                data-tanggal="{{ date('d-m-Y', $data->tanggal) }}"
-                                                            >
-                                                                <i class="far fa-trash-alt"></i>
-                                                            </button>
-                                                        </div>
-                                                    </th>
-                                                @endforeach
-                                            </tr>
-                                            <tr class="text-center">
-                                                @foreach ($listAbsensi as $data)
-                                                    <th class="text-nowrap">{{ date('d-m-Y', $data->tanggal) }}</th>
-                                                @endforeach
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listAnggota as $anggota)
-                                                <tr>
+                                        @if (count($listAbsensi) > 0)
+                                            <thead>
+                                                <tr class="text-center">
                                                     @foreach ($listAbsensi as $data)
-                                                        @php
-                                                            $id = $listAbsensiDetail[$data->id][$anggota->id]['id'] ?? null;
-                                                            $absensi = $listAbsensiDetail[$data->id][$anggota->id]['absensi'] ?? null;
-                                                        @endphp
-                                                        <td style="padding: 5px 2px;">
-                                                            <div class="form-group" style="margin: 0px;">
-                                                                <select class="form-control kehadiran" name="kehadiran"
-                                                                    data-id="{{ $id }}"
-                                                                    data-kelas_id="{{ $kelasId }}"
+                                                        <th style="padding: 8px 0px;">
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-sm btn-outline-warning btn-perbarui"
+                                                                    title="perbarui"
+                                                                    data-toggle="modal"
+                                                                    data-target="#modalInput"
                                                                     data-absensi_id="{{ $data->id }}"
-                                                                    data-anggota_id="{{ $anggota->id }}"
+                                                                    data-kelas_id="{{ $kelasId }}"
+                                                                    data-tanggal="{{ date('Y-m-d', $data->tanggal) }}"
                                                                 >
-                                                                    <option value="" {{ $absensi === '' ? 'selected' : '' }}></option>
-                                                                    <option value="H" {{ $absensi === 'H' ? 'selected' : '' }}>H</option>
-                                                                    <option value="A" {{ $absensi === 'A' ? 'selected' : '' }}>A</option>
-                                                                    <option value="I" {{ $absensi === 'I' ? 'selected' : '' }}>I</option>
-                                                                </select>
+                                                                    <i class="far fa-edit"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-outline-danger btn-hapus" title="hapus"
+                                                                    data-id="{{ $data->id }}"
+                                                                    data-tanggal="{{ date('d-m-Y', $data->tanggal) }}"
+                                                                >
+                                                                    <i class="far fa-trash-alt"></i>
+                                                                </button>
                                                             </div>
-                                                        </td>
+                                                        </th>
                                                     @endforeach
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
+                                                <tr class="text-center">
+                                                    @foreach ($listAbsensi as $data)
+                                                        <th class="text-nowrap">{{ date('d-m-Y', $data->tanggal) }}</th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($listMurid as $murid)
+                                                    <tr>
+                                                        @foreach ($listAbsensi as $data)
+                                                            @php
+                                                                $id = $listAbsensiDetail[$data->id][$murid->id]['id'] ?? null;
+                                                                $absensi = $listAbsensiDetail[$data->id][$murid->id]['absensi'] ?? null;
+                                                            @endphp
+                                                            <td style="padding: 5px 2px;">
+                                                                <div class="form-group" style="margin: 0px;">
+                                                                    <select class="form-control kehadiran" name="kehadiran"
+                                                                        data-id="{{ $id }}"
+                                                                        data-kelas_id="{{ $kelasId }}"
+                                                                        data-absensi_id="{{ $data->id }}"
+                                                                        data-murid_id="{{ $murid->id }}"
+                                                                    >
+                                                                        <option value="" {{ $absensi === '' ? 'selected' : '' }}></option>
+                                                                        <option value="H" {{ $absensi === 'H' ? 'selected' : '' }}>H</option>
+                                                                        <option value="A" {{ $absensi === 'A' ? 'selected' : '' }}>A</option>
+                                                                        <option value="I" {{ $absensi === 'I' ? 'selected' : '' }}>I</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        @else
+                                            <thead>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="text-center">
+                                                    <td>Tanggal absensi belum dibuat</td>
+                                                </tr>
+                                            </tbody>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -358,7 +380,7 @@
         var id = $(this).data('id');
         var kelasId = $(this).data('kelas_id');
         var absensiId = $(this).data('absensi_id');
-        var anggotaId = $(this).data('anggota_id');
+        var anggotaId = $(this).data('murid_id');
         var absensi = $(this).val();
 
         $.ajax({
@@ -368,7 +390,7 @@
                 id          : id,
                 kelas_id    : kelasId,
                 absensi_id  : absensiId,
-                anggota_id  : anggotaId,
+                murid_id  : anggotaId,
                 absensi     : absensi
             },
             success: function(data) {
