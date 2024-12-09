@@ -47,7 +47,12 @@ class PencapaianTargetController extends Controller
         $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])->orderBy('nama_panggilan', 'ASC')->get();
 
         $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_ajaran_id', $tahunAjaranId]])->pluck('id')->first();
-        $listTargetKurikulum = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')->where('kurikulum_target_id', $id)->orderBy('created_at', 'ASC')->get();
+        $listTargetKurikulum = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')
+            ->where('kurikulum_target_id', $id)
+            ->orderBy('karakter_id', 'ASC')
+            ->orderBy('created_at', 'ASC')
+            ->get();
+
 
         $listPencapaianTarget = [];
 

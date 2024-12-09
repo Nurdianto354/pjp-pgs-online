@@ -68,7 +68,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-2" style="padding-right: 0px;">
+                            <!-- Kolom pertama: Daftar siswa -->
+                            <div class="col-3 col-md-3" style="padding-right: 0px;">
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr class="text-center" style="height: 148px;">
@@ -90,7 +91,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-sm-10 table-responsive" style="padding-left: 0px;">
+
+                            <!-- Kolom kedua: Tabel Target Kurikulum -->
+                            <div class="col-9 col-md-9 table-responsive" style="padding-left: 0px;">
                                 <table class="table table-bordered table-striped">
                                     @if (count($listTargetKurikulum) > 0)
                                         <thead>
