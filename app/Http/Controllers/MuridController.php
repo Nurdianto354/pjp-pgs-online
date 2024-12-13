@@ -44,8 +44,8 @@ class MuridController extends Controller
                 $data->created_at = Carbon::now();
             }
 
-            $data->nama_lengkap   = $request->nama_lengkap;
-            $data->nama_panggilan = $request->nama_panggilan;
+            $data->nama_lengkap   = ucwords(strtolower($request->nama_lengkap));
+            $data->nama_panggilan = ucwords(strtolower($request->nama_panggilan));
             $data->jenis_kelamin  = $request->jenis_kelamin;
             $data->divisi_id      = $request->divisi_id;
             $data->kelas_id       = $request->kelas_id;

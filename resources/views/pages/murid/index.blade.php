@@ -82,6 +82,7 @@
                                                     data-nama_panggilan="{{ $data->nama_panggilan }}"
                                                     data-jenis_kelamin="{{ $data->jenis_kelamin }}"
                                                     data-kelas_id="{{ $data->kelas_id }}"
+                                                    data-divisi_id="{{ $data->divisi_id }}"
                                                     data-tempat_lahir="{{ $data->tempat_lahir }}"
                                                     data-tanggal_lahir="{{ $data->tanggal_lahir }}"
                                                     data-alamat="{{ $data->alamat }}"

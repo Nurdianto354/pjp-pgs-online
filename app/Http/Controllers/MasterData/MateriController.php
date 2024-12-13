@@ -18,7 +18,7 @@ class MateriController extends Controller
 
     public function index()
     {
-        $datas = Materi::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = Materi::orderBy('created_at', 'DESC')->get();
 
         return view('pages.master_data.materi.index', compact('datas'));
     }
@@ -27,7 +27,17 @@ class MateriController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Materi";
+        $title  = "Data Materi ".$request->nama;
+
+        $checkData = Materi::where('nama', 'LIKE', '%'.$request->nama.'%')->where('id', '!=', $request->id)
+            ->first();
+
+        if (!empty($checkData)) {
+            $message = "Gagal. " . " " . $action . " " . $title . " sudah ada dan status ". ($checkData->status == true ? "Active" : "Inactive");
+
+            toast($message, 'info');
+            return back();
+        }
 
         DB::beginTransaction();
         try {
@@ -37,11 +47,11 @@ class MateriController extends Controller
             } else {
                 $data = new Materi();
                 $data->created_at = Carbon::now();
-                $data->status     = true;
             }
 
-            $data->nama         = $request->nama;
-            $data->updated_at   = Carbon::now();
+            $data->nama       = ucwords(strtolower($request->nama));
+            $data->status     = true;
+            $data->updated_at = Carbon::now();
             $data->save();
 
             DB::commit();

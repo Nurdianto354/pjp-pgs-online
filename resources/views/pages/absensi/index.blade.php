@@ -58,7 +58,7 @@
                                         data-target="#modalInput"
                                         data-kelas_id="{{ $kelasId }}"
                                     >
-                                        <i class="fa fa-plus"></i> Tambah Tanggal
+                                        <i class="fa fa-plus"></i> Tambah Tanggal {{ $kelasId }}
                                     </button>
                                     {{-- <button type="button" class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#modalImportData">
                                         <i class="fas fa-file-import"></i> Import Data

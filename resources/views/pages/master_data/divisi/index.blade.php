@@ -57,9 +57,11 @@
                                                     data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
                                                     <i class="far fa-edit"></i> Ubah
                                                 </button>
-                                                <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
-                                                    <i class="far fa-trash-alt"></i> Hapus
-                                                </button>
+                                                @if ($data->status == true)
+                                                    <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                        <i class="far fa-trash-alt"></i> Hapus
+                                                    </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
