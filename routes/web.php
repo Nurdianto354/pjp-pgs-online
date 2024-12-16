@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\Aktivitas\HariLiburController;
+use App\Http\Controllers\Aktivitas\JadwalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KurikulumTargetController;
 use App\Http\Controllers\MasterData\DivisiController;
@@ -105,6 +107,16 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
 Route::controller(PencapaianTargetController::class)->prefix('pencapaian-target')->group(function () {
     Route::get('index', 'index')->name('pencapaian_target.index');
     Route::post('store', 'store')->name('pencapaian_target.store');
+});
+
+Route::prefix('aktivitas')->group(function () {
+    Route::controller(JadwalController::class)->prefix('jadwal')->group(function () {
+        Route::get('index', 'index')->name('aktivitas.jadwal.index');
+    });
+
+    Route::controller(HariLiburController::class)->prefix('hari_libur')->group(function () {
+        Route::get('index', 'index')->name('aktivitas.hari_libur.index');
+    });
 });
 
 Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {

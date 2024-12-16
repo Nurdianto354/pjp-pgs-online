@@ -98,6 +98,29 @@
                         <p>Pencapaian Target</p>
                     </a>
                 </li>
+                <li class="nav-item {{ setActiveMenu('aktivitas/*') }}">
+                    <a href="#" class="nav-link {{ setActive('aktivitas/*') }}">
+                        <i class="nav-icon fa-solid fa-calendar-days"></i>
+                        <p>
+                            Aktivitas
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('aktivitas.jadwal.index') }}" class="nav-link {{ setActive('aktivitas/jadwal/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Jadwal</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('aktivitas.hari_libur.index') }}" class="nav-link {{ setActive('aktivitas/hari_libur/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Hari Libur</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
                         <i class="nav-icon far fa-calendar-check"></i>
@@ -106,13 +129,13 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
-                        <i class="nav-icon far fa-calendar-check"></i>
+                        <i class="nav-icon fa-solid fa-laptop-file"></i>
                         <p>Kegiatan</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
-                        <i class="nav-icon far fa-calendar-check"></i>
+                        <i class="nav-icon fa-solid fa-box-archive"></i>
                         <p>Laporan</p>
                     </a>
                 </li>
