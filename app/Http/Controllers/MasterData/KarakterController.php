@@ -18,7 +18,7 @@ class KarakterController extends Controller
 
     public function index()
     {
-        $datas = Karakter::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = Karakter::orderBy('created_at', 'DESC')->get();
 
         return view('pages.master_data.karakter.index', compact('datas'));
     }

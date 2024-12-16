@@ -18,7 +18,7 @@ class TahunAjaranController extends Controller
 
     public function index()
     {
-        $datas = TahunAjaran::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = TahunAjaran::orderBy('created_at', 'DESC')->get();
 
         return view('pages.master_data.tahun_ajaran.index', compact('datas'));
     }

@@ -18,7 +18,7 @@ class SatuanController extends Controller
 
     public function index()
     {
-        $datas = Satuan::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = Satuan::orderBy('created_at', 'DESC')->get();
 
         return view('pages.master_data.satuan.index', compact('datas'));
     }

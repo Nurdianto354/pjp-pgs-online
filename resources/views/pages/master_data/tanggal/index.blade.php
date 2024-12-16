@@ -60,11 +60,11 @@
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-warning btn-sm update-data"
                                                     data-toggle="modal" data-target="#modalInput"
-                                                    data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                    data-id="{{ $data->id }}" data-tanggal="{{ date("Y-m-d", $data->tanggal) }}">
                                                     <i class="far fa-edit"></i> Ubah
                                                 </button>
                                                 @if ($data->status == true)
-                                                    <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                    <button type="button" class="btn btn-danger btn-sm delete-data" data-id="{{ $data->id }}" data-tanggal="{{ date("d-m-Y", $data->tanggal) }}">
                                                         <i class="far fa-trash-alt"></i> Hapus
                                                     </button>
                                                 @endif
@@ -100,9 +100,9 @@
                     <input type="hidden" id="id" name="id">
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input type="text" class="form-control" placeholder="Input tanggal" id="nama" name="nama">
+                        <input type="date" class="form-control" placeholder="Input tanggal" id="tanggal" name="tanggal">
                     </div>
-                    <small class="form-text text-danger error-nama" style="margin-top: -15px;">Harap masukan tanggal !</small>
+                    <small class="form-text text-danger error-tanggal" style="margin-top: -15px;">Harap masukan tanggal !</small>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger mb-2 mr-sm-2" data-dismiss="modal">
                             <i class="fa-solid fa-xmark"></i> Batal
@@ -120,7 +120,7 @@
     $(document).ready(function () {
         $('.loading').hide();
 
-        $('.error-nama').hide();
+        $('.error-tanggal').hide();
     });
 
     function validateForm() {
@@ -128,7 +128,7 @@
         let status = true;
 
         const fields = [
-            { selector: '#nama', errorSelector: '.error-nama' },
+            { selector: '#tanggal', errorSelector: '.error-tanggal' },
         ];
 
         fields.forEach(field => {
@@ -156,9 +156,9 @@
         $('#title').text('Tambah');
 
         $('#id').val('');
-        $('#nama').val('');
+        $('#tanggal').val('');
 
-        $('.error-nama').hide();
+        $('.error-tanggal').hide();
     });
 
     $('.update-data').on("click", function () {
@@ -168,23 +168,23 @@
         $('#title').text('Update')
 
         var id = $(this).data('id');
-        var nama = $(this).data('nama');
+        var tanggal = $(this).data('tanggal');
 
         $('#id').val(id);
-        $('#nama').val(nama);
+        $('#tanggal').val(tanggal);
 
-        $('.error-nama').hide();
+        $('.error-tanggal').hide();
     });
 
     $(document).on('click', '.delete-data', function(e) {
         let id   = $(this).data('id');
-        let nama = $(this).data('nama');
+        let tanggal = $(this).data('tanggal');
 
         e.preventDefault();
 
         Swal.fire({
             title: "Apakah kamu yakin ?",
-            text: "Ingin menghapus data tanggal "+nama+" ini !",
+            text: "Ingin menghapus data tanggal "+tanggal+" ini !",
             icon: "warning",
             showDenyButton: true,
             cancelButtonColor: "#DC3741",
@@ -200,14 +200,14 @@
                         if(data.status == "success") {
                             toastMixin.fire({
                                 icon: 'success',
-                                title: 'Berhasil menghapus data tanggal '+nama,
+                                title: 'Berhasil menghapus data tanggal '+tanggal,
                             });
 
                             location.reload();
                         } else if(data.status == "error") {
                             toastMixin.fire({
                                 icon: 'error',
-                                title: 'Gagal, menghapus data tanggal '+nama,
+                                title: 'Gagal, menghapus data tanggal '+tanggal,
                             });
                         }
                     }

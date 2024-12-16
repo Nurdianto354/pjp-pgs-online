@@ -27,13 +27,10 @@ class TanggalController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Tanggal ".$request->nama;
+        $title  = "Data Tanggal ".date("d-m-Y", strtotime($request->tanggal));
 
-        $this->validate($request, [
-            'nama' => 'required|string|max:255',
-        ]);
-
-        $checkData = Tanggal::where('nama', 'LIKE', '%'.$request->nama.'%')->where('id', '!=', $request->id)
+        $checkData = Tanggal::where('tanggal', 'LIKE', '%'.strtotime($request->tanggal).'%')
+            ->where('id', '!=', $request->id)
             ->first();
 
         if (!empty($checkData)) {
@@ -45,6 +42,8 @@ class TanggalController extends Controller
 
         DB::beginTransaction();
         try {
+            $tanggal = Carbon::parse($request->tanggal);
+
             if ($request->id != null && $request->id != '') {
                 $data = Tanggal::findOrFail($request->id);
                 $action = "perbarui";
@@ -54,7 +53,10 @@ class TanggalController extends Controller
                 $data->status     = true;
             }
 
-            $data->nama         = ucwords(strtolower($request->nama));
+            $data->tanggal      = strtotime($tanggal);
+            $data->hari         = $tanggal->day;
+            $data->bulan        = $tanggal->month;
+            $data->tahun        = $tanggal->year;
             $data->updated_at   = Carbon::now();
             $data->save();
 

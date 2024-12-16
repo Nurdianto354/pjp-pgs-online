@@ -18,7 +18,7 @@ class KelasController extends Controller
 
     public function index()
     {
-        $datas = Kelas::where('status', true)->orderBy('created_at', 'DESC')->get();
+        $datas = Kelas::orderBy('created_at', 'DESC')->get();
 
         return view('pages.master_data.kelas.index', compact('datas'));
     }
