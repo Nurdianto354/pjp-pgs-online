@@ -73,15 +73,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('master_data.kelas.index') }}" class="nav-link {{ setActive('master-data/kelas/*') }}">
+                            <a href="{{ route('master_data.tanggal.index') }}" class="nav-link {{ setActive('master-data/tanggal/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Tanggal</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('master_data.kelas.index') }}" class="nav-link {{ setActive('master-data/kelas/*') }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Jadwal</p>
                             </a>
                         </li>
                     </ul>
