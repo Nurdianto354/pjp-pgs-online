@@ -27,7 +27,12 @@ class SatuanController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Satuan";
+        $title  = "Data Satuan ".$request->nama;
+
+        $this->validate($request, [
+            'nama' => 'required|string|max:255',
+        ]);
+
 
         DB::beginTransaction();
         try {

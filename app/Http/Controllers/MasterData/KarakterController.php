@@ -27,7 +27,12 @@ class KarakterController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Karakter";
+        $title  = "Data Karakter ".$request->nama;
+
+        $this->validate($request, [
+            'nama' => 'required|string|max:255',
+        ]);
+
 
         DB::beginTransaction();
         try {

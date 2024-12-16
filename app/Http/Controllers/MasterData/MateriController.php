@@ -29,6 +29,10 @@ class MateriController extends Controller
         $action = "menambahkan";
         $title  = "Data Materi ".$request->nama;
 
+        $this->validate($request, [
+            'nama' => 'required|string|max:255',
+        ]);
+
         $checkData = Materi::where('nama', 'LIKE', '%'.$request->nama.'%')->where('id', '!=', $request->id)
             ->first();
 

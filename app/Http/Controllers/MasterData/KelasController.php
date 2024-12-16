@@ -27,7 +27,11 @@ class KelasController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Kelas";
+        $title  = "Data Kelas ".$request->nama;
+
+        $this->validate($request, [
+            'nama' => 'required|string|max:255',
+        ]);
 
         DB::beginTransaction();
         try {

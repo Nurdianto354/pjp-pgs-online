@@ -27,7 +27,12 @@ class TahunAjaranController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data TahunAjaran";
+        $title  = "Data TahunAjaran ".$request->nama;
+
+        $this->validate($request, [
+            'nama' => 'required|string|max:255',
+        ]);
+
 
         DB::beginTransaction();
         try {

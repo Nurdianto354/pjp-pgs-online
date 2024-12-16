@@ -29,6 +29,10 @@ class DivisiController extends Controller
         $action = "menambahkan";
         $title  = "Data Divisi ".$request->nama;
 
+        $this->validate($request, [
+            'nama' => 'required|string|max:255',
+        ]);
+
         $checkData = Divisi::where('nama', 'LIKE', '%'.$request->nama.'%')->where('id', '!=', $request->id)
             ->first();
 

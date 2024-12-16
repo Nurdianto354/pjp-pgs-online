@@ -44,37 +44,37 @@ Route::controller(ProfilController::class)->prefix('profil')->group(function () 
 Route::prefix('master-data')->group(function () {
     Route::controller(TahunAjaranController::class)->prefix('tahun-ajaran')->group(function () {
         Route::get('index', 'index')->name('master_data.tahun_ajaran.index');
-        Route::post('create', 'create')->name('master_data.tahun_ajaran.create');
+        Route::post('create', 'create')->name('master_data.tahun_ajaran.create')->middleware('csp');
         Route::post('delete/{id}', 'destroy')->name('master_data.tahun_ajaran.destroy');
     });
 
     Route::controller(MateriController::class)->prefix('materi')->group(function () {
         Route::get('index', 'index')->name('master_data.materi.index');
-        Route::post('create', 'create')->name('master_data.materi.create');
+        Route::post('create', 'create')->name('master_data.materi.create')->middleware('csp');
         Route::post('delete/{id}', 'destroy')->name('master_data.materi.destroy');
     });
 
     Route::controller(KarakterController::class)->prefix('karakter')->group(function () {
         Route::get('index', 'index')->name('master_data.karakter.index');
-        Route::post('create', 'create')->name('master_data.karakter.create');
+        Route::post('create', 'create')->name('master_data.karakter.create')->middleware('csp');
         Route::post('delete/{id}', 'destroy')->name('master_data.karakter.destroy');
     });
 
     Route::controller(SatuanController::class)->prefix('satuan')->group(function () {
         Route::get('index', 'index')->name('master_data.satuan.index');
-        Route::post('create', 'create')->name('master_data.satuan.create');
+        Route::post('create', 'create')->name('master_data.satuan.create')->middleware('csp');
         Route::post('delete/{id}', 'destroy')->name('master_data.satuan.destroy');
     });
 
     Route::controller(DivisiController::class)->prefix('divisi')->group(function () {
         Route::get('index', 'index')->name('master_data.divisi.index');
-        Route::post('create', 'create')->name('master_data.divisi.create');
+        Route::post('create', 'create')->name('master_data.divisi.create')->middleware('csp');
         Route::post('delete/{id}', 'destroy')->name('master_data.divisi.destroy');
     });
 
     Route::controller(KelasController::class)->prefix('kelas')->group(function () {
         Route::get('index', 'index')->name('master_data.kelas.index');
-        Route::post('create', 'create')->name('master_data.kelas.create');
+        Route::post('create', 'create')->name('master_data.kelas.create')->middleware('csp');
         Route::post('delete/{id}', 'destroy')->name('master_data.kelas.destroy');
     });
 });
@@ -97,7 +97,7 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
 
 Route::controller(PencapaianTargetController::class)->prefix('pencapaian-target')->group(function () {
     Route::get('index', 'index')->name('pencapaian_target.index');
-    Route::post('store', 'store')->name('pencapaian_target.store');
+    Route::post('store', 'store')->name('pencapaian_target.store')->middleware('csp');
 });
 
 Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {
