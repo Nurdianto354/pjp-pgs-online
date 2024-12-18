@@ -50,16 +50,16 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <label>Tahun Ajaran</label>
+                        <label>Tahun </label>
                         <ul class="nav mt-2">
-                            @foreach ($listTahunAjaran as $tahunAjaran)
+                            @foreach ($listTahun as $tahun)
                                 <li class="nav-item mx-1">
                                     <form method="GET" action="{{ route('pencapaian_target.index') }}">
                                         <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                         <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
-                                        <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaran->id }}">
-                                        <button type="submit" class="btn btn-outline-success col-sm text-left {{ App\Models\PencapaianTarget\PencapaianTarget::getTab($tahunAjaran->id, $tahunAjaranId) ? 'active' : '' }}">
-                                            {{ $tahunAjaran->nama }}
+                                        <input type="hidden" name="tahun__id" value="{{ $tahun->id }}">
+                                        <button type="submit" class="btn btn-outline-success col-sm text-left {{ App\Models\PencapaianTarget\PencapaianTarget::getTab($tahun->id, $tahunId) ? 'active' : '' }}">
+                                            {{ $tahun->nama }}
                                         </button>
                                     </form>
                                 </li>
@@ -145,7 +145,7 @@
                                                                 <input class="form-control nilai-pencapaian" min="0" type="number" placeholder="0" name="target" value="{{ $target }}"
                                                                     data-id="{{ $id }}"
                                                                     data-kelas_id="{{ $kelasId }}"
-                                                                    data-tahun_ajaran_id="{{ $tahunAjaranId }}"
+                                                                    data-tahun__id="{{ $tahunId }}"
                                                                     data-murid_id="{{ $murid->id }}"
                                                                     data-kurikulum_target_detail_id="{{ $targetKurikulum->id }}"
                                                                 >
@@ -188,7 +188,7 @@
     $(".nilai-pencapaian").on("change", function() {
         let id = $(this).data('id');
         let kelasId = $(this).data('kelas_id');
-        let tahunAjaranId = $(this).data('tahun_ajaran_id');
+        let tahunId = $(this).data('tahun__id');
         let anggotaId = $(this).data('murid_id');
         let kurikulumTargetId = $(this).data('kurikulum_target_id');
         let kurikulumTargetDetailId = $(this).data('kurikulum_target_detail_id');
@@ -200,7 +200,7 @@
             data   : {
                 id                          : id,
                 kelas_id                    : kelasId,
-                tahun_ajaran_id             : tahunAjaranId,
+                tahun__id             : tahunId,
                 murid_id                  : anggotaId,
                 kurikulum_target_detail_id  : kurikulumTargetDetailId,
                 target                      : target

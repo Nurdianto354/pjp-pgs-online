@@ -12,7 +12,7 @@ use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
 use App\Http\Controllers\MasterData\MateriController;
 use App\Http\Controllers\MasterData\SatuanController;
-use App\Http\Controllers\MasterData\TahunAjaranController;
+use App\Http\Controllers\MasterData\TahunController;
 use App\Http\Controllers\MasterData\TanggalController;
 use App\Http\Controllers\MasterUser\PermissionController;
 use App\Http\Controllers\MasterUser\RoleController;
@@ -53,10 +53,10 @@ Route::prefix('master-data')->group(function () {
         Route::post('delete/{id}', 'destroy')->name('master_data.tanggal.destroy');
     });
 
-    Route::controller(TahunAjaranController::class)->prefix('tahun-ajaran')->group(function () {
-        Route::get('index', 'index')->name('master_data.tahun_ajaran.index');
-        Route::post('create', 'create')->name('master_data.tahun_ajaran.create');
-        Route::post('delete/{id}', 'destroy')->name('master_data.tahun_ajaran.destroy');
+    Route::controller(TahunController::class)->prefix('tahun')->group(function () {
+        Route::get('index', 'index')->name('master_data.tahun.index');
+        Route::post('create', 'create')->name('master_data.tahun.create');
+        Route::post('delete/{id}', 'destroy')->name('master_data.tahun.destroy');
     });
 
     Route::controller(MateriController::class)->prefix('materi')->group(function () {

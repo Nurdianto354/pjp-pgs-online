@@ -16,11 +16,11 @@ class CreateKurikulumTargetTable extends Migration
         Schema::create('kurikulum_target', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('kelas_id');
-            $table->unsignedBigInteger('tahun_ajaran_id');
+            $table->unsignedBigInteger('tahun_id');
             $table->timestamps();
 
             $table->foreign('kelas_id')->references('id')->on('m_kelas')->onDelete('cascade');
-            $table->foreign('tahun_ajaran_id')->references('id')->on('m_tahun_ajaran')->onDelete('cascade');
+            $table->foreign('tahun_id')->references('id')->on('m_tahun')->onDelete('cascade');
         });
     }
 

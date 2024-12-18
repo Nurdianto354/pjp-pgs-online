@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\MasterData\TahunAjaran;
+use App\Models\MasterData\Tahun;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
-class TahunAjaranTableSeeder extends Seeder
+class TahunTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +15,13 @@ class TahunAjaranTableSeeder extends Seeder
      */
     public function run()
     {
-        TahunAjaran::create([
+        Tahun::create([
             'nama' => '2024/2025',
             'status' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
-        TahunAjaran::create([
+        Tahun::create([
             'nama' => '2025/2026',
             'status' => true,
             'created_at' => Carbon::now(),

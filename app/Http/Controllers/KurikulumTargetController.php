@@ -8,7 +8,7 @@ use App\Models\MasterData\Karakter;
 use App\Models\MasterData\Kelas;
 use App\Models\MasterData\Materi;
 use App\Models\MasterData\Satuan;
-use App\Models\MasterData\TahunAjaran;
+use App\Models\MasterData\Tahun;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,20 +47,20 @@ class KurikulumTargetController extends Controller
             $kelasNama = $request->kelas_nama;
         }
 
-        $tahunAjaran = TahunAjaran::where('status', true)->orderBy('id', 'DESC')->first();
-        $tahunAjaranId = $tahunAjaran->id;
+        $tahun = Tahun::where('status', true)->orderBy('id', 'DESC')->first();
+        $tahunId = $tahun->id;
 
-        if($request->has('tahun_ajaran_id')) {
-            $tahunAjaranId = $request->tahun_ajaran_id;
+        if($request->has('tahun_id')) {
+            $tahunId = $request->tahun_id;
         }
 
-        $listTahunAjaran = TahunAjaran::where('status', true)->orderBy('id', 'DESC')->get();
+        $listTahun = Tahun::where('status', true)->orderBy('id', 'DESC')->get();
         $listKelas = Kelas::where('status', true)->get();
 
-        $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_ajaran_id', $tahunAjaranId]])->pluck('id')->first();
+        $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_id', $tahunId]])->pluck('id')->first();
         $datas = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')->where('kurikulum_target_id', $id)->orderBy('created_at', 'ASC')->get();
 
-        return view('pages.kurikulum_target.index', compact('listKelas', 'listTahunAjaran', 'id', 'kelasId', 'kelasNama', 'tahunAjaranId', 'datas'));
+        return view('pages.kurikulum_target.index', compact('listKelas', 'listTahun', 'id', 'kelasId', 'kelasNama', 'tahunId', 'datas'));
     }
 
     public function create(Request $request)
@@ -69,16 +69,16 @@ class KurikulumTargetController extends Controller
 
         $id = $request['id'];
         $kelasId = $request['kelas_id'];
-        $tahunAjaranId = $request['tahun_ajaran_id'];
+        $tahunId = $request['tahun_id'];
 
         $kelasNama = Kelas::where([['status', true], ['id', $kelasId]])->pluck('nama')->first();
-        $tahunAjaranNama = TahunAjaran::where([['status', true], ['id', $tahunAjaranId]])->pluck('nama')->first();
+        $tahunNama = Tahun::where([['status', true], ['id', $tahunId]])->pluck('nama')->first();
 
         $listKarakter = Karakter::where('status', true)->orderBy('nama', 'ASC')->get();
         $listMateri   = Materi::where('status', true)->orderBy('nama', 'ASC')->get();
         $listSatuan   = Satuan::where('status', true)->orderBy('nama', 'ASC')->get();
 
-        return view('pages.kurikulum_target.create', compact('title', 'id', 'kelasId', 'kelasNama', 'tahunAjaranId', 'tahunAjaranNama', 'listKarakter', 'listMateri', 'listSatuan'));
+        return view('pages.kurikulum_target.create', compact('title', 'id', 'kelasId', 'kelasNama', 'tahunId', 'tahunNama', 'listKarakter', 'listMateri', 'listSatuan'));
     }
 
     public function store(Request $request)
@@ -95,12 +95,12 @@ class KurikulumTargetController extends Controller
         }
 
         $kelasNama = Kelas::where([['id', $request['kelas_id']], ['status', true]])->pluck('nama')->first();
-        $tahunAjaranNama = TahunAjaran::where([['id', $request['tahun_ajaran_id']], ['status', true]])->pluck('nama')->first();
+        $tahunNama = Tahun::where([['id', $request['tahun_id']], ['status', true]])->pluck('nama')->first();
 
         DB::beginTransaction();
         try {
             $data->kelas_id = $request['kelas_id'];
-            $data->tahun_ajaran_id = $request['tahun_ajaran_id'];
+            $data->tahun_id = $request['tahun_id'];
             $data->updated_at = Carbon::now();
             $data->save();
 
@@ -125,13 +125,13 @@ class KurikulumTargetController extends Controller
 
             DB::commit();
 
-            toast('Berhasil ' . $action . ' kelas ' . $kelasNama . ' tahun ajaran ' . $tahunAjaranNama, 'success');
-            return redirect()->route('kurikulum_target.index', ['kelas_id' => $request['kelas_id'], 'kelas_nama' => $kelasNama, 'tahun_ajaran_id' => $request['tahun_ajaran_id']]);
+            toast('Berhasil ' . $action . ' kelas ' . $kelasNama . ' tahun ajaran ' . $tahunNama, 'success');
+            return redirect()->route('kurikulum_target.index', ['kelas_id' => $request['kelas_id'], 'kelas_nama' => $kelasNama, 'tahun_id' => $request['tahun_id']]);
         } catch (\Throwable $th) {
             Log::info($th);
             DB::rollBack();
 
-            toast('Gagal ' . $action . ' kelas ' . $kelasNama . ' tahun ajaran ' . $tahunAjaranNama, 'error');
+            toast('Gagal ' . $action . ' kelas ' . $kelasNama . ' tahun ajaran ' . $tahunNama, 'error');
             return back();
         }
     }
@@ -173,7 +173,7 @@ class KurikulumTargetController extends Controller
     public function exportTemplate(Request $request)
     {
         $kelas = Kelas::where('id', $request['kelas_id'])->pluck('nama')->first();
-        $tahunAjaran = TahunAjaran::where('id', $request['tahun_ajaran_id'])->pluck('nama')->first();
+        $tahun = Tahun::where('id', $request['tahun_id'])->pluck('nama')->first();
 
         $style_border = [
 			'borders' => [
@@ -228,7 +228,7 @@ class KurikulumTargetController extends Controller
 		$sheet->setCellValueExplicitByColumnAndRow($col, $row, $kelas, DataType::TYPE_STRING);
 		$sheet->mergeCells($sheet->getCellByColumnAndRow($col, $row)->getCoordinate().':'.$sheet->getCellByColumnAndRow($col+2, $row)->getCoordinate());
         $row++;
-		$sheet->setCellValueExplicitByColumnAndRow($col, $row, $tahunAjaran, DataType::TYPE_STRING);
+		$sheet->setCellValueExplicitByColumnAndRow($col, $row, $tahun, DataType::TYPE_STRING);
 		$sheet->mergeCells($sheet->getCellByColumnAndRow($col, $row)->getCoordinate().':'.$sheet->getCellByColumnAndRow($col+2, $row)->getCoordinate());
         $row++;
 
@@ -425,20 +425,20 @@ class KurikulumTargetController extends Controller
         $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
 
         $kelas = $sheetData->getCellByColumnAndRow(1, 3)->getValue();
-        $tahunAjaran = $sheetData->getCellByColumnAndRow(1, 4)->getValue();
+        $tahun = $sheetData->getCellByColumnAndRow(1, 4)->getValue();
 
         $kelasId = Kelas::where([['nama', 'LIKE', '%'.$kelas.'%'], ['status', true]])->pluck('id')->first();
-        $tahunAjaranId = TahunAjaran::where([['nama', 'LIKE', '%'.$tahunAjaran.'%'], ['status', true]])->pluck('id')->first();
+        $tahunId = Tahun::where([['nama', 'LIKE', '%'.$tahun.'%'], ['status', true]])->pluck('id')->first();
 
-        if (empty($kelasId) || empty($tahunAjaranId)) {
-            toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran.', karena kelas atau tahun ajaran tidak di temukan', 'Error');
+        if (empty($kelasId) || empty($tahunId)) {
+            toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun.', karena kelas atau tahun ajaran tidak di temukan', 'Error');
             return back();
         }
 
-        $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_ajaran_id', $tahunAjaranId]])->pluck('id')->first();
+        $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_id', $tahunId]])->pluck('id')->first();
 
         if (!empty($id)) {
-            toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran.', karena sudah ada', 'Error');
+            toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun.', karena sudah ada', 'Error');
             return back();
         }
 
@@ -461,7 +461,7 @@ class KurikulumTargetController extends Controller
         try {
             $data = new KurikulumTarget();
             $data->kelas_id         = $kelasId;
-            $data->tahun_ajaran_id  = $tahunAjaranId;
+            $data->tahun_id  = $tahunId;
             $data->created_at       = Carbon::now();
             $data->updated_at       = Carbon::now();
             $data->save();
@@ -480,7 +480,7 @@ class KurikulumTargetController extends Controller
                 if (empty($namaKarakter) || empty($namaMateri) || empty($namaSatuan) || empty($target)) {
                     DB::rollback();
 
-                    toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran.', mohon cek kembali data import karena tidak boleh kosong', 'Error');
+                    toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun.', mohon cek kembali data import karena tidak boleh kosong', 'Error');
                     return back();
                 }
 
@@ -506,7 +506,7 @@ class KurikulumTargetController extends Controller
 
                     $mesageError = implode(', ', $error);
 
-                    toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran.', karena '.$mesageError.' tidak ada di master data', 'Error');
+                    toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun.', karena '.$mesageError.' tidak ada di master data', 'Error');
                     return back();
                 }
 
@@ -522,13 +522,13 @@ class KurikulumTargetController extends Controller
 
             DB::commit();
 
-            toast('Berhasil import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran, 'success');
+            toast('Berhasil import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun, 'success');
             return back();
         } catch (\Exception $e) {
             Log::info($e);
             DB::rollback();
 
-            toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahunAjaran, 'Error');
+            toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun, 'Error');
             return back();
         }
     }

@@ -91,7 +91,13 @@ class AbsensiController extends Controller
 
             $data->kelas_id   = $request->kelas_id;
             $data->murid_id   = $request->murid_id;
+
+            $tanggal = Carbon::parse(date("Y-m-d", $request->tanggal));
+
             $data->tanggal    = $request->tanggal;
+            $data->hari       = $tanggal->day;
+            $data->bulan      = $tanggal->month;
+            $data->tahun      = $tanggal->year;
             $data->kehadiran  = $request->kehadiran;
             $data->updated_at = Carbon::now();
             $data->save();

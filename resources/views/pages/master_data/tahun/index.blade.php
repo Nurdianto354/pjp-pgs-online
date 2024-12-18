@@ -5,12 +5,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data Tahun Ajaran</h1>
+                <h1 class="m-0">Data Tahun</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">Master Data</li>
-                    <li class="breadcrumb-item active"><a href="{{ route('master_data.tahun_ajaran.index') }}">Data Tahun Ajaran</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('master_data.tahun.index') }}">Data Tahun</a></li>
                 </ol>
             </div>
         </div>
@@ -24,7 +24,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-table"></i>
-                            Data Tahun Ajaran
+                            Data Tahun
                         </h3>
                     </div>
                     <div class="card-body">
@@ -35,7 +35,7 @@
                             <thead>
                                 <tr class="text-center">
                                     <th style="width: 5%;">No</th>
-                                    <th>Tahun Ajaran</th>
+                                    <th>Tahun</th>
                                     <th>Status</th>
                                     <th>di Buat</th>
                                     <th>di Perbarui</th>
@@ -83,18 +83,18 @@
                 </div>
             </div>
             <div class="modal-header">
-                <h5 class="modal-title"><span id="title"></span> Data Tahun Ajaran</h5>
+                <h5 class="modal-title"><span id="title"></span> Data Tahun</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form name="input-data" method="POST" action="{{ route('master_data.tahun_ajaran.create')}}" onsubmit="return validateForm()">
+                <form name="input-data" method="POST" action="{{ route('master_data.tahun.create')}}" onsubmit="return validateForm()">
                     @csrf
                     <input type="hidden" id="id" name="id">
                     <div class="form-group">
-                        <label>Tahun Ajaran</label>
-                        <input type="text" class="form-control" placeholder="Input tahun ajaran" id="nama" name="nama">
+                        <label>Tahun</label>
+                        <input type="text" class="form-control" placeholder="Input tahun" id="nama" name="nama">
                     </div>
-                    <small class="form-text text-danger error-nama" style="margin-top: -15px;">Harap masukan tahun ajaran !</small>
+                    <small class="form-text text-danger error-nama" style="margin-top: -15px;">Harap masukan tahun !</small>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger mb-2 mr-sm-2" data-dismiss="modal">
                             <i class="fa-solid fa-xmark"></i> Batal
@@ -176,7 +176,7 @@
 
         Swal.fire({
             title: "Apakah kamu yakin ?",
-            text: "Ingin menghapus data tahun ajaran "+nama+" ini !",
+            text: "Ingin menghapus data tahun "+nama+" ini !",
             icon: "warning",
             showDenyButton: true,
             cancelButtonColor: "#DC3741",
@@ -187,19 +187,19 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type    : "POST",
-                    url     : "{{ url('/master-data/tahun-ajaran/delete') }}/" + id,
+                    url     : "{{ url('/master-data/tahun/delete') }}/" + id,
                     success: function(data) {
                         if(data.status == "success") {
                             toastMixin.fire({
                                 icon: 'success',
-                                title: 'Berhasil menghapus data tahun ajaran '+nama,
+                                title: 'Berhasil menghapus data tahun '+nama,
                             });
 
                             location.reload();
                         } else if(data.status == "error") {
                             toastMixin.fire({
                                 icon: 'error',
-                                title: 'Gagal, menghapus data tahun ajaran '+nama,
+                                title: 'Gagal, menghapus data tahun '+nama,
                             });
                         }
                     }

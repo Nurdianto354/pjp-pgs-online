@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMTahunAjaranTable extends Migration
+class CreateMTahunTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMTahunAjaranTable extends Migration
      */
     public function up()
     {
-        Schema::create('m_tahun_ajaran', function (Blueprint $table) {
+        Schema::create('m_tahun', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama');
             $table->boolean('status');
@@ -28,6 +28,6 @@ class CreateMTahunAjaranTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('m_tahun_ajaran');
+        Schema::dropIfExists('m_tahun');
     }
 }

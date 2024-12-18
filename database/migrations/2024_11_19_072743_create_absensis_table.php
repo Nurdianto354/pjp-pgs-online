@@ -18,6 +18,9 @@ class CreateAbsensisTable extends Migration
             $table->unsignedBigInteger('kelas_id');
             $table->unsignedBigInteger('murid_id');
             $table->bigInteger('tanggal');
+            $table->tinyInteger('hari');
+            $table->tinyInteger('bulan');
+            $table->bigInteger('tahun');
             $table->char('kehadiran', 1)->nullable();
             $table->timestamps();
 

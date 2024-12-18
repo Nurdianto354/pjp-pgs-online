@@ -42,8 +42,6 @@ class TanggalController extends Controller
 
         DB::beginTransaction();
         try {
-            $tanggal = Carbon::parse($request->tanggal);
-
             if ($request->id != null && $request->id != '') {
                 $data = Tanggal::findOrFail($request->id);
                 $action = "memperbarui";
@@ -53,11 +51,13 @@ class TanggalController extends Controller
                 $data->status     = true;
             }
 
-            $data->tanggal      = strtotime($tanggal);
-            $data->hari         = $tanggal->day;
-            $data->bulan        = $tanggal->month;
-            $data->tahun        = $tanggal->year;
-            $data->updated_at   = Carbon::now();
+            $tanggal = Carbon::parse($request->tanggal);
+
+            $data->tanggal    = strtotime($tanggal);
+            $data->hari       = $tanggal->day;
+            $data->bulan      = $tanggal->month;
+            $data->tahun      = $tanggal->year;
+            $data->updated_at = Carbon::now();
             $data->save();
 
             DB::commit();

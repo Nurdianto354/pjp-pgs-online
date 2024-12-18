@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Models\MasterData\TahunAjaran;
+use App\Models\MasterData\Tahun;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class TahunAjaranController extends Controller
+class TahunController extends Controller
 {
     public function __construct()
     {
@@ -18,29 +18,28 @@ class TahunAjaranController extends Controller
 
     public function index()
     {
-        $datas = TahunAjaran::orderBy('created_at', 'DESC')->get();
+        $datas = Tahun::orderBy('created_at', 'DESC')->get();
 
-        return view('pages.master_data.tahun_ajaran.index', compact('datas'));
+        return view('pages.master_data.tahun.index', compact('datas'));
     }
 
     public function create(Request $request)
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data TahunAjaran ".$request->nama;
+        $title  = "Data Tahun ".$request->nama;
 
         $this->validate($request, [
             'nama' => 'required|string|max:255',
         ]);
 
-
         DB::beginTransaction();
         try {
-            if($request->id != null && $request->id != '') {
-                $data = TahunAjaran::findOrFail($request->id);
+            if ($request->id != null && $request->id != '') {
+                $data = Tahun::findOrFail($request->id);
                 $action = "memperbarui";
             } else {
-                $data = new TahunAjaran();
+                $data = new Tahun();
                 $data->created_at = Carbon::now();
                 $data->status     = true;
             }
@@ -68,7 +67,7 @@ class TahunAjaranController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = TahunAjaran::findOrFail($id);
+            $data = Tahun::findOrFail($id);
             $data->status = false;
             $data->save();
 

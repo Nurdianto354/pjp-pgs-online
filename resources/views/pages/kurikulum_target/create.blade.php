@@ -70,7 +70,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-clipboard-list"></i>
-                            {{ $title }} Kurikulum & Target Kelas <span class="text-bold">{{ $kelasNama }}</span> Tahun Ajaran <span class="text-bold">{{ $tahunAjaranNama }}</span>
+                            {{ $title }} Kurikulum & Target Kelas <span class="text-bold">{{ $kelasNama }}</span> Tahun <span class="text-bold">{{ $tahunNama }}</span>
                         </h3>
                     </div>
                     <div class="card-body">
@@ -78,7 +78,7 @@
                             @csrf
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
-                            <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">
+                            <input type="hidden" name="tahun__id" value="{{ $tahunId }}">
                             <div id="form-data">
                                 <div class="row">
                                     <input type="hidden" name="id_detail[]" value="">

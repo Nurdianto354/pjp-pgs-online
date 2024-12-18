@@ -50,16 +50,16 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <label>Tahun Ajaran</label>
+                        <label>Tahun</label>
                         <ul class="nav mt-2">
-                            @foreach ($listTahunAjaran as $tahunAjaran)
+                            @foreach ($listTahun as $tahun)
                                 <li class="nav-item mx-1">
                                     <form method="GET" action="{{ route('kurikulum_target.index') }}">
                                         <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                         <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
-                                        <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaran->id }}">
-                                        <button type="submit" class="btn btn-outline-success col-sm text-left {{ App\Models\KurikulumTarget\KurikulumTarget::getTab($tahunAjaran->id, $tahunAjaranId) ? 'active' : '' }}">
-                                            {{ $tahunAjaran->nama }}
+                                        <input type="hidden" name="tahun_id" value="{{ $tahun->id }}">
+                                        <button type="submit" class="btn btn-outline-success col-sm text-left {{ App\Models\KurikulumTarget\KurikulumTarget::getTab($tahun->id, $tahunId) ? 'active' : '' }}">
+                                            {{ $tahun->nama }}
                                         </button>
                                     </form>
                                 </li>
@@ -73,7 +73,7 @@
                                         <input type="hidden" name="id" value="{{ $id }}">
                                         <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                         <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
-                                        <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">
+                                        <input type="hidden" name="tahun_id" value="{{ $tahunId }}">
                                         <button type="submit" class="btn btn-sm btn-success mx-1 text-right">
                                             <i class="far fa-edit"></i> Perbarui
                                         </button>
@@ -82,7 +82,7 @@
                                     <form method="GET" action="{{ route('kurikulum_target.create') }}">
                                         <input type="hidden" name="id" value="">
                                         <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
-                                        <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">
+                                        <input type="hidden" name="tahun_id" value="{{ $tahunId }}">
                                         <button type="submit" class="btn btn-sm btn-success mr-1 text-right">
                                             <i class="fa fa-plus"></i> Tambah
                                         </button>
@@ -93,7 +93,7 @@
                                 </button>
                                 <form method="GET" action="{{ route('kurikulum_target.export_template') }}">
                                     <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
-                                    <input type="hidden" name="tahun_ajaran_id" value="{{ $tahunAjaranId }}">
+                                    <input type="hidden" name="tahun_id" value="{{ $tahunId }}">
                                     <button type="submit" class="btn btn-sm btn-outline-success ml-1">
                                         <i class="fa fa-download"></i> Download Template
                                     </button>
