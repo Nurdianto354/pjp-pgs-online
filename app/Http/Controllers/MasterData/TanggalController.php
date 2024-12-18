@@ -46,7 +46,7 @@ class TanggalController extends Controller
 
             if ($request->id != null && $request->id != '') {
                 $data = Tanggal::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Tanggal();
                 $data->created_at = Carbon::now();

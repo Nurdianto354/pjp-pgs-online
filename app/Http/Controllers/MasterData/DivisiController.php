@@ -47,7 +47,7 @@ class DivisiController extends Controller
         try {
             if ($request->id != null && $request->id != '') {
                 $data = Divisi::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Divisi();
                 $data->created_at = Carbon::now();

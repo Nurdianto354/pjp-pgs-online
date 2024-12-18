@@ -38,7 +38,7 @@ class SatuanController extends Controller
         try {
             if($request->id != null && $request->id != '') {
                 $data = Satuan::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Satuan();
                 $data->created_at = Carbon::now();

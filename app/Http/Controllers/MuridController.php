@@ -38,7 +38,7 @@ class MuridController extends Controller
         try {
             if ($request->id != null && $request->id != '') {
                 $data = Murid::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Murid();
                 $data->created_at = Carbon::now();

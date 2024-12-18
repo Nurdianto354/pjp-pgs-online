@@ -47,7 +47,7 @@ class MateriController extends Controller
         try {
             if($request->id != null && $request->id != '') {
                 $data = Materi::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Materi();
                 $data->created_at = Carbon::now();

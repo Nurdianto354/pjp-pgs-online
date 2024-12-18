@@ -37,7 +37,7 @@ class KelasController extends Controller
         try {
             if($request->id != null && $request->id != '') {
                 $data = Kelas::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Kelas();
                 $data->created_at = Carbon::now();

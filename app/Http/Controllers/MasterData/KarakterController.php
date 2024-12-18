@@ -38,7 +38,7 @@ class KarakterController extends Controller
         try {
             if($request->id != null && $request->id != '') {
                 $data = Karakter::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new Karakter();
                 $data->created_at = Carbon::now();

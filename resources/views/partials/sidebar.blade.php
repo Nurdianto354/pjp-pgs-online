@@ -114,7 +114,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('aktivitas.hari_libur.index') }}" class="nav-link {{ setActive('aktivitas/hari_libur/*') }}">
+                            <a href="{{ route('aktivitas.hari_libur.index') }}" class="nav-link {{ setActive('aktivitas/hari-libur/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Hari Libur</p>
                             </a>

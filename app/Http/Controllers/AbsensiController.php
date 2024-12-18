@@ -59,7 +59,7 @@ class AbsensiController extends Controller
         DB::beginTransaction();
         try {
             if ($request->id != null && $request->id != '') {
-                $action = "perbarui";
+                $action = "memperbarui";
                 $tanggal = strtotime($request->tanggal);
 
                 $check = Absensi::where([['id', '!=', $request->id], ['tanggal', $tanggal], ['status', true]])->first();

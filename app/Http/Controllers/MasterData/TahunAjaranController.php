@@ -38,7 +38,7 @@ class TahunAjaranController extends Controller
         try {
             if($request->id != null && $request->id != '') {
                 $data = TahunAjaran::findOrFail($request->id);
-                $action = "perbarui";
+                $action = "memperbarui";
             } else {
                 $data = new TahunAjaran();
                 $data->created_at = Carbon::now();

@@ -112,10 +112,14 @@ Route::controller(PencapaianTargetController::class)->prefix('pencapaian-target'
 Route::prefix('aktivitas')->group(function () {
     Route::controller(JadwalController::class)->prefix('jadwal')->group(function () {
         Route::get('index', 'index')->name('aktivitas.jadwal.index');
+        Route::post('create', 'create')->name('aktivitas.jadwal.create');
+        Route::post('delete/{id}', 'destroy')->name('aktivitas.jadwal.destroy');
     });
 
-    Route::controller(HariLiburController::class)->prefix('hari_libur')->group(function () {
+    Route::controller(HariLiburController::class)->prefix('hari-libur')->group(function () {
         Route::get('index', 'index')->name('aktivitas.hari_libur.index');
+        Route::post('create', 'create')->name('aktivitas.hari_libur.create');
+        Route::post('delete/{id}', 'destroy')->name('aktivitas.hari_libur.destroy');
     });
 });
 
