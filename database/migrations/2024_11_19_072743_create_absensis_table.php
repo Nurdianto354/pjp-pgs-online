@@ -16,11 +16,13 @@ class CreateAbsensisTable extends Migration
         Schema::create('absensi', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('kelas_id');
+            $table->unsignedBigInteger('murid_id');
             $table->bigInteger('tanggal');
-            $table->boolean('status');
+            $table->char('kehadiran', 1)->nullable();
             $table->timestamps();
 
             $table->foreign('kelas_id')->references('id')->on('m_kelas')->onDelete('cascade');
+            $table->foreign('murid_id')->references('id')->on('murid')->onDelete('cascade');
         });
     }
 

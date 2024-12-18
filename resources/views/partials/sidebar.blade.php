@@ -37,6 +37,12 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ route('master_data.tanggal.index') }}" class="nav-link {{ setActive('master-data/tanggal/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tanggal</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('master_data.tahun_ajaran.index') }}" class="nav-link {{ setActive('master-data/tahun-ajaran/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Tahun Ajaran</p>
@@ -70,12 +76,6 @@
                             <a href="{{ route('master_data.kelas.index') }}" class="nav-link {{ setActive('master-data/kelas/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Kelas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('master_data.tanggal.index') }}" class="nav-link {{ setActive('master-data/tanggal/*') }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tanggal</p>
                             </a>
                         </li>
                     </ul>
@@ -128,13 +128,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
+                    <a href="{{ route('kegiatan.index') }}" class="nav-link {{ setActive('kegiatan/*') }}">
                         <i class="nav-icon fa-solid fa-laptop-file"></i>
                         <p>Kegiatan</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
+                    <a href="{{ route('laporan.index') }}" class="nav-link {{ setActive('laporan/*') }}">
                         <i class="nav-icon fa-solid fa-box-archive"></i>
                         <p>Laporan</p>
                     </a>

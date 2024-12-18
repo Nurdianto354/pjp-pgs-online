@@ -15,9 +15,12 @@ class CreateMKelasTable extends Migration
     {
         Schema::create('m_kelas', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('divisi_id');
             $table->string('nama');
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('divisi_id')->references('id')->on('m_divisi')->onDelete('cascade');
         });
     }
 

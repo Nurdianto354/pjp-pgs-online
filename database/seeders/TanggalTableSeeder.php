@@ -24,7 +24,7 @@ class TanggalTableSeeder extends Seeder
         while ($currentDate <= $endDate) {
             DB::table('m_tanggal')->insert([
                 'tanggal'    => strtotime($currentDate->format('Y-m-d')),
-                'hari'       => $currentDate->day,
+                'hari'       => $currentDate->dayOfWeek,
                 'bulan'      => $currentDate->month,
                 'tahun'      => $currentDate->year,
                 'status'     => true,

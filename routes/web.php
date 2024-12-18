@@ -4,7 +4,9 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\Aktivitas\HariLiburController;
 use App\Http\Controllers\Aktivitas\JadwalController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KurikulumTargetController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MasterData\DivisiController;
 use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
@@ -125,9 +127,15 @@ Route::prefix('aktivitas')->group(function () {
 
 Route::controller(AbsensiController::class)->prefix('absensi')->group(function () {
     Route::get('index', 'index')->name('absensi.index');
-    Route::get('add-attendance-date', 'addAttendanceDate')->name('absensi.add_attendance_date');
-    Route::post('delete-attendance-date/{id}', 'deleteAttendanceDate')->name('absensi.delete_attendance_date');
     Route::post('store', 'store')->name('absensi.store');
+});
+
+Route::controller(KegiatanController::class)->prefix('kegiatan')->group(function () {
+    Route::get('index', 'index')->name('kegiatan.index');
+});
+
+Route::controller(LaporanController::class)->prefix('laporan')->group(function () {
+    Route::get('index', 'index')->name('laporan.index');
 });
 
 Route::prefix('master-user')->group(function () {

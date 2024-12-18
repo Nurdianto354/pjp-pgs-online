@@ -57,7 +57,7 @@ class HariLiburController extends Controller
 
             $data->divisi_id  = $request->divisi_id;
             $data->tanggal    = strtotime($tanggal);
-            $data->hari       = $tanggal->day;
+            $data->hari       = $tanggal->dayOfWeek;
             $data->bulan      = $tanggal->month;
             $data->tahun      = $tanggal->year;
             $data->keterangan = $request->keterangan;

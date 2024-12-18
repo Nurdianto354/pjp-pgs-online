@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Aktivitas;
 use App\Http\Controllers\Controller;
 use App\Models\Aktivitas\Jadwal;
 use App\Models\MasterData\Divisi;
+use App\Models\MasterData\Tanggal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +42,7 @@ class JadwalController extends Controller
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Jadwal Hari " . Jadwal::listDay[$request->hari] . " Waktu " . $request->waktu_mulai . " : " . $request->waktu_selesai;
+        $title  = "Data Jadwal Hari " . Tanggal::listDay[$request->hari] . " Waktu " . $request->waktu_mulai . " : " . $request->waktu_selesai;
 
         DB::beginTransaction();
         try {

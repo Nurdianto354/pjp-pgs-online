@@ -23,6 +23,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 1,
                 'nama' => 'Paud '.$convertNumToAlpa[$i],
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -32,6 +33,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 6; $i++) {
             Kelas::create([
+                'divisi' => 2,
                 'nama' => 'Tilawati '.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -41,6 +43,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 2,
                 'nama' => 'Al-Quran A-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -50,6 +53,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 2,
                 'nama' => 'Al-Quran B-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -59,6 +63,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 2,
                 'nama' => 'Al-Quran C-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -68,6 +73,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 3,
                 'nama' => 'Praremaja A-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -77,6 +83,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 3,
                 'nama' => 'Praremaja B-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -86,6 +93,7 @@ class KelasTableSeeder extends Seeder
 
         for ($i = 1; $i <= 2; $i++) {
             Kelas::create([
+                'divisi' => 3,
                 'nama' => 'Praremaja C-'.$i,
                 'status' => true,
                 'created_at' => Carbon::now(),
@@ -94,6 +102,7 @@ class KelasTableSeeder extends Seeder
         }
 
         Kelas::create([
+            'divisi' => 4,
             'nama' => 'Remaja',
             'status' => true,
             'created_at' => Carbon::now(),
@@ -101,6 +110,7 @@ class KelasTableSeeder extends Seeder
         ]);
 
         Kelas::create([
+            'divisi' => 5,
             'nama' => 'Pranikah',
             'status' => true,
             'created_at' => Carbon::now(),

@@ -76,7 +76,7 @@
                             <tbody>
                                 @foreach($datas as $key => $data)
                                     <tr>
-                                        <td>{{ App\Models\Aktivitas\Jadwal::listDay[$data->hari] }}</td>
+                                        <td>{{ App\Models\MasterData\Tanggal::listDay[$data->hari] }}</td>
                                         <td class="text-center">
                                             {{ date("H:i", strtotime($data->waktu_mulai)) }} : {{ date("H:i", strtotime($data->waktu_selesai)) }}
                                         </td>
@@ -93,7 +93,7 @@
                                                 </button>
                                                 @if ($data->status == true)
                                                     <button type="button" class="btn btn-danger btn-sm delete-data"
-                                                        data-id="{{ $data->id }}" data-hari="{{ App\Models\Aktivitas\Jadwal::listDay[$data->hari] }}"
+                                                        data-id="{{ $data->id }}" data-hari="{{ App\Models\MasterData\Tanggal::listDay[$data->hari] }}"
                                                         data-waktu_mulai="{{ date("H:i", strtotime($data->waktu_mulai)) }}"
                                                         data-waktu_selesai="{{ date("H:i", strtotime($data->waktu_selesai)) }}">
                                                         <i class="far fa-trash-alt"></i> Hapus
@@ -133,13 +133,13 @@
                     <div class="form-group">
                         <label>Hari</label>
                         <select name="hari" class="form-control select2-hari select2-success" data-dropdown-css-class="select2-success">
+                            <option value="0">Minggu</option>
                             <option value="1">Senin</option>
                             <option value="2">Selasa</option>
                             <option value="3">Rabu</option>
                             <option value="4">Kamis</option>
                             <option value="5">Jumat</option>
                             <option value="6">Sabtu</option>
-                            <option value="7">Minggu</option>
                         </select>
                     </div>
                     <small class="form-text text-danger error-hari" style="margin-top: -15px;">Harap pilih hari !</small>
