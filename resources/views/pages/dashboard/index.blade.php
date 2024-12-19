@@ -18,58 +18,35 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>New Orders</p>
+                @foreach ($listDivisi as $divisi)
+                    <div class="col-12 col-lg-12">
+                        <div class="small-box" style="background-color: white;">
+                            <div class="inner bg-success text-center">
+                                <h4 class="font-weight-bold">{{ $divisi->nama }}</h4>
+                            </div>
+                            <table class="table table-bordered table-sm table-striped">
+                                <thead>
+                                    <tr class="text-center" style="font-size: 10x;">
+                                        <th>Kelas</th>
+                                        <th>Jumlah Siswa</th>
+                                        <th>Laki-laki</th>
+                                        <th>Perempuan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($divisi->listKelas as $kelas)
+                                        <tr>
+                                            <td style="width: 40%;">{{ $kelas->nama }}</td>
+                                            <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->count() }}</td>
+                                            <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('jenis_kelamin', 'Laki - laki')->count() }}</td>
+                                            <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('jenis_kelamin', 'Perempuan')->count() }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
-
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>

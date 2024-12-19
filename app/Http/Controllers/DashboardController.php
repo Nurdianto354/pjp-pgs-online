@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MasterData\Divisi;
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -11,6 +13,8 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('pages.dashboard.index');
+        $listDivisi = Divisi::with('listKelas.listMurid')->where([['status', true]])->get();
+
+        return view('pages.dashboard.index', compact('listDivisi'));
     }
 }

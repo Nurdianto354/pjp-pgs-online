@@ -16,4 +16,9 @@ class Divisi extends Model
     public $incrementing    = true;
     public $timestamps      = true;
     protected $guarded      = [];
+
+    public function listKelas()
+    {
+        return $this->hasMany(Kelas::class, 'divisi_id', 'id');
+    }
 }
