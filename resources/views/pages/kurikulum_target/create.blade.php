@@ -76,6 +76,7 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('kurikulum_target.store') }}">
                             @csrf
+                            @method('PUT')
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                             <input type="hidden" name="tahun__id" value="{{ $tahunId }}">

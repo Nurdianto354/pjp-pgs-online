@@ -13,7 +13,7 @@ class PermissionController extends Controller
 {
     public function index()
     {
-        $datas = Permission::latest()->get();
+        $datas = Permission::orderBy('name', 'ASC')->get();
 
         return view('pages.master_user.permission.index', compact('datas'));
     }
@@ -24,6 +24,10 @@ class PermissionController extends Controller
         $action = "menambahkan";
         $title  = "Data Permission";
 
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+        ]);
+
         DB::beginTransaction();
         try {
             if($request->id != null && $request->id != '') {
@@ -32,7 +36,6 @@ class PermissionController extends Controller
             } else {
                 $data = new Permission();
                 $data->created_at = Carbon::now();
-                $data->status     = true;
             }
 
             $data->name         = $request->name;

@@ -100,7 +100,7 @@ Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')-
     Route::get('index', 'index')->name('kurikulum_target.index');
     Route::get('create', 'create')->name('kurikulum_target.create');
     Route::get('data-detail', 'getDataDetail')->name('kurikulum_target.data_detail');
-    Route::post('store', 'store')->name('kurikulum_target.store');
+    Route::put('store', 'store')->name('kurikulum_target.store');
     Route::delete('delete/{id}', 'destroy')->name('kurikulum_target.destroy');
     Route::get('export-template', 'exportTemplate')->name('kurikulum_target.export_template');
     Route::post('import-data', 'importData')->name('kurikulum_target.import_data');
@@ -148,12 +148,15 @@ Route::prefix('master-user')->group(function () {
     Route::controller(RoleController::class)->prefix('role')->group(function () {
         Route::get('index', 'index')->name('master_user.role.index');
         Route::post('create', 'create')->name('master_user.role.create');
-        Route::delete('delete/{id}', 'destroy')->name('master_user.role.destroy');
+        Route::post('delete/{id}', 'destroy')->name('master_user.role.destroy');
+
+        Route::get('set-akses/{id}', 'setAkses')->name('master_user.role.set_akses');
+        Route::put('store', 'store')->name('master_user.role.store');
     });
 
     Route::controller(PermissionController::class)->prefix('permission')->group(function () {
         Route::get('index', 'index')->name('master_user.permission.index');
         Route::post('create', 'create')->name('master_user.permission.create');
-        Route::delete('delete/{id}', 'destroy')->name('master_user.permission.destroy');
+        Route::post('delete/{id}', 'destroy')->name('master_user.permission.destroy');
     });
 });

@@ -28,7 +28,7 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-success btn-sm mb-2 add-or-edit-data" data-toggle="modal" data-target="#modalInput" data-id="" data-name="" data-status="0">
+                        <button type="button" class="btn btn-success btn-sm mb-2 update-data" data-toggle="modal" data-target="#modalInput" data-id="" data-name="" data-status="0">
                             <i class="fa fa-plus"></i> Tambah
                         </button>
                         <table id="dataTables" class="table table-bordered table-striped">
@@ -50,7 +50,7 @@
                                         <td class="text-center">{{ date("d-m-Y", strtotime($data->updated_at)) }}</td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-warning btn-sm add-or-edit-data"
+                                                <button type="button" class="btn btn-warning btn-sm update-data"
                                                     data-toggle="modal" data-target="#modalInput"
                                                     data-id="{{ $data->id }}" data-name="{{ $data->name }}" data-status="1">
                                                     <i class="far fa-edit"></i> Ubah
@@ -139,7 +139,7 @@
         return status;
     }
 
-    $(document).on('click', '.add-or-edit-data', function(e) {
+    $(document).on('click', '.update-data', function(e) {
         $('.loading').hide();
 
         let id = $(this).data('id');
