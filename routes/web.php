@@ -141,7 +141,9 @@ Route::controller(LaporanController::class)->prefix('laporan')->group(function (
 Route::prefix('master-user')->group(function () {
     Route::controller(UserController::class)->prefix('user')->group(function () {
         Route::get('index', 'index')->name('master_user.user.index');
-        Route::post('create', 'create')->name('master_user.user.create');
+        Route::get('create', 'create')->name('master_user.user.create');
+        Route::get('update/{id}', 'update')->name('master_user.user.update');
+        Route::post('store', 'store')->name('master_user.user.store');
         Route::post('delete/{id}', 'destroy')->name('master_user.user.destroy');
     });
 
