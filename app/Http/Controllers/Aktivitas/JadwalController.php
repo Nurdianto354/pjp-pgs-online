@@ -15,7 +15,7 @@ class JadwalController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['permission:aktivitas']);
     }
 
     public function index(Request $request)

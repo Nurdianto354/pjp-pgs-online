@@ -12,6 +12,11 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:master_user.user']);
+    }
+
     public function index()
     {
         $datas = User::latest()->get();

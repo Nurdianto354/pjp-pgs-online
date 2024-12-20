@@ -12,6 +12,11 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:master_user|master_user.role']);
+    }
+
     public function index()
     {
         $datas = Role::orderBy('name', 'ASC')->get();

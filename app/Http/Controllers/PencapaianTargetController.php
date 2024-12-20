@@ -16,7 +16,7 @@ class PencapaianTargetController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['permission:pencapaian_target']);
     }
 
     public function index(Request $request)

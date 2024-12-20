@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Aktivitas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aktivitas\HariLibur;
-use App\Models\Aktivitas\Jadwal;
 use App\Models\MasterData\Divisi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ class HariLiburController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['permission:aktivitas']);
     }
 
     public function index(Request $request)

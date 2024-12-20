@@ -29,7 +29,7 @@ class KurikulumTargetController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['permission:kurikulum_target']);
     }
 
     public function index(Request $request)

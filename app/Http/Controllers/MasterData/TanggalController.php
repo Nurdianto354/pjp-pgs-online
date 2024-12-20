@@ -13,7 +13,7 @@ class TanggalController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['permission:master_data']);
     }
 
     public function index()

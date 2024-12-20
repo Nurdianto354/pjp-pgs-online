@@ -11,6 +11,11 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:master_user|master_user.permission']);
+    }
+
     public function index()
     {
         $datas = Permission::orderBy('name', 'ASC')->get();

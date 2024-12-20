@@ -27,6 +27,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @can('master_data')
                 <li class="nav-item {{ setActiveMenu('master-data/*') }}">
                     <a href="#" class="nav-link {{ setActive('master-data/*') }}">
                         <i class="nav-icon fas fa-table"></i>
@@ -80,24 +81,32 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
+                @can('murid')
                 <li class="nav-item">
                     <a href="{{ route('murid.index') }}" class="nav-link {{ setActive('murid/*') }}">
                         <i class="nav-icon fas fa-user-cog"></i>
                         <p>Murid</p>
                     </a>
                 </li>
+                @endcan
+                @can('kurikulum_target')
                 <li class="nav-item">
                     <a href="{{ route('kurikulum_target.index') }}" class="nav-link {{ setActive('kurikulum-target/*') }}">
                         <i class="nav-icon fas fa-clipboard-list"></i>
                         <p>Kurikulum & Target</p>
                     </a>
                 </li>
+                @endcan
+                @can('pencapaian_target')
                 <li class="nav-item">
                     <a href="{{ route('pencapaian_target.index') }}" class="nav-link {{ setActive('pencapaian-target/*') }}">
                         <i class="nav-icon fa-solid fa-chart-line"></i>
                         <p>Pencapaian Target</p>
                     </a>
                 </li>
+                @endcan
+                @can('aktivitas')
                 <li class="nav-item {{ setActiveMenu('aktivitas/*') }}">
                     <a href="#" class="nav-link {{ setActive('aktivitas/*') }}">
                         <i class="nav-icon fa-solid fa-calendar-days"></i>
@@ -121,24 +130,32 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
+                @can('absensi')
                 <li class="nav-item">
                     <a href="{{ route('absensi.index') }}" class="nav-link {{ setActive('absensi/*') }}">
                         <i class="nav-icon far fa-calendar-check"></i>
                         <p>Absensi</p>
                     </a>
                 </li>
+                @endcan
+                @can('kegiatan')
                 <li class="nav-item">
                     <a href="{{ route('kegiatan.index') }}" class="nav-link {{ setActive('kegiatan/*') }}">
                         <i class="nav-icon fa-solid fa-laptop-file"></i>
                         <p>Kegiatan</p>
                     </a>
                 </li>
+                @endcan
+                @can('laporan')
                 <li class="nav-item">
                     <a href="{{ route('laporan.index') }}" class="nav-link {{ setActive('laporan/*') }}">
                         <i class="nav-icon fa-solid fa-box-archive"></i>
                         <p>Laporan</p>
                     </a>
                 </li>
+                @endcan
+                @can('master_user')
                 <li class="nav-item {{ setActiveMenu('master-user/*') }}">
                     <a href="#" class="nav-link {{ setActive('master-user/*') }}">
                         <i class="nav-icon fas fa-users-cog"></i>
@@ -168,6 +185,7 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
             </ul>
         </nav>
     </div>
