@@ -7,6 +7,7 @@ use App\Models\Aktivitas\HariLibur;
 use App\Models\MasterData\Divisi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,34 @@ class HariLiburController extends Controller
 
     public function index(Request $request)
     {
-        $divisi = Divisi::where([['status', true], ['nama', 'Paud']])->first();
+        $user = Auth::user();
+        $roles = $user->getRoleNames()->toArray();
+
+        if (array_intersect($roles, ['paud', 'caberawit', 'praremaja', 'remaja', 'pranikah'])) {
+            $divisiIds  = [];
+            $divisiNama = "";
+            // Loop untuk mengambil divisi dan kelas berdasarkan peran
+            foreach ($roles as $index => $role) {
+                if ($index == 0) {
+                    $divisiNama = ucfirst(strtolower($role));
+                }
+
+                $divisi = Divisi::select('id')
+                    ->where([['nama', ucfirst(strtolower($role))], ['status', true]])
+                    ->first();
+
+                // Pastikan divisi ditemukan sebelum melanjutkan
+                if ($divisi) {
+                    $divisiIds[] = $divisi->id; // Simpan ID Divisi
+                }
+            }
+
+            $divisi = Divisi::where([['status', true], ['nama', $divisiNama]])->first();
+            $listDivisi = Divisi::whereIn('id', $divisiIds)->where('status', true)->orderBy('id', 'ASC')->get();
+        } else {
+            $divisi = Divisi::where([['status', true], ['nama', 'Paud']])->first();
+            $listDivisi = Divisi::where('status', true)->orderBy('id', 'ASC')->get();
+        }
 
         $divisiId   = $divisi->id;
         $divisiNama = $divisi->nama;
@@ -32,7 +60,6 @@ class HariLiburController extends Controller
         }
 
         $datas = HariLibur::where([['status', true], ['divisi_id', $divisiId]])->orderBy('hari', 'ASC')->get();
-        $listDivisi = Divisi::where('status', true)->orderBy('id', 'ASC')->get();
 
         return view('pages.aktivitas.hari_libur.index', compact('datas', 'listDivisi', 'divisiId', 'divisiNama'));
     }

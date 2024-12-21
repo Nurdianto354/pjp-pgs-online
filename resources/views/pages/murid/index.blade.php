@@ -63,7 +63,7 @@
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $data->nama_lengkap }}</td>
                                         <td>{{ $data->nama_panggilan }}</td>
-                                        <td class="text-center">{{ $data->status == 1 ? 'Laki - laki' : 'Perempuan' }}</td>
+                                        <td class="text-center">{{ $data->jenis_kelamin == 1 ? 'Laki - laki' : 'Perempuan' }}</td>
                                         <td>{{ $data->getDivisi->nama }}</td>
                                         <td>{{ $data->getKelas->nama }}</td>
                                         <td>
@@ -81,8 +81,8 @@
                                                     data-nama_lengkap="{{ $data->nama_lengkap }}"
                                                     data-nama_panggilan="{{ $data->nama_panggilan }}"
                                                     data-jenis_kelamin="{{ $data->jenis_kelamin }}"
-                                                    data-kelas_id="{{ $data->kelas_id }}"
                                                     data-divisi_id="{{ $data->divisi_id }}"
+                                                    data-kelas_id="{{ $data->kelas_id }}"
                                                     data-tempat_lahir="{{ $data->tempat_lahir }}"
                                                     data-tanggal_lahir="{{ $data->tanggal_lahir }}"
                                                     data-alamat="{{ $data->alamat }}"
@@ -146,9 +146,9 @@
                     <div class="form-group">
                         <label>Nama Divisi</label>
                         <select name="divisi_id" class="form-control select2-divisi select2-success" data-dropdown-css-class="select2-success">
-                            @foreach ($listDivisi as $divisi)
-                                <option value="{{ $divisi->id }}">
-                                    {{ $divisi->nama }}
+                            @foreach ($listDivisi as $id => $divisi)
+                                <option value="{{ $id }}">
+                                    {{ $divisi }}
                                 </option>
                             @endforeach
                         </select>
@@ -157,9 +157,9 @@
                     <div class="form-group">
                         <label>Nama Kelas</label>
                         <select name="kelas_id" class="form-control select2-kelas select2-success" data-dropdown-css-class="select2-success">
-                            @foreach ($listKelas as $kelas)
-                                <option value="{{ $kelas->id }}">
-                                    {{ $kelas->nama }}
+                            @foreach ($listKelas as $id => $kelas)
+                                <option value="{{ $id }}">
+                                    {{ $kelas }}
                                 </option>
                             @endforeach
                         </select>

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Absensi\Absensi;
 use App\Models\Aktivitas\HariLibur;
 use App\Models\Aktivitas\Jadwal;
+use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Kelas;
 use App\Models\MasterData\Tanggal;
 use App\Models\Murid\Murid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -22,7 +24,30 @@ class AbsensiController extends Controller
 
     public function index(Request $request)
     {
-        $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();
+        $user = Auth::user();
+        $roles = $user->getRoleNames()->toArray();
+
+        if (array_intersect($roles, ['paud', 'caberawit', 'praremaja', 'remaja', 'pranikah'])) {
+            $divisiIds = [];
+            // Loop untuk mengambil divisi dan kelas berdasarkan peran
+            foreach ($roles as $role) {
+                $divisi = Divisi::select('id')
+                    ->where([['nama', ucfirst(strtolower($role))], ['status', true]])
+                    ->first();
+
+                // Pastikan divisi ditemukan sebelum melanjutkan
+                if ($divisi) {
+                    $divisiIds[] = $divisi->id; // Simpan ID Divisi
+                }
+            }
+
+            $kelas = Kelas::whereIn('divisi_id', $divisiIds)->where('status', true)->first();
+
+            $listKelas = Kelas::whereIn('divisi_id', $divisiIds)->where('status', true)->get();
+        } else {
+            $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();
+            $listKelas = Kelas::where('status', true)->get();
+        }
 
         $kelasId   = $kelas->id;
         $kelasNama = $kelas->nama;
@@ -36,7 +61,6 @@ class AbsensiController extends Controller
             $divisiId  = $kelas->divisi_id;
         }
 
-        $listKelas = Kelas::where('status', true)->get();
         $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])
             ->orderBy('nama_panggilan', 'ASC')->get();
 

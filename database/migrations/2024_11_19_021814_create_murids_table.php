@@ -17,7 +17,7 @@ class CreateMuridsTable extends Migration
             $table->bigIncrements('id');
             $table->string('nama_lengkap');
             $table->string('nama_panggilan');
-            $table->string('jenis_kelamin');
+            $table->boolean('jenis_kelamin');
             $table->unsignedBigInteger('divisi_id');
             $table->unsignedBigInteger('kelas_id');
             $table->string('tempat_lahir')->nullable();

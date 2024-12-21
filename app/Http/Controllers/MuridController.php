@@ -8,6 +8,7 @@ use App\Models\MasterData\Kelas;
 use App\Models\Murid\Murid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -20,12 +21,58 @@ class MuridController extends Controller
 
     public function index()
     {
-        $listKelas = Kelas::where('status', true)->get();
-        $listDivisi = Divisi::where('status', true)->get();
+        $user = Auth::user();
+        $roles = $user->getRoleNames()->toArray();
 
-        $datas = Murid::with('getKelas')->get();
+        if (array_intersect($roles, ['paud', 'caberawit', 'praremaja', 'remaja', 'pranikah'])) {
+            $divisiIds = [];
+            $kelasIds = [];
 
-        return view('pages.murid.index', compact('listKelas', 'listDivisi', 'datas'));
+            // Loop untuk mengambil divisi dan kelas berdasarkan peran
+            foreach ($roles as $role) {
+                $divisi = Divisi::select('id')
+                    ->where([['nama', ucfirst(strtolower($role))], ['status', true]])
+                    ->first();
+
+                // Pastikan divisi ditemukan sebelum melanjutkan
+                if ($divisi) {
+                    $divisiIds[] = $divisi->id; // Simpan ID Divisi
+                    $kelasIds = array_merge($kelasIds, Kelas::select('id')
+                        ->where([['divisi_id', $divisi->id], ['status', true]])
+                        ->pluck('id')->toArray());
+                }
+            }
+
+            // Ambil list divisi berdasarkan ID yang ditemukan
+            $listDivisi = Divisi::whereIn('id', $divisiIds)
+                ->where('status', true)
+                ->pluck('nama', 'id')
+                ->toArray();
+
+            // Ambil list kelas berdasarkan ID kelas yang ditemukan
+            $listKelas = Kelas::whereIn('id', $kelasIds)
+                ->where('status', true)
+                ->pluck('nama', 'id')
+                ->toArray();
+
+            $datas = Murid::with('getKelas')->whereIn('divisi_id', $divisiIds)->get();
+        } else {
+            // Jika tidak ada role yang sesuai, ambil semua divisi dan kelas dengan status true
+            $listDivisi = Divisi::where('status', true)
+                ->pluck('nama', 'id')
+                ->toArray();
+
+            $listKelas = Kelas::where('status', true)
+                ->pluck('nama', 'id')
+                ->toArray();
+
+            // Ambil data murid dengan relasi ke kelas
+            $datas = Murid::with('getKelas')->get();
+        }
+
+        // Return view dengan data yang sudah disiapkan
+        return view('pages.murid.index', compact('listDivisi', 'listKelas', 'datas'));
+
     }
 
     public function create(Request $request)
