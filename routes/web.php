@@ -34,13 +34,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes([
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+]);
+
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::controller(ProfilController::class)->prefix('profil')->group(function () {
         Route::get('index', 'index')->name('profil.index');
-        Route::get('update', 'update')->name('profil.update');
+        Route::get('update/{id}/{view}', 'update')->name('profil.update');
         Route::put('store', 'store')->name('profil.store');
     });
 

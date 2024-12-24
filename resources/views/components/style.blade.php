@@ -24,3 +24,18 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 <!-- overlayScrollbars -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+
+<style>
+    body {
+        padding-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+        .main-header.navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+        }
+    }
+</style>

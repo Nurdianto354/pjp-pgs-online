@@ -1,5 +1,5 @@
 <?php
-    $user = Auth::user();
+    $user  = Auth::user();
 ?>
 <aside class="main-sidebar elevation-4 sidebar-light-success">
     <a href="{{ route('dashboard') }}" class="brand-link ml-3">
@@ -11,11 +11,14 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
                 @if (empty($user->photo))
-                    <img class="img-circle elevation-2" src="{{ asset('assets/img/blank-profile.png')}}" alt="Foto Profil">
+                    <img class="img-circle elevation-2" src="{{ asset('assets/img/blank-profile.png') }}" alt="Foto Profil">
                 @endif
             </div>
-            <div class="info">
+            <div class="info d-flex justify-content-between w-100">
                 <a href="{{ route('profil.index') }}" class="d-block">{{ ucwords(strtolower($user->nama)) }}</a>
+                <a href="{{ route('profil.index') }}" class="ml-2">
+                    <i class="fa-regular fa-pen-to-square fa-sm"></i>
+                </a>
             </div>
         </div>
 

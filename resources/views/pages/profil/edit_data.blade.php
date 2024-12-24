@@ -5,13 +5,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data User</h1>
+                <h1 class="m-0">Profil</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">Master User</li>
-                    <li class="breadcrumb-item active"><a href="{{ route('master_user.user.index') }}">Data User</a></li>
-                    <li class="breadcrumb-item">{{ $title }} User</li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item">Profil</li>
+                    <li class="breadcrumb-item active">{{ $title }}</li>
                 </ol>
             </div>
         </div>
@@ -30,13 +30,15 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-users-cog"></i>
-                            {{ $title }} Data User
+                            {{ $title }}
                         </h3>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('profil.store') }}" enctype="multipart/form-data">
                             @csrf
+                            @method('put')
                             <input type="hidden" name="id" value="{{ !empty($data) ? $data->id : NULL }}">
+                            <input type="hidden" name="view" value="{{ !empty($view) ? $view : 'data' }}">
                             <div class="form-group">
                                 <label>Username</label>
                                 <input type="text" name="username" value="{{ old('username', !empty($data) ? $data->username : NULL) }}"

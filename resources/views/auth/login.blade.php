@@ -69,9 +69,9 @@
                                 <label class="form-check-label fas-6">Remember me</label>
                             </div>
                         </div>
-                        <div class="col-6 d-flex justify-content-end">
+                        {{-- <div class="col-6 d-flex justify-content-end">
                             <a href="{{ route('password.request') }}" class="fs-6">Forgot password?</a>
-                        </div>
+                        </div> --}}
                     </div>
                     <button type="submit" class="btn btn-block btn-success">Sign In</button>
                 </form>
