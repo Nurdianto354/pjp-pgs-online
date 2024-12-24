@@ -34,16 +34,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
-
 Auth::routes();
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::controller(ProfilController::class)->prefix('profil')->group(function () {
         Route::get('index', 'index')->name('profil.index');
+        Route::get('update', 'update')->name('profil.update');
+        Route::put('store', 'store')->name('profil.store');
     });
 
     Route::prefix('master-data')->group(function () {

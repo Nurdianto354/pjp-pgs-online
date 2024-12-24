@@ -160,7 +160,7 @@
         $('.error-nama').hide();
     });
 
-    $('.update-data').on("click", function () {
+    $(document).on("click", ".update-data", function () {
         $('.loading').hide();
 
         $('#btnSave').html('<i class="fa-solid fa-check"></i> Perbarui');

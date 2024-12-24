@@ -79,7 +79,7 @@
                             @method('PUT')
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
-                            <input type="hidden" name="tahun__id" value="{{ $tahunId }}">
+                            <input type="hidden" name="tahun_id" value="{{ $tahunId }}">
                             <div id="form-data">
                                 <div class="row">
                                     <input type="hidden" name="id_detail[]" value="">

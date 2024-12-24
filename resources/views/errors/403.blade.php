@@ -17,7 +17,7 @@
                         <p class="text-center">Jika Anda merasa ini adalah kesalahan, silakan hubungi administrator.</p>
 
                         <div class="text-center mt-4">
-                            <a href="{{ url('/dashboard') }}" class="btn btn-primary">
+                            <a href="{{ url('/') }}" class="btn btn-primary">
                                 <i class="fas fa-home"></i> Kembali ke Beranda
                             </a>
                         </div>

@@ -477,7 +477,7 @@ class KurikulumTargetController extends Controller
                 $row++;
                 $target       = $sheetData->getCellByColumnAndRow($col, $row)->getValue();
 
-                if (empty($namaKarakter) || empty($namaMateri) || empty($namaSatuan) || empty($target)) {
+                if (empty($namaKarakter) || empty($namaMateri) || empty($namaSatuan)) {
                     DB::rollback();
 
                     toast('Gagal import data kurikulum & target kelas '.$kelas.' Tahun Ajaran '.$tahun.', mohon cek kembali data import karena tidak boleh kosong', 'Error');

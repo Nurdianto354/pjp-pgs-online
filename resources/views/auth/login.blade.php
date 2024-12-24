@@ -75,9 +75,9 @@
                     </div>
                     <button type="submit" class="btn btn-block btn-success">Sign In</button>
                 </form>
-                <div class="col-12 col-md-12 d-flex justify-content-center mt-4">
+                {{-- <div class="col-12 col-md-12 d-flex justify-content-center mt-4">
                     <p class="mb-0">Don't have an account? <a href="{{ route('register') }}">Sign Up</a></p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
