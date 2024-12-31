@@ -107,8 +107,9 @@
                                 <br>
                                 @foreach ($listRole as $role)
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="role" value="{{ $role->name }}"
-                                            id="check-{{ $role->id }}" {{ !empty($data) ? ($data->roles->contains($role->id) ? 'checked' : '') : '' }}>
+                                        <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}"
+                                            id="check-{{ $role->id }}"
+                                            {{ !empty($data) ? ($data->roles->contains($role->id) ? 'checked' : '') : '' }}>
                                         <label class="form-check-label" for="check-{{ $role->id }}">
                                             {{ $role->name }}
                                         </label>

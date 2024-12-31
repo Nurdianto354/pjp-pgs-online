@@ -84,9 +84,11 @@ class UserController extends Controller
             $data->save();
 
             if ($request->id != null && $request->id != '') {
-                $data->syncRoles($request->input('role'));
+                 $data->syncRoles($request->input('roles'));
             }  else {
-                $data->assignRole($request->input('role'));
+                foreach ($request->input('roles') as $role) {
+                    $data->assignRole($role);
+                }
             }
 
             DB::commit();

@@ -49,6 +49,39 @@
                         </h3>
                     </div>
                     <div class="card-body">
+                        <label>Tahun</label>
+                        <ul class="nav mt-2">
+                            @foreach ($listTahun as $value)
+                                <li class="nav-item mx-1">
+                                    <form method="GET" action="{{ route('absensi.index') }}">
+                                        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                        <input type="hidden" name="tahun" value="{{ $value }}">
+                                        <input type="hidden" name="bulan" value="{{ $bulan }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Absensi\Absensi::getTab($value, $tahun) ? 'active' : '' }}">
+                                            {{ $value }}
+                                        </button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <hr>
+                        <label>Bulan</label>
+                        <ul class="nav mt-2">
+                            @foreach ($listBulan as $value)
+                                <li class="nav-item mx-1">
+                                    <form method="GET" action="{{ route('absensi.index') }}">
+                                        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                        <input type="hidden" name="tahun" value="{{ $tahun }}">
+                                        <input type="hidden" name="bulan" value="{{ $value }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Absensi\Absensi::getTab($value, $bulan) ? 'active' : '' }}">
+                                            {{ App\Models\MasterData\Tanggal::listBulan[$value] }}
+                                        </button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-3 col-md-3" style="padding-right: 0px;">
                                 <table class="table table-bordered table-striped">

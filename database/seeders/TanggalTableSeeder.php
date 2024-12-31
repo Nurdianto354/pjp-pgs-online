@@ -15,12 +15,14 @@ class TanggalTableSeeder extends Seeder
      */
     public function run()
     {
-        // Define the year range (1 year)
-        $startDate = Carbon::now()->startOfYear(); // Get the first day of the current year
-        $endDate = Carbon::now()->endOfYear(); // Get the last day of the current year
+        // $startDate = Carbon::now()->startOfYear();
+        // $endDate = Carbon::now()->endOfYear();
 
-        // Loop through each day within the range
+        $startDate = Carbon::createFromDate(2025, 1, 1)->startOfYear();
+        $endDate = Carbon::createFromDate(2025, 12, 31)->endOfYear();
+
         $currentDate = $startDate;
+
         while ($currentDate <= $endDate) {
             DB::table('m_tanggal')->insert([
                 'tanggal'    => strtotime($currentDate->format('Y-m-d')),

@@ -64,8 +64,16 @@ class AbsensiController extends Controller
         $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])
             ->orderBy('nama_panggilan', 'ASC')->get();
 
-        $tahun  = Carbon::now()->year;
-        $bulan  = Carbon::now()->month;
+        $tahun  = $request->has('tahun') ? $request->tahun : Carbon::now()->year;
+
+        $listTahun = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')
+                 ->pluck('tahun');
+
+        $bulan  = $request->has('bulan') ? $request->bulan : Carbon::now()->month;
+
+        $listBulan = Tanggal::where([['tahun', $tahun], ['status', true]])->orderBy('bulan', 'ASC')->groupBy('bulan')
+                 ->pluck('bulan');
+
         $jadwal = Jadwal::where([['divisi_id', $divisiId], ['status', true]])
             ->pluck('hari');
 
@@ -89,7 +97,7 @@ class AbsensiController extends Controller
             }
         }
 
-        return view('pages.absensi.index', compact('kelasId', 'kelasNama', 'listKelas', 'listMurid', 'listTanggal', 'datas'));
+        return view('pages.absensi.index', compact('kelasId', 'kelasNama', 'listKelas', 'listMurid', 'tahun', 'listTahun', 'listBulan',  'bulan','listTanggal', 'datas'));
     }
 
     public function store(Request $request)

@@ -427,7 +427,7 @@ class KurikulumTargetController extends Controller
         $kelas = $sheetData->getCellByColumnAndRow(1, 3)->getValue();
         $tahun = $sheetData->getCellByColumnAndRow(1, 4)->getValue();
 
-        $kelasId = Kelas::where([['nama', 'LIKE', '%'.$kelas.'%'], ['status', true]])->pluck('id')->first();
+        $kelasId = Kelas::where([['nama', 'LIKE', $kelas.'%'], ['status', true]])->pluck('id')->first();
         $tahunId = Tahun::where([['nama', 'LIKE', '%'.$tahun.'%'], ['status', true]])->pluck('id')->first();
 
         if (empty($kelasId) || empty($tahunId)) {
