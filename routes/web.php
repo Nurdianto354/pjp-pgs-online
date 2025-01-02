@@ -97,6 +97,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('index', 'index')->name('murid.index');
         Route::post('create', 'create')->name('murid.create');
         Route::post('delete/{id}', 'destroy')->name('murid.destroy');
+        Route::get('export-excel', 'exportExcel')->name('murid.export_excel');
     });
 
     Route::controller(KurikulumTargetController::class)->prefix('kurikulum-target')->group(function () {

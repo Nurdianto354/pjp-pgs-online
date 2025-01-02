@@ -143,7 +143,6 @@ class KurikulumTargetController extends Controller
         return response()->json([
             'datas' => $datas,
         ]);
-
     }
 
     public function destroy($id)

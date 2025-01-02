@@ -11,6 +11,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MuridController extends Controller
 {
@@ -44,27 +51,23 @@ class MuridController extends Controller
             }
 
             // Ambil list divisi berdasarkan ID yang ditemukan
-            $listDivisi = Divisi::whereIn('id', $divisiIds)
+            $listDivisi = Divisi::select('id', 'nama')->whereIn('id', $divisiIds)
                 ->where('status', true)
-                ->pluck('nama', 'id')
-                ->toArray();
+                ->get();
 
             // Ambil list kelas berdasarkan ID kelas yang ditemukan
-            $listKelas = Kelas::whereIn('id', $kelasIds)
+            $listKelas = Kelas::select('id', 'nama')->whereIn('id', $kelasIds)
                 ->where('status', true)
-                ->pluck('nama', 'id')
-                ->toArray();
+                ->get();
 
             $datas = Murid::with('getKelas')->whereIn('divisi_id', $divisiIds)->get();
         } else {
             // Jika tidak ada role yang sesuai, ambil semua divisi dan kelas dengan status true
-            $listDivisi = Divisi::where('status', true)
-                ->pluck('nama', 'id')
-                ->toArray();
+            $listDivisi = Divisi::select('id', 'nama')->where('status', true)
+                ->get();
 
-            $listKelas = Kelas::where('status', true)
-                ->pluck('nama', 'id')
-                ->toArray();
+            $listKelas = Kelas::select('id', 'nama')->where('status', true)
+                ->get();
 
             // Ambil data murid dengan relasi ke kelas
             $datas = Murid::with('getKelas')->get();
@@ -141,5 +144,179 @@ class MuridController extends Controller
                 'keterangan' => 'karena ada kesalahan di sistem'
             ]);
         }
+    }
+
+    public function exportExcel()
+    {
+        $user = Auth::user();
+        $roles = $user->getRoleNames()->toArray();
+
+        // Jika tidak ada role yang sesuai, ambil semua divisi dan kelas dengan status true
+        $listDivisi = Divisi::select('id', 'nama')->where('status', true)
+            ->get();
+
+        if (array_intersect($roles, ['paud', 'caberawit', 'praremaja', 'remaja', 'pranikah'])) {
+            $divisiIds = [];
+
+            // Loop untuk mengambil divisi dan kelas berdasarkan peran
+            foreach ($roles as $role) {
+                $divisi = Divisi::select('id')
+                    ->where([['nama', ucfirst(strtolower($role))], ['status', true]])
+                    ->first();
+
+                // Pastikan divisi ditemukan sebelum melanjutkan
+                if ($divisi) {
+                    $divisiIds[] = $divisi->id; // Simpan ID Divisi
+                }
+            }
+
+            // Ambil list divisi berdasarkan ID yang ditemukan
+            $listDivisi = Divisi::whereIn('id', $divisiIds)
+                ->where('status', true)
+                ->pluck('nama', 'id')
+                ->toArray();
+        }
+
+        $style_border = [
+			'borders' => [
+				'allBorders' => [
+					'borderStyle' => Border::BORDER_THIN,
+				],
+			],
+			'alignment' => [
+				'vertical' => Alignment::VERTICAL_CENTER,
+				'wrapText' => true,
+			],
+		];
+
+		$style_header = [
+			'alignment' => [
+				'horizontal' => Alignment::HORIZONTAL_CENTER,
+				'vertical' => Alignment::VERTICAL_CENTER,
+				'wrapText' => true,
+			],
+			'fill'  => [
+				'fillType' => Fill::FILL_SOLID,
+				'startColor' => ['rgb' => 'EEEEEE'],
+			],
+			'font' => [
+				'size' => 10,
+				'bold' => true,
+			],
+		];
+
+        $style_right = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT]];
+        $style_left = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT]];
+        $style_center = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
+
+        $fields = [
+            ['field' => 'no', 'name' => 'No.', 'style' => 'center'],
+            ['field' => 'nama_lengkap', 'name' => 'Nama Lengkap', 'style' => 'left'],
+            ['field' => 'nama_panggilan', 'name' => 'Nama Panggilan', 'style' => 'left'],
+            ['field' => 'jenis_kelamin', 'name' => 'Jenis Kelamin', 'style' => 'left'],
+            ['field' => 'kelas_id', 'name' => 'Kelas', 'style' => 'left'],
+            ['field' => 'tempat_lahir', 'name' => 'Tempat Lahir', 'style' => 'left'],
+            ['field' => 'tanggal_lahir', 'name' => 'Tempat Lahir', 'style' => 'center'],
+            ['field' => 'alamat', 'name' => 'Alamat', 'style' => 'left'],
+            ['field' => 'no_telp', 'name' => 'No. Telp', 'style' => 'left'],
+        ];
+
+		$title = "Data Murid";
+        $sheetActiveName = "Paud";
+
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator("PJP Online Pagesangan II")->setLastModifiedBy("PJP Online Pagesangan II")->setTitle($title)->setSubject($title)->setDescription($title);
+
+
+        foreach($listDivisi as $key => $divisi) {
+            if ($key <= 0) {
+                $sheetActiveName = $divisi->nama;
+
+                $sheet = $spreadsheet->getActiveSheet();
+            } else {
+                $sheet = $spreadsheet->createSheet();
+            }
+
+            $sheet->setTitle($divisi->nama);
+
+            $col = $colAwal = 1;
+            $row = 1;
+
+            foreach ($fields as $field) {
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$field['name'], DataType::TYPE_STRING);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+            }
+
+            $sheet->getStyleByColumnAndRow($colAwal, $row, $col-1, $row)->applyFromArray($style_border);
+            $sheet->getStyleByColumnAndRow($colAwal, $row, $col-1, $row)->applyFromArray($style_header);
+
+            $row++;
+            $rowAwal = $row;
+
+
+            $listMurid = Murid::with('getKelas')
+                ->where([['divisi_id', $divisi->id], ['status', true]])
+                ->orderBy('kelas_id', 'ASC')
+                ->orderBy('nama_lengkap', 'ASC')
+                ->get();
+
+
+            foreach ($listMurid as $index => $murid) {
+                $col = $colAwal;
+
+                foreach ($fields as $field) {
+
+                    if ($field['field'] == 'no') {
+                        $sheet->setCellValueExplicitByColumnAndRow($col, $row, ++$index, DataType::TYPE_NUMERIC);
+                        $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                        $col++;
+                    } else {
+                        if ($field['field'] == 'jenis_kelamin') {
+                            $value = $murid[$field['field']] == 1 ? "Laki - laki" : "Perempuan";
+                            $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$value, DataType::TYPE_STRING);
+                        } else if ($field['field'] == 'kelas_id') {
+                            $value = $murid->getKelas->nama;
+                            $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$value, DataType::TYPE_STRING);
+                        } else {
+                            $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$murid[$field['field']], DataType::TYPE_STRING);
+                        }
+
+                        $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                        $col++;
+                    }
+
+                    if ($field['style'] == 'left') {
+                        $sheet->getStyle($sheet->getCellByColumnAndRow($col-1, $row)->getCoordinate())->applyFromArray($style_left);
+                    } else if ($field['style'] == 'right') {
+                        $sheet->getStyle($sheet->getCellByColumnAndRow($col-1, $row)->getCoordinate())->applyFromArray($style_right);
+                    } else {
+                        $sheet->getStyle($sheet->getCellByColumnAndRow($col-1, $row)->getCoordinate())->applyFromArray($style_center);
+                    }
+                }
+
+                $row++;
+            }
+
+            $sheet->getStyleByColumnAndRow($colAwal, $rowAwal, $col-1, $row-1)->applyFromArray($style_border);
+        }
+
+        // set sheet as the active sheet
+		$spreadsheet->setActiveSheetIndexByName($sheetActiveName);
+
+        $writer = new Xlsx($spreadsheet);
+        $response = new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            }
+        );
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$title.'.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 }

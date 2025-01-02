@@ -59,7 +59,7 @@ class HariLiburController extends Controller
             $divisiNama = $divisi->nama;
         }
 
-        $datas = HariLibur::where([['status', true], ['divisi_id', $divisiId]])->orderBy('hari', 'ASC')->get();
+        $datas = HariLibur::where([['status', true], ['divisi_id', $divisiId]])->orderBy('tanggal', 'DESC')->get();
 
         return view('pages.aktivitas.hari_libur.index', compact('datas', 'listDivisi', 'divisiId', 'divisiNama'));
     }

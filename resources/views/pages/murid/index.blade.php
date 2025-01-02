@@ -38,9 +38,18 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalInput" id="tambahData">
-                            <i class="fa fa-plus"></i> Tambah
-                        </button>
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalInput" id="tambahData">
+                                    <i class="fa fa-plus"></i> Tambah
+                                </button>
+                                <form method="GET" action="{{ route('murid.export_excel') }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-success ml-1">
+                                        <i class="fa-regular fa-file-excel"></i> Export Excel
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                         <table id="dataTables" class="table table-bordered table-striped">
                             <thead>
                                 <tr class="text-center">
@@ -146,9 +155,9 @@
                     <div class="form-group">
                         <label>Nama Divisi</label>
                         <select name="divisi_id" class="form-control select2-divisi select2-success" data-dropdown-css-class="select2-success">
-                            @foreach ($listDivisi as $id => $divisi)
-                                <option value="{{ $id }}">
-                                    {{ $divisi }}
+                            @foreach ($listDivisi as $divisi)
+                                <option value="{{ $divisi->id }}">
+                                    {{ $divisi->nama }}
                                 </option>
                             @endforeach
                         </select>
@@ -157,9 +166,9 @@
                     <div class="form-group">
                         <label>Nama Kelas</label>
                         <select name="kelas_id" class="form-control select2-kelas select2-success" data-dropdown-css-class="select2-success">
-                            @foreach ($listKelas as $id => $kelas)
-                                <option value="{{ $id }}">
-                                    {{ $kelas }}
+                            @foreach ($listKelas as $kelas)
+                                <option value="{{ $kelas->id }}">
+                                    {{ $kelas->nama }}
                                 </option>
                             @endforeach
                         </select>
