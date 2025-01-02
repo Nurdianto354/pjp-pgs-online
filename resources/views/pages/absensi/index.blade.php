@@ -54,7 +54,7 @@
                             @foreach ($listTahun as $value)
                                 <li class="nav-item mx-1">
                                     <form method="GET" action="{{ route('absensi.index') }}">
-                                        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                        <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                         <input type="hidden" name="tahun" value="{{ $value }}">
                                         <input type="hidden" name="bulan" value="{{ $bulan }}">
                                         <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Absensi\Absensi::getTab($value, $tahun) ? 'active' : '' }}">
@@ -70,7 +70,7 @@
                             @foreach ($listBulan as $value)
                                 <li class="nav-item mx-1">
                                     <form method="GET" action="{{ route('absensi.index') }}">
-                                        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                        <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
                                         <input type="hidden" name="tahun" value="{{ $tahun }}">
                                         <input type="hidden" name="bulan" value="{{ $value }}">
                                         <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Absensi\Absensi::getTab($value, $bulan) ? 'active' : '' }}">
