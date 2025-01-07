@@ -93,22 +93,6 @@
                     </a>
                 </li>
                 @endcan
-                @can('kurikulum_target')
-                <li class="nav-item">
-                    <a href="{{ route('kurikulum_target.index') }}" class="nav-link {{ setActive('kurikulum-target/*') }}">
-                        <i class="nav-icon fas fa-clipboard-list"></i>
-                        <p>Kurikulum & Target</p>
-                    </a>
-                </li>
-                @endcan
-                @can('pencapaian_target')
-                <li class="nav-item">
-                    <a href="{{ route('pencapaian_target.index') }}" class="nav-link {{ setActive('pencapaian-target/*') }}">
-                        <i class="nav-icon fa-solid fa-chart-line"></i>
-                        <p>Pencapaian Target</p>
-                    </a>
-                </li>
-                @endcan
                 @can('aktivitas')
                 <li class="nav-item {{ setActiveMenu('aktivitas/*') }}">
                     <a href="#" class="nav-link {{ setActive('aktivitas/*') }}">
@@ -142,6 +126,22 @@
                     </a>
                 </li>
                 @endcan
+                @can('kurikulum_target')
+                <li class="nav-item">
+                    <a href="{{ route('kurikulum_target.index') }}" class="nav-link {{ setActive('kurikulum-target/*') }}">
+                        <i class="nav-icon fas fa-clipboard-list"></i>
+                        <p>Kurikulum & Target</p>
+                    </a>
+                </li>
+                @endcan
+                @can('pencapaian_target')
+                <li class="nav-item">
+                    <a href="{{ route('pencapaian_target.index') }}" class="nav-link {{ setActive('pencapaian-target/*') }}">
+                        <i class="nav-icon fa-solid fa-chart-line"></i>
+                        <p>Pencapaian Target</p>
+                    </a>
+                </li>
+                @endcan
                 @can('kegiatan')
                 <li class="nav-item">
                     <a href="{{ route('kegiatan.index') }}" class="nav-link {{ setActive('kegiatan/*') }}">
@@ -158,6 +158,35 @@
                     </a>
                 </li>
                 @endcan
+                <li class="nav-item {{ setActiveMenu('bimbingan-konseling/*') }}">
+                    <a href="#" class="nav-link {{ setActive('bimbingan-konseling/*') }}">
+                        <i class="nav-icon fa fa-user-graduate"></i>
+                        <p>
+                            Bimbingan Konseling
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('bimbingan_konseling.rekap_absensi.index') }}" class="nav-link {{ setActive('bimbingan-konseling/rekap-absensi/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Rekap Absensi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('bimbingan_konseling.laporan_desa.index') }}" class="nav-link {{ setActive('bimbingan-konseling/laporan-desa/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Desa</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('bimbingan_konseling.laporan_daerah.index') }}" class="nav-link {{ setActive('bimbingan-konseling/laporan-daerah/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Daerah</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 @can('master_user')
                 <li class="nav-item {{ setActiveMenu('master-user/*') }}">
                     <a href="#" class="nav-link {{ setActive('master-user/*') }}">
