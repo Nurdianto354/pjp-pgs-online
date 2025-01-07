@@ -87,14 +87,19 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr class="text-center">
-                                            <th>Siswa</th>
+                                            <th>Nama Murid</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (count($listMurid) > 0)
                                             @foreach ($listMurid as $murid)
                                                 <tr>
-                                                    <td>{{ $murid->nama_panggilan }}</td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-8 col-md-8">{{ $murid->nama_panggilan }}</div>
+                                                            <div class="col-4 col-md-4">({{ $murid->jenis_kelamin == 1 ? "L" : "P" }})</div>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         @else

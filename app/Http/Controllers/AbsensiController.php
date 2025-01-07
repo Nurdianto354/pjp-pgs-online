@@ -61,8 +61,8 @@ class AbsensiController extends Controller
             $divisiId  = $kelas->divisi_id;
         }
 
-        $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])
-            ->orderBy('nama_panggilan', 'ASC')->get();
+        $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id', 'jenis_kelamin')->where([['kelas_id', $kelasId], ['status', true]])
+            ->orderBy('jenis_kelamin', 'DESC')->orderBy('nama_panggilan', 'ASC')->get();
 
         $tahun  = $request->has('tahun') ? $request->tahun : Carbon::now()->year;
 
