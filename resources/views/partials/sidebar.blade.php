@@ -158,6 +158,7 @@
                     </a>
                 </li>
                 @endcan
+                @can('bimbingan_konseling')
                 <li class="nav-item {{ setActiveMenu('bimbingan-konseling/*') }}">
                     <a href="#" class="nav-link {{ setActive('bimbingan-konseling/*') }}">
                         <i class="nav-icon fa fa-user-graduate"></i>
@@ -187,6 +188,7 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
                 @can('master_user')
                 <li class="nav-item {{ setActiveMenu('master-user/*') }}">
                     <a href="#" class="nav-link {{ setActive('master-user/*') }}">

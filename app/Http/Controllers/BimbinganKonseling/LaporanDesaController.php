@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Log;
 
 class LaporanDesaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:bimbingan_konseling']);
+    }
+
     public function index()
     {
         $listTahun = Tanggal::where('status', true)->groupBy('tahun')->pluck('tahun');
