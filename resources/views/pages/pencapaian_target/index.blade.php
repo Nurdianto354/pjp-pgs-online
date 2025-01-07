@@ -49,7 +49,7 @@
                             Pencapaian Target {{ $kelasNama }}
                         </h3>
                     </div>
-                    <div class="card-body">
+                    {{-- <div class="card-body">
                         <label>Tahun </label>
                         <ul class="nav mt-2">
                             @foreach ($listTahun as $tahun)
@@ -65,7 +65,7 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </div>
+                    </div> --}}
                     <div class="card-body">
                         <div class="row">
                             <!-- Kolom pertama: Daftar siswa -->

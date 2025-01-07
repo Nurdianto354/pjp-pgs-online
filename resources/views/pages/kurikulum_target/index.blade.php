@@ -50,7 +50,7 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <label>Tahun</label>
+                        {{-- <label>Tahun</label>
                         <ul class="nav mt-2">
                             @foreach ($listTahun as $tahun)
                                 <li class="nav-item mx-1">
@@ -65,7 +65,7 @@
                                 </li>
                             @endforeach
                         </ul>
-                        <hr>
+                        <hr> --}}
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
                                 @if ($id != null)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KurikulumTarget\KurikulumTarget;
 use App\Models\KurikulumTarget\KurikulumTargetDetail;
+use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Karakter;
 use App\Models\MasterData\Kelas;
 use App\Models\MasterData\Materi;
@@ -11,6 +12,7 @@ use App\Models\MasterData\Satuan;
 use App\Models\MasterData\Tahun;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -34,16 +36,39 @@ class KurikulumTargetController extends Controller
 
     public function index(Request $request)
     {
-        $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();
+        $user = Auth::user();
+        $roles = $user->getRoleNames()->toArray();
+
+        if (array_intersect($roles, ['paud', 'caberawit', 'praremaja', 'remaja', 'pranikah'])) {
+            $divisiIds = [];
+            // Loop untuk mengambil divisi dan kelas berdasarkan peran
+            foreach ($roles as $role) {
+                $divisi = Divisi::select('id')
+                    ->where([['nama', ucfirst(strtolower($role))], ['status', true]])
+                    ->first();
+
+                // Pastikan divisi ditemukan sebelum melanjutkan
+                if ($divisi) {
+                    $divisiIds[] = $divisi->id; // Simpan ID Divisi
+                }
+            }
+
+            $kelas = Kelas::whereIn('divisi_id', $divisiIds)->where('status', true)->first();
+
+            $listKelas = Kelas::whereIn('divisi_id', $divisiIds)->where('status', true)->get();
+        } else {
+            $kelas = Kelas::where([['status', true], ['nama', 'Paud A']])->first();
+            $listKelas = Kelas::where('status', true)->get();
+        }
 
         $kelasId   = $kelas->id;
         $kelasNama = $kelas->nama;
 
-        if($request->has('kelas_id')) {
+        if ($request->has('kelas_id')) {
             $kelasId   = $request->kelas_id;
         }
 
-        if($request->has('kelas_nama')) {
+        if ($request->has('kelas_nama')) {
             $kelasNama = $request->kelas_nama;
         }
 
@@ -55,7 +80,6 @@ class KurikulumTargetController extends Controller
         }
 
         $listTahun = Tahun::where('status', true)->orderBy('id', 'DESC')->get();
-        $listKelas = Kelas::where('status', true)->get();
 
         $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_id', $tahunId]])->pluck('id')->first();
         $datas = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')->where('kurikulum_target_id', $id)->orderBy('created_at', 'ASC')->get();
