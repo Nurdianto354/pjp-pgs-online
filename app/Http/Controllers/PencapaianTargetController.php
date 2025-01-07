@@ -99,7 +99,7 @@ class PencapaianTargetController extends Controller
 
         $data = new PencapaianTarget();
         $data->kelas_id                   = $request->kelas_id;
-        $data->tahun_id            = $request->tahun_id;
+        $data->tahun_id                   = $request->tahun_id;
         $data->murid_id                   = $request->murid_id;
         $data->kurikulum_target_detail_id = $request->kurikulum_target_detail_id;
         $data->target                     = $request->target;
