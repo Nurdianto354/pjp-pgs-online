@@ -31,6 +31,8 @@
                             @foreach ($listKelas as $kelas)
                                 <form method="GET" action="{{ route('absensi.index') }}">
                                     <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                    <input type="hidden" name="tahun" value="{{ $tahun }}">
+                                    <input type="hidden" name="bulan" value="{{ $bulan }}">
                                     <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\Absensi\Absensi::getTab($kelas->id, $kelasId) ? 'active' : '' }}">
                                         {{ $kelas->nama }}
                                     </button>
@@ -83,7 +85,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-3 col-md-3" style="padding-right: 0px;">
+                            <div class="col-6 col-md-6" style="padding-right: 0px;">
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr class="text-center">
@@ -110,7 +112,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-9 col-md-9 table-responsive" style="padding-left: 0px;">
+                            <div class="col-6 col-md-6 table-responsive" style="padding-left: 0px;">
                                 <table class="table table-bordered table-striped">
                                     @if (count($listTanggal) > 0)
                                         <thead>
