@@ -70,7 +70,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-clipboard-list"></i>
-                            {{ $title }} Kurikulum & Target Kelas <span class="text-bold">{{ $kelasNama }}</span> Tahun <span class="text-bold">{{ $tahunNama }}</span>
+                            {{ $title }} Kurikulum & Target Kelas <span class="text-bold">{{ $kelasNama }}</span>
                         </h3>
                     </div>
                     <div class="card-body">
@@ -79,7 +79,6 @@
                             @method('PUT')
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
-                            <input type="hidden" name="tahun_id" value="{{ $tahunId }}">
                             <div id="form-data">
                                 <div class="row">
                                     <input type="hidden" name="id_detail[]" value="">
@@ -271,7 +270,7 @@
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="karakter" class="col-form-label">Karakter</label>
-                        <select name="karakter[]" class="form-control select2-karakter-${index} select2-success" data-dropdown-css-class="select2-success" id="karakter-${index}">
+                        <select name="karakter[]" class="form-control select2-karakter-${index} select2-success" data-dropdown-css-class="select2-success" id="karakter-${index}" ${id != '' ? 'disabled': ''}>
                             ${generateOptions('karakter', karakter_id)}
                         </select>
                     </div>
@@ -280,7 +279,7 @@
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="materi" class="col-form-label">Materi</label>
-                        <select name="materi[]" class="form-control select2-materi-${index} select2-success" data-dropdown-css-class="select2-success" id="materi-${index}">
+                        <select name="materi[]" class="form-control select2-materi-${index} select2-success" data-dropdown-css-class="select2-success" id="materi-${index}" ${id != '' ? 'disabled': ''}>
                             ${generateOptions('materi', materi_id)}
                         </select>
                     </div>
@@ -296,7 +295,7 @@
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="satuan" class="col-form-label">Satuan</label>
-                        <select name="satuan[]" class="form-control select2-satuan-${index} select2-success" data-dropdown-css-class="select2-success" id="satuan-${index}">
+                        <select name="satuan[]" class="form-control select2-satuan-${index} select2-success" data-dropdown-css-class="select2-success" id="satuan-${index}" ${id != '' ? 'disabled': ''}>
                             ${generateOptions('satuan', satuan_id)}
                         </select>
                     </div>

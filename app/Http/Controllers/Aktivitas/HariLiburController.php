@@ -67,19 +67,38 @@ class HariLiburController extends Controller
     public function create(Request $request)
     {
         $status = "Berhasil";
-        $action = "menambahkan";
         $title  = "Data Hari Libur tanggal " . date("d-m-Y", strtotime($request->tanggal));
+
+        $this->validate($request, [
+            'divisi_id' => 'required|integer',
+            'tanggal'   => 'required|date',
+        ]);
+
 
         DB::beginTransaction();
         try {
-            if ($request->id != null && $request->id != '') {
-                $data = HariLibur::findOrFail($request->id);
-                $action = "memperbarui";
-            } else {
-                $data = new HariLibur();
-            }
-
             $tanggal = Carbon::parse($request->tanggal);
+
+            $action = "menambahkan";
+            $data = new HariLibur();
+            $data->created_at = Carbon::now();
+
+            if ($request->id != null && $request->id != '') {
+                $action = "memperbarui";
+                $data = HariLibur::findOrFail($request->id);
+            } else {
+                $checkData = HariLibur::where([['divisi_id', $request->divisi_id], ['tanggal', strtotime($tanggal)]])->first();
+
+                if (isset($checkData) && $checkData->status == true) {
+                    DB::rollBack();
+                    $message = "Gagal" . " " . $action . " " . $title . ", karena sudah ada";
+
+                    toast($message, 'error');
+                    return back();
+                } else {
+                    $data = $checkData;
+                }
+            }
 
             $data->divisi_id  = $request->divisi_id;
             $data->tanggal    = strtotime($tanggal);

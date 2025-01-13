@@ -47,12 +47,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('master_data.tahun.index') }}" class="nav-link {{ setActive('master-data/tahun/*') }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tahun</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('master_data.materi.index') }}" class="nav-link {{ setActive('master-data/materi/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Materi</p>

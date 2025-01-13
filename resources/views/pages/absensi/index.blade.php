@@ -85,34 +85,31 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-6 col-md-6" style="padding-right: 0px;">
+                            <div class="col-6 col-md-3" style="padding-right: 0px;">
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr class="text-center">
                                             <th>Nama Murid</th>
+                                            <th>Gender</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (count($listMurid) > 0)
                                             @foreach ($listMurid as $murid)
                                                 <tr>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col-8 col-md-8">{{ $murid->nama_panggilan }}</div>
-                                                            <div class="col-4 col-md-4">({{ $murid->jenis_kelamin == 1 ? "L" : "P" }})</div>
-                                                        </div>
-                                                    </td>
+                                                    <td>{{ $murid->nama_panggilan }}</td>
+                                                    <td class="text-center">{{ $murid->jenis_kelamin == 1 ? "L" : "P" }}</td>
                                                 </tr>
                                             @endforeach
                                         @else
                                             <tr class="text-center">
-                                                <td>Data murid tidak ada</td>
+                                                <td colspan="2">Data murid tidak ada</td>
                                             </tr>
                                         @endif
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-6 col-md-6 table-responsive" style="padding-left: 0px;">
+                            <div class="col-6 col-md-9 table-responsive" style="padding-left: 0px;">
                                 <table class="table table-bordered table-striped">
                                     @if (count($listTanggal) > 0)
                                         <thead>

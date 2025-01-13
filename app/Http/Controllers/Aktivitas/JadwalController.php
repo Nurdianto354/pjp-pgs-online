@@ -68,17 +68,34 @@ class JadwalController extends Controller
     public function create(Request $request)
     {
         $status = "Berhasil";
-        $action = "menambahkan";
         $title  = "Data Jadwal Hari " . Tanggal::listDay[$request->hari] . " Waktu " . $request->waktu_mulai . " : " . $request->waktu_selesai;
+
+        $this->validate($request, [
+            'divisi_id' => 'required|integer',
+            'hari' => 'required|integer',
+        ]);
 
         DB::beginTransaction();
         try {
+            $action = "menambahkan";
+            $data = new Jadwal();
+            $data->created_at = Carbon::now();
+
             if ($request->id != null && $request->id != '') {
-                $data = Jadwal::findOrFail($request->id);
                 $action = "memperbarui";
+                $data = Jadwal::findOrFail($request->id);
             } else {
-                $data = new Jadwal();
-                $data->created_at = Carbon::now();
+                $checkData = Jadwal::where([['divisi_id', $request->divisi_id], ['hari', $request->hari]])->first();
+
+                if (isset($checkData) && $checkData->status == true) {
+                    DB::rollBack();
+                    $message = "Gagal" . " " . $action . " " . $title . ", karena sudah ada";
+
+                    toast($message, 'error');
+                    return back();
+                } else {
+                    $data = $checkData;
+                }
             }
 
             $data->divisi_id     = $request->divisi_id;

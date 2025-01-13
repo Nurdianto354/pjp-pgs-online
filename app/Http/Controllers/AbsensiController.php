@@ -65,12 +65,10 @@ class AbsensiController extends Controller
             ->orderBy('jenis_kelamin', 'DESC')->orderBy('nama_panggilan', 'ASC')->get();
 
         $tahun  = $request->has('tahun') ? $request->tahun : Carbon::now()->year;
+        $bulan  = $request->has('bulan') ? $request->bulan : Carbon::now()->month;
 
         $listTahun = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')
                  ->pluck('tahun');
-
-        $bulan  = $request->has('bulan') ? $request->bulan : Carbon::now()->month;
-
         $listBulan = Tanggal::where([['tahun', $tahun], ['status', true]])->orderBy('bulan', 'ASC')->groupBy('bulan')
                  ->pluck('bulan');
 

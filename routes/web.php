@@ -59,12 +59,6 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('delete/{id}', 'destroy')->name('master_data.tanggal.destroy');
         });
 
-        Route::controller(TahunController::class)->prefix('tahun')->group(function () {
-            Route::get('index', 'index')->name('master_data.tahun.index');
-            Route::post('create', 'create')->name('master_data.tahun.create');
-            Route::post('delete/{id}', 'destroy')->name('master_data.tahun.destroy');
-        });
-
         Route::controller(MateriController::class)->prefix('materi')->group(function () {
             Route::get('index', 'index')->name('master_data.materi.index');
             Route::post('create', 'create')->name('master_data.materi.create');

@@ -6,12 +6,13 @@ use App\Models\KurikulumTarget\KurikulumTarget;
 use App\Models\KurikulumTarget\KurikulumTargetDetail;
 use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Kelas;
-use App\Models\MasterData\Tahun;
+use App\Models\MasterData\Tanggal;
 use App\Models\Murid\Murid;
 use App\Models\PencapaianTarget\PencapaianTarget;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PencapaianTargetController extends Controller
@@ -59,19 +60,18 @@ class PencapaianTargetController extends Controller
             $kelasNama = $request->kelas_nama;
         }
 
-        $tahun = Tahun::where('status', true)->orderBy('id', 'DESC')->first();
-        $tahunId = $tahun->id;
+        $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id', 'jenis_kelamin')->where([['kelas_id', $kelasId], ['status', true]])
+            ->orderBy('jenis_kelamin', 'DESC')->orderBy('nama_panggilan', 'ASC')->get();
 
-        if ($request->has('tahun_id')) {
-            $tahunId = $request->tahun_id;
-        }
+        $tahun  = $request->has('tahun') ? $request->tahun : Carbon::now()->year;
+        $bulan  = $request->has('bulan') ? $request->bulan : Carbon::now()->month;
 
-        $listTahun = Tahun::where('status', true)->orderBy('id', 'DESC')->get();
+        $listTahun = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')
+                 ->pluck('tahun');
+        $listBulan = Tanggal::where([['tahun', $tahun], ['status', true]])->orderBy('bulan', 'ASC')->groupBy('bulan')
+                 ->pluck('bulan');
 
-        $listMurid = Murid::select('id', 'nama_panggilan', 'kelas_id')->where([['kelas_id', $kelasId], ['status', true]])
-            ->orderBy('nama_panggilan', 'ASC')->get();
-
-        $id = KurikulumTarget::where([['kelas_id', $kelasId], ['tahun_id', $tahunId]])->pluck('id')->first();
+        $id = KurikulumTarget::where([['kelas_id', $kelasId]])->pluck('id')->first();
         $listTargetKurikulum = KurikulumTargetDetail::with('getKarakter', 'getMateri', 'getSatuan')
             ->where('kurikulum_target_id', $id)
             ->orderBy('karakter_id', 'ASC')
@@ -82,30 +82,56 @@ class PencapaianTargetController extends Controller
 
         foreach ($listMurid as $murid) {
             $datas = PencapaianTarget::select('id', 'kurikulum_target_detail_id', 'target')
-                ->where([['kelas_id', $kelasId], ['tahun_id', $tahunId], ['murid_id', $murid->id]])->get()->toArray();
+                ->where([['kelas_id', $kelasId], ['murid_id', $murid->id], ['tahun', $tahun], ['bulan', $bulan]])
+                ->get()->toArray();
 
             foreach ($datas as $data) {
                 $listPencapaianTarget[$murid->id][$data['kurikulum_target_detail_id']] = $data;
             }
         }
 
-        return view('pages.pencapaian_target.index', compact('listKelas', 'listTahun', 'listMurid', 'listTargetKurikulum', 'listPencapaianTarget', 'id', 'kelasId', 'kelasNama', 'tahunId'));
+        return view('pages.pencapaian_target.index', compact('listKelas', 'listMurid', 'listTahun', 'listBulan', 'listTargetKurikulum', 'listPencapaianTarget', 'id', 'kelasId', 'kelasNama', 'tahun', 'bulan'));
     }
 
     public function store(Request $request)
     {
         $success = true;
-        $message = "";
+        $message = "Data has been saved successfully";
 
-        $data = new PencapaianTarget();
-        $data->kelas_id                   = $request->kelas_id;
-        $data->tahun_id                   = $request->tahun_id;
-        $data->murid_id                   = $request->murid_id;
-        $data->kurikulum_target_detail_id = $request->kurikulum_target_detail_id;
-        $data->target                     = $request->target;
-        $data->created_at                 = Carbon::now();
-        $data->updated_at                 = Carbon::now();
-        $data->save();
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                'kelas_id'  => 'required|integer',
+                'murid_id'  => 'required|integer',
+                'kurikulum_target_detail_id' => 'required|integer',
+                'target' => 'required|integer',
+                'bulan' => 'required|integer',
+                'tahun' => 'required|integer',
+            ]);
+
+            if ($request->id != null && $request->id != '') {
+                $data = PencapaianTarget::findOrFail($request->id);
+            } else {
+                $data = new PencapaianTarget();
+                $data->created_at = Carbon::now();
+            }
+
+            $data->kelas_id                   = $request->kelas_id;
+            $data->murid_id                   = $request->murid_id;
+            $data->kurikulum_target_detail_id = $request->kurikulum_target_detail_id;
+            $data->target                     = $request->target;
+            $data->bulan                      = $request->bulan;
+            $data->tahun                      = $request->tahun;
+            $data->updated_at                 = Carbon::now();
+            $data->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e;
+
+            DB::rollback();
+        }
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
