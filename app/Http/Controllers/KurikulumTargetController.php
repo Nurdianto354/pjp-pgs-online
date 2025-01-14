@@ -197,9 +197,6 @@ class KurikulumTargetController extends Controller
 		$spreadsheet = new Spreadsheet();
 		$spreadsheet->getProperties()->setCreator("PJP Online Pagesangan II")->setLastModifiedBy("PJP Online Pagesangan II")->setTitle($title)->setSubject($title)->setDescription($title);
 
-        $sheet = $spreadsheet->getActiveSheet();
-		$sheet->setTitle('Data');
-
         // buat sheet dan beri nama data
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setTitle('Data');

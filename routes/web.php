@@ -137,6 +137,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::controller(LaporanController::class)->prefix('laporan')->group(function () {
         Route::get('index', 'index')->name('laporan.index');
+        Route::get('export-excel', 'exportExcel')->name('laporan.export_excel');
     });
 
     Route::prefix('bimbingan-konseling')->group(function () {
