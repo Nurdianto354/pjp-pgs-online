@@ -120,12 +120,14 @@
                     </a>
                 </li>
                 @endcan
-                <li class="nav-item">
-                    <a href="{{ route('rekap_absensi.index') }}" class="nav-link {{ setActive('rekap-absensi/*') }}">
-                        <i class="nav-icon fas fa-calendar"></i>
-                        <p>Rekap Absensi</p>
-                    </a>
-                </li>
+                @can('rekap_absensi')
+                    <li class="nav-item">
+                        <a href="{{ route('rekap_absensi.index') }}" class="nav-link {{ setActive('rekap-absensi/*') }}">
+                            <i class="nav-icon fas fa-calendar"></i>
+                            <p>Rekap Absensi</p>
+                        </a>
+                    </li>
+                @endcan
                 @can('kurikulum_target')
                 <li class="nav-item">
                     <a href="{{ route('kurikulum_target.index') }}" class="nav-link {{ setActive('kurikulum-target/*') }}">
