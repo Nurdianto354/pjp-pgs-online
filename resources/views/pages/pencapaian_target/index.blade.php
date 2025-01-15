@@ -34,7 +34,7 @@
                                     <input type="hidden" name="kelas_nama" value="{{ $kelas->nama }}">
                                     <input type="hidden" name="bulan" value="{{ $bulan }}">
                                     <input type="hidden" name="tahun" value="{{ $tahun }}">
-                                    <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\KurikulumTarget\KurikulumTarget::getTab($kelas->id, $kelasId) ? 'active' : '' }}">
+                                    <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\Helpers::getTab($kelas->id, $kelasId) ? 'active' : '' }}">
                                         {{ $kelas->nama }}
                                     </button>
                                 </form>
@@ -61,7 +61,7 @@
                                         <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
                                         <input type="hidden" name="tahun" value="{{ $value }}">
                                         <input type="hidden" name="bulan" value="{{ $bulan }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Absensi\Absensi::getTab($value, $tahun) ? 'active' : '' }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Helpers::getTab($value, $tahun) ? 'active' : '' }}">
                                             {{ $value }}
                                         </button>
                                     </form>
@@ -78,7 +78,7 @@
                                         <input type="hidden" name="kelas_nama" value="{{ $kelasNama }}">
                                         <input type="hidden" name="tahun" value="{{ $tahun }}">
                                         <input type="hidden" name="bulan" value="{{ $value }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Absensi\Absensi::getTab($value, $bulan) ? 'active' : '' }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success text-left {{ App\Models\Helpers::getTab($value, $bulan) ? 'active' : '' }}">
                                             {{ App\Models\MasterData\Tanggal::listBulan[$value] }}
                                         </button>
                                     </form>

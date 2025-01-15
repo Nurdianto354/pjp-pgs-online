@@ -5,7 +5,6 @@ use App\Http\Controllers\Aktivitas\HariLiburController;
 use App\Http\Controllers\Aktivitas\JadwalController;
 use App\Http\Controllers\BimbinganKonseling\LaporanDaerahController;
 use App\Http\Controllers\BimbinganKonseling\LaporanDesaController;
-use App\Http\Controllers\BimbinganKonseling\RekapAbsensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KurikulumTargetController;
@@ -15,7 +14,6 @@ use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
 use App\Http\Controllers\MasterData\MateriController;
 use App\Http\Controllers\MasterData\SatuanController;
-use App\Http\Controllers\MasterData\TahunController;
 use App\Http\Controllers\MasterData\TanggalController;
 use App\Http\Controllers\MasterUser\PermissionController;
 use App\Http\Controllers\MasterUser\RoleController;
@@ -23,6 +21,7 @@ use App\Http\Controllers\MasterUser\UserController;
 use App\Http\Controllers\MuridController;
 use App\Http\Controllers\PencapaianTargetController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RekapAbsensiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -131,6 +130,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('store', 'store')->name('absensi.store');
     });
 
+    Route::controller(RekapAbsensiController::class)->prefix('rekap-absensi')->group(function () {
+        Route::get('index', 'index')->name('rekap_absensi.index');
+    });
+
     Route::controller(KegiatanController::class)->prefix('kegiatan')->group(function () {
         Route::get('index', 'index')->name('kegiatan.index');
     });
@@ -141,9 +144,6 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::prefix('bimbingan-konseling')->group(function () {
-        Route::controller(RekapAbsensiController::class)->prefix('rekap-absensi')->group(function () {
-            Route::get('index', 'index')->name('bimbingan_konseling.rekap_absensi.index');
-        });
         Route::controller(LaporanDesaController::class)->prefix('laporan-desa')->group(function () {
             Route::get('index', 'index')->name('bimbingan_konseling.laporan_desa.index');
             Route::post('create', 'create')->name('bimbingan_konseling.laporan_desa.create');

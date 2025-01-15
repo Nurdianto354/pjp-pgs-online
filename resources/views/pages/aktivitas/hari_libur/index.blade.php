@@ -33,7 +33,7 @@
                                 <form method="GET" action="{{ route('aktivitas.hari_libur.index') }}">
                                     <input type="hidden" name="divisi_id" value="{{ $divisi->id }}">
                                     <input type="hidden" name="divisi_nama" value="{{ $divisi->nama }}">
-                                    <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\Aktivitas\Jadwal::getTab($divisi->id, $divisiId) ? 'active' : '' }}">
+                                    <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\Helpers::getTab($divisi->id, $divisiId) ? 'active' : '' }}">
                                         {{ $divisi->nama }}
                                     </button>
                                 </form>

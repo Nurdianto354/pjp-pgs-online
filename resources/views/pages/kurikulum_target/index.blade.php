@@ -32,7 +32,7 @@
                                 <form method="GET" action="{{ route('kurikulum_target.index') }}">
                                     <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
                                     <input type="hidden" name="kelas_nama" value="{{ $kelas->nama }}">
-                                    <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\KurikulumTarget\KurikulumTarget::getTab($kelas->id, $kelasId) ? 'active' : '' }}">
+                                    <button type="submit" class="btn btn-outline-success col-sm text-left mb-1 {{ App\Models\Helpers::getTab($kelas->id, $kelasId) ? 'active' : '' }}">
                                         {{ $kelas->nama }}
                                     </button>
                                 </form>

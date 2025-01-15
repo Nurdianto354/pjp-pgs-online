@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absensi\Absensi;
+use App\Models\Aktivitas\HariLibur;
+use App\Models\Aktivitas\Jadwal;
 use App\Models\KurikulumTarget\KurikulumTarget;
 use App\Models\KurikulumTarget\KurikulumTargetDetail;
 use App\Models\MasterData\Divisi;
@@ -90,16 +93,16 @@ class LaporanController extends Controller
         $style_left = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT]];
         $style_center = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
 
-        $fields = [
-            ['field' => 'no', 'name' => 'No.', 'style' => 'center', 'col' => 1, 'row' => 2],
-            ['field' => 'nama_lengkap', 'name' => 'Nama Lengkap Murid', 'style' => 'center', 'col' => 1, 'row' => 2],
-        ];
-
 		$title = "Laporan KBM Divisi ".$divisiNama;
 		$spreadsheet = new Spreadsheet();
 		$spreadsheet->getProperties()->setCreator("PJP Online Pagesangan II")->setLastModifiedBy("PJP Online Pagesangan II")->setTitle($title)->setSubject($title)->setDescription($title);
 
         foreach($listKelas as $key => $kelas) {
+            $fields = [
+                ['field' => 'no', 'name' => 'No.', 'style' => 'center', 'col' => 1, 'row' => 2],
+                ['field' => 'nama_lengkap', 'name' => 'Nama Lengkap Murid', 'style' => 'center', 'col' => 1, 'row' => 2],
+            ];
+
             if ($key <= 0) {
                 $sheet = $spreadsheet->getActiveSheet();
             } else {
@@ -139,30 +142,34 @@ class LaporanController extends Controller
                 $col++;
             }
 
-            // $fields = [
-            //     ['field' => 'absensi_kehadiran', 'name' => 'Absensi Kehadiran', 'style' => 'center', 'col' => 5, 'row' => 0],
-            //     ['field' => 'hadir', 'name' => 'Hadir', 'style' => 'center', 'col' => 0, 'row' => 1],
-            //     ['field' => 'izin', 'name' => 'Izin', 'style' => 'center', 'col' => 0, 'row' => 1],
-            //     ['field' => 'alfa', 'name' => 'Alfa', 'style' => 'center', 'col' => 0, 'row' => 1],
-            //     ['field' => 'total', 'name' => 'Total', 'style' => 'center', 'col' => 0, 'row' => 1],
-            //     ['field' => 'presentase', 'name' => 'Presentase', 'style' => 'center', 'col' => 1, 'row' => 0],
-            //     ['field' => 'hadir_pers', 'name' => 'Hadir', 'style' => 'center', 'col' => 0, 'row' => 0],
-            //     ['field' => 'hadir_izin_pers', 'name' => 'Izin', 'style' => 'center', 'col' => 0, 'row' => 0],
-            // ];
+            $fields = [
+                ['field' => 'absensi_kehadiran', 'name' => 'Absensi Kehadiran', 'style' => 'center', 'col' => 5, 'row' => 0],
+                ['field' => 'hadir', 'name' => 'Hadir', 'style' => 'center', 'col' => 0, 'row' => 1],
+                ['field' => 'izin', 'name' => 'Izin', 'style' => 'center', 'col' => 0, 'row' => 1],
+                ['field' => 'alfa', 'name' => 'Alfa', 'style' => 'center', 'col' => 0, 'row' => 1],
+                ['field' => 'total', 'name' => 'Total', 'style' => 'center', 'col' => 0, 'row' => 1],
+                ['field' => 'presentase', 'name' => 'Presentase', 'style' => 'center', 'col' => 1, 'row' => 0],
+                ['field' => 'hadir_pers', 'name' => 'Hadir', 'style' => 'center', 'col' => 0, 'row' => 0],
+                ['field' => 'hadir_izin_pers', 'name' => 'Hadir + Izin', 'style' => 'center', 'col' => 0, 'row' => 0],
+            ];
 
-            // $row = $rowAwal;
+            $row = $rowAwal;
 
-            // foreach ($fields as $field) {
-            //     $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$field['name'], DataType::TYPE_STRING);
-            //     $sheet->mergeCells($sheet->getCellByColumnAndRow($col, $row)->getCoordinate().':'.$sheet->getCellByColumnAndRow($col+$field['col'], $row+$field['row'])->getCoordinate());
-            //     $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
-            //     $col++;
+            foreach ($fields as $field) {
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$field['name'], DataType::TYPE_STRING);
+                $sheet->mergeCells($sheet->getCellByColumnAndRow($col, $row)->getCoordinate().':'.$sheet->getCellByColumnAndRow($col+$field['col'], $row+$field['row'])->getCoordinate());
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
 
-            //     // if (in_array($field['field'], ['absensi_kehadiran') {
-            //     // }
-            // }
+                if ($field['col'] == 0) {
+                    $col++;
+                }
 
-            // $row++;
+                if ($field['row'] == 0 && $field['col'] != 0) {
+                    $row++;
+                }
+            }
+
+            $row++;
 
             $sheet->getStyleByColumnAndRow($colAwal, $rowAwal, $col-1, $row-1)->applyFromArray($style_border);
             $sheet->getStyleByColumnAndRow($colAwal, $rowAwal, $col-1, $row-1)->applyFromArray($style_header);
@@ -199,6 +206,61 @@ class LaporanController extends Controller
                     $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
                     $col++;
                 }
+
+                $jadwal = Jadwal::where([['divisi_id', $request['divisi_id']], ['status', true]])
+                    ->pluck('hari');
+
+                $hariLibur = HariLibur::where([['divisi_id', $request['divisi_id']], ['status', true]])
+                    ->pluck('tanggal');
+
+                $listTanggal = Tanggal::where([['tahun', $request['tahun']], ['bulan', $request['bulan']], ['status', true]])
+                    ->whereIn('hari', $jadwal)
+                    ->whereNotIn('tanggal', $hariLibur)
+                    ->orderBy('tanggal', 'ASC')->pluck('tanggal')->toArray();
+
+                $listAbsensi = Absensi::where([['murid_id', $murid->id], ['kelas_id', $kelas->id]])
+                    ->whereIn('tanggal', $listTanggal);
+
+                $absensiCount = $listAbsensi->selectRaw('
+                        SUM(CASE WHEN kehadiran = "H" THEN 1 ELSE 0 END) as hadir,
+                        SUM(CASE WHEN kehadiran IN ("I", "S") THEN 1 ELSE 0 END) as izin,
+                        SUM(CASE WHEN kehadiran = "A" THEN 1 ELSE 0 END) as alfa
+                    ')
+                    ->first();
+
+                $hadir = $absensiCount->hadir;
+                $izin  = $absensiCount->izin;
+                $alfa  = $absensiCount->alfa;
+                $total = count($listTanggal);
+
+                $hadirPers = ($hadir/$total)*100;
+                $hadirIzinPers = (($hadir+$izin)/$total)*100;
+
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (int)$hadir, DataType::TYPE_NUMERIC);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (int)$izin, DataType::TYPE_NUMERIC);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (int)$alfa, DataType::TYPE_NUMERIC);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (int)$total, DataType::TYPE_NUMERIC);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$hadirPers."%", DataType::TYPE_STRING);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+
+                $sheet->setCellValueExplicitByColumnAndRow($col, $row, (string)$hadirIzinPers."%", DataType::TYPE_STRING);
+                $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                $col++;
+
+                $sheet->getStyleByColumnAndRow($colAwal+2, $row, $col-1, $row)->applyFromArray($style_center);
 
                 $row++;
             }

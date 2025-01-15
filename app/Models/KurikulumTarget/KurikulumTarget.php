@@ -16,19 +16,4 @@ class KurikulumTarget extends Model
     public $incrementing    = true;
     public $timestamps      = true;
     protected $guarded      = [];
-
-    public static function getTab($tab, $nTab, $isFade = false)
-    {
-        $active = "";
-
-        if ($isFade) {
-            $active = "fade";
-        }
-
-        if ($tab == $nTab) {
-            $active = 'active';
-        }
-
-        return $active;
-    }
 }
