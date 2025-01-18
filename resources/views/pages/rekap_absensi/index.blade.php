@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    /* Menambahkan efek hover untuk meningkatkan interaktivitas */
+    .clickable:hover {
+        background-color: #f4f6f9; /* Warna latar belakang saat dihover */
+        color: #007bff; /* Warna teks saat dihover */
+        text-decoration: underline; /* Garis bawah untuk menunjukkan bahwa itu bisa diklik */
+    }
+</style>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -83,85 +91,90 @@
                                 </li>
                             @endforeach
                         </ul>
-                        <hr>
+                    </div>
+                    <div class="card-body">
                         @foreach ($listKelas as $kelas)
                             @php
                                 $listMurid = App\Models\Murid\Murid::where([['kelas_id', $kelas->id], ['status', true]])
-                                    ->orderBy('nama_lengkap', 'ASC')
+                                    ->orderBy('jenis_kelamin', 'DESC')->orderBy('nama_lengkap', 'ASC')
                                     ->get();
                             @endphp
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th colspan="7" style="font-size: 16px;">{{ $kelas->nama }}</th>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <th style="width: 25%;">Murid</th>
-                                            <th style="width: 5%;">Gander</th>
-                                            <th>Hadir</th>
-                                            <th>Izin</th>
-                                            <th>Alfa</th>
-                                            <th>Total</th>
-                                            <th>Keterangan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($listMurid as $index => $murid)
-                                            @php
-                                                $jadwal = App\Models\Aktivitas\Jadwal::where([['divisi_id', $divisiId], ['status', true]])
-                                                    ->pluck('hari');
-
-                                                $hariLibur = App\Models\Aktivitas\HariLibur::where([['divisi_id', $divisiId], ['status', true]])
-                                                    ->pluck('tanggal');
-
-                                                $listTanggal = App\Models\MasterData\Tanggal::where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])
-                                                    ->whereIn('hari', $jadwal)
-                                                    ->whereNotIn('tanggal', $hariLibur)
-                                                    ->orderBy('tanggal', 'ASC')->pluck('tanggal')->toArray();
-
-                                                $listAbsensi = App\Models\Absensi\Absensi::where([['murid_id', $murid->id], ['kelas_id', $kelas->id]])
-                                                    ->whereIn('tanggal', $listTanggal);
-
-                                                $absensiCount = $listAbsensi->selectRaw('
-                                                        SUM(CASE WHEN kehadiran = "H" THEN 1 ELSE 0 END) as hadir,
-                                                        SUM(CASE WHEN kehadiran IN ("I", "S") THEN 1 ELSE 0 END) as izin,
-                                                        SUM(CASE WHEN kehadiran = "A" THEN 1 ELSE 0 END) as alfa
-                                                    ')
-                                                    ->first();
-
-                                                $hadir = $absensiCount->hadir <= 0 ? 0 : $absensiCount->hadir;
-                                                $izin  = $absensiCount->izin <= 0 ? 0 : $absensiCount->izin;
-                                                $alfa  = $absensiCount->alfa <= 0 ? 0 : $absensiCount->alfa;
-                                                $total = count($listTanggal);
-
-                                                $hadirPers = ($hadir/$total)*100;
-                                                $keterangan = "Nilai tidak valid";
-
-                                                if ($hadirPers < 40) {
-                                                    $keterangan = "Tidak lancar";
-                                                } elseif ($hadirPers >= 40 && $hadirPers < 60) {
-                                                    $keterangan = "Kurang lancar";
-                                                } elseif ($hadirPers >= 60 && $hadirPers < 80) {
-                                                    $keterangan = "Lancar";
-                                                } elseif ($hadirPers >= 80 && $hadirPers <= 100) {
-                                                    $keterangan = "Sangat lancar";
-                                                }
-                                            @endphp
+                            @if (count($listMurid) > 0)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
                                             <tr class="text-center">
-                                                <td class="text-left">{{ $murid->nama_lengkap }}</td>
-                                                <td>{{ $murid->jenis_kelamin == 0 ? "P" : "L" }}</td>
-                                                <td>{{ $hadir }}</td>
-                                                <td>{{ $izin }}</td>
-                                                <td>{{ $alfa }}</td>
-                                                <td>{{ $total }}</td>
-                                                <td>{{ $keterangan }}</td>
+                                                <th colspan="7" style="font-size: 16px;">{{ $kelas->nama }}</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                            <tr class="text-center">
+                                                <th style="width: 25%;">Murid</th>
+                                                <th style="width: 5%;">Gander</th>
+                                                <th>Hadir</th>
+                                                <th>Izin</th>
+                                                <th>Alfa</th>
+                                                <th>Total</th>
+                                                <th>Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listMurid as $index => $murid)
+                                                @php
+                                                    $jadwal = App\Models\Aktivitas\Jadwal::where([['divisi_id', $divisiId], ['status', true]])
+                                                        ->pluck('hari');
+
+                                                    $hariLibur = App\Models\Aktivitas\HariLibur::where([['divisi_id', $divisiId], ['status', true]])
+                                                        ->pluck('tanggal');
+
+                                                    $listTanggal = App\Models\MasterData\Tanggal::where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])
+                                                        ->whereIn('hari', $jadwal)
+                                                        ->whereNotIn('tanggal', $hariLibur)
+                                                        ->orderBy('tanggal', 'ASC')->pluck('tanggal')->toArray();
+
+                                                    $listAbsensi = App\Models\Absensi\Absensi::where([['murid_id', $murid->id], ['kelas_id', $kelas->id]])
+                                                        ->whereIn('tanggal', $listTanggal);
+
+                                                    $absensiCount = $listAbsensi->selectRaw('
+                                                            SUM(CASE WHEN kehadiran = "H" THEN 1 ELSE 0 END) as hadir,
+                                                            SUM(CASE WHEN kehadiran IN ("I", "S") THEN 1 ELSE 0 END) as izin,
+                                                            SUM(CASE WHEN kehadiran = "A" THEN 1 ELSE 0 END) as alfa
+                                                        ')
+                                                        ->first();
+
+                                                    $hadir = $absensiCount->hadir <= 0 ? 0 : $absensiCount->hadir;
+                                                    $izin  = $absensiCount->izin <= 0 ? 0 : $absensiCount->izin;
+                                                    $alfa  = $absensiCount->alfa <= 0 ? 0 : $absensiCount->alfa;
+                                                    $total = count($listTanggal);
+
+                                                    $hadirPers = ($hadir/$total)*100;
+                                                    $keterangan = "Nilai tidak valid";
+
+                                                    if ($hadirPers < 40) {
+                                                        $keterangan = "Tidak lancar";
+                                                    } elseif ($hadirPers >= 40 && $hadirPers < 60) {
+                                                        $keterangan = "Kurang lancar";
+                                                    } elseif ($hadirPers >= 60 && $hadirPers < 80) {
+                                                        $keterangan = "Lancar";
+                                                    } elseif ($hadirPers >= 80 && $hadirPers <= 100) {
+                                                        $keterangan = "Sangat lancar";
+                                                    }
+                                                @endphp
+                                                <tr class="text-center">
+                                                    <td class="text-left clickable" style="cursor: pointer;" onclick="handleClick('{{ $murid->id }}')">
+                                                        {{ $murid->nama_lengkap }}
+                                                    </td>
+                                                    <td>{{ $murid->jenis_kelamin == 0 ? "P" : "L" }}</td>
+                                                    <td>{{ $hadir }}</td>
+                                                    <td>{{ $izin }}</td>
+                                                    <td>{{ $alfa }}</td>
+                                                    <td>{{ $total }}</td>
+                                                    <td>{{ $keterangan }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>

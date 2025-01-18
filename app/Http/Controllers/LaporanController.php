@@ -58,7 +58,7 @@ class LaporanController extends Controller
 
     public function exportExcel(Request $request)
     {
-        $divisiNama = Divisi::find($request['divisi_id'])->first()->nama;
+        $divisiNama = Divisi::where('id', $request['divisi_id'])->first()->nama;
         $listKelas  = Kelas::where([['divisi_id', $request['divisi_id']], ['status', true]])->orderBy('level', 'ASC')->get();
 
         $style_border = [
