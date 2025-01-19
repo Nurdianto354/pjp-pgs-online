@@ -136,7 +136,6 @@ class KurikulumTargetController extends Controller
             toast('Berhasil ' . $action . ' kelas ' . $kelasNama, 'success');
             return redirect()->route('kurikulum_target.index', ['kelas_id' => $request['kelas_id'], 'kelas_nama' => $kelasNama]);
         } catch (\Throwable $th) {
-            Log::info($th);
             DB::rollBack();
 
             toast('Gagal ' . $action . ' kelas ' . $kelasNama, 'error');
@@ -167,7 +166,6 @@ class KurikulumTargetController extends Controller
                 'keterangan' => '',
             ]);
         } catch (\Throwable $th) {
-            Log::info($th);
             DB::rollBack();
 
             return response()->json([
@@ -506,7 +504,6 @@ class KurikulumTargetController extends Controller
             toast('Berhasil import data kurikulum & target kelas '.$kelas, 'success');
             return back();
         } catch (\Exception $e) {
-            Log::info($e);
             DB::rollback();
 
             toast('Gagal import data kurikulum & target kelas '.$kelas, 'error');

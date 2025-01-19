@@ -134,10 +134,10 @@ class AbsensiController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            Log::info($e);die();
+            DB::rollback();
+
             $success = false;
             $message = $e;
-            DB::rollback();
         }
 
         return response()->json(['success' => $success, 'message' => $message]);

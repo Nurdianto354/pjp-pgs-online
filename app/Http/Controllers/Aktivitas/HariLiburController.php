@@ -91,6 +91,7 @@ class HariLiburController extends Controller
 
                 if (isset($checkData) && $checkData->status == true) {
                     DB::rollBack();
+
                     $message = "Gagal" . " " . $action . " " . $title . ", karena sudah ada";
 
                     toast($message, 'error');
@@ -117,7 +118,6 @@ class HariLiburController extends Controller
             toast($message, 'success');
             return back();
         } catch (\Exception $e) {
-            Log::info($e);
             DB::rollback();
 
             toast('Gagal. Mohon cek kembali','error');
@@ -140,8 +140,8 @@ class HariLiburController extends Controller
                 'keterangan' => '',
             ]);
         } catch (\Throwable $th) {
-            Log::info($th);
             DB::rollBack();
+
             return response()->json([
                 'status'     => 'error',
                 'keterangan' => 'karena ada kesalahan di sistem'

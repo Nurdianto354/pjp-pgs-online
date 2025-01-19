@@ -132,6 +132,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::controller(RekapAbsensiController::class)->prefix('rekap-absensi')->group(function () {
         Route::get('index', 'index')->name('rekap_absensi.index');
+        Route::get('detail', 'detail')->name('rekap_absensi.detail');
     });
 
     Route::controller(KegiatanController::class)->prefix('kegiatan')->group(function () {

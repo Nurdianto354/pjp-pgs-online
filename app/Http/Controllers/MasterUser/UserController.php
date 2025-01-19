@@ -97,7 +97,6 @@ class UserController extends Controller
 
             return redirect()->route('master_user.user.index')->with(['success' => $message]);
         } catch (\Throwable $th) {
-            Log::info($th);
             DB::rollBack();
 
             return back()->with('error', 'Gagal ' . " " . $action . " " . $title);
@@ -119,7 +118,6 @@ class UserController extends Controller
                 'keterangan' => '',
             ]);
         } catch (\Throwable $th) {
-            Log::info($th);
             DB::rollBack();
 
             return response()->json([

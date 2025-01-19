@@ -88,9 +88,6 @@ class ProfilController extends Controller
 
             return redirect()->route('profil.index')->with(['success' => $message]);
         } catch (\Throwable $th) {
-
-            dd($th);
-            Log::info($th);
             DB::rollBack();
 
             return back()->with('error', 'Gagal ' . " " . $title);

@@ -2,11 +2,17 @@
 
 @section('content')
 <style>
-    /* Menambahkan efek hover untuk meningkatkan interaktivitas */
-    .clickable:hover {
-        background-color: #f4f6f9; /* Warna latar belakang saat dihover */
-        color: #007bff; /* Warna teks saat dihover */
-        text-decoration: underline; /* Garis bawah untuk menunjukkan bahwa itu bisa diklik */
+    .modal-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .modal-title {
+        margin: 0;
+        text-align: center;
+        flex-grow: 1;
     }
 </style>
 <div class="content-header">
@@ -160,8 +166,18 @@
                                                     }
                                                 @endphp
                                                 <tr class="text-center">
-                                                    <td class="text-left clickable" style="cursor: pointer;" onclick="handleClick('{{ $murid->id }}')">
-                                                        {{ $murid->nama_lengkap }}
+                                                    <td class="text-left">
+                                                        <button type="button" class="btn btn-link get-detail"
+                                                            data-toggle="modal"
+                                                            data-target="#staticBackdrop"
+                                                            data-id = "{{ $murid->id }}"
+                                                            data-nama_lengkap = "{{ $murid->nama_lengkap }}"
+                                                            data-kelas_id = "{{ $murid->kelas_id }}"
+                                                            data-kelas_nama = "{{ $kelas->nama }}"
+                                                            data-divisi_id = "{{ $murid->divisi_id }}"
+                                                        >
+                                                            {{ $murid->nama_lengkap }}
+                                                        </button>
                                                     </td>
                                                     <td>{{ $murid->jenis_kelamin == 0 ? "P" : "L" }}</td>
                                                     <td>{{ $hadir }}</td>
@@ -182,4 +198,122 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" style="width: 100px; height: 100px; margin: 25% 0;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-12 text-center">
+                        <h3 class="text-bold" id="namaLengkap"></h3>
+                    </div>
+                    <div class="col-12 col-md-12 text-center">
+                        <h4 id="kelasNama"></h4>
+                    </div>
+                    <div class="col-12 col-md-12">
+                        <div id="dataDetail"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@section('js')
+<script>
+    $(document).ready(function () {
+        $('.loading').hide();
+    });
+
+    $(document).on("click", ".get-detail", function () {
+        $('.loading').show();
+
+        let id = $(this).data('id');
+        let namaLengkap = $(this).data('nama_lengkap');
+        let kelasId = $(this).data('kelas_id');
+        let kelasNama = $(this).data('kelas_nama');
+        let divisiId = $(this).data('divisi_id');
+
+        $('#namaLengkap').text(namaLengkap);
+        $('#kelasNama').text(kelasNama);
+
+        $.ajax({
+            type : "GET",
+            url  : "{{ url('/rekap-absensi/detail') }}",
+            data : {
+                id: id,
+                kelas_id: kelasId,
+                divisi_id: divisiId
+            },
+            dataType: 'json',
+            success: function(responses) {
+                $('.loading').hide();
+
+                // Clear the div before appending new data
+                $('#dataDetail').empty();
+
+                // Check if data is not empty
+                if (responses.datas && Object.keys(responses.datas).length > 0) {
+                    // Start the table structure
+                    let table = '<table class="table table-bordered table-striped mt-3">';
+                    table += '<thead><tr class="text-center">';
+                    table += '<th>Bulan</th>';
+                    table += '<th class="text-center">H</th>';
+                    table += '<th class="text-center">I</th>';
+                    table += '<th class="text-center">A</th>';
+                    table += '<th class="text-center">%</th>';
+                    table += '<th>Keterangan</th>';
+                    table += '</tr></thead>';
+                    table += '<tbody>';
+
+                    // Loop through the data and append rows
+                    for (const key in responses.datas) {
+                        if (responses.datas.hasOwnProperty(key)) {
+                            let data = responses.datas[key];
+                            let row = '';
+
+                            row += '<tr>';
+                            row += '<td>' + data.bulan + ' ' + data.tahun + '</td>';
+                            row += '<td class="text-center">' + data.hadir + '</td>';
+                            row += '<td class="text-center">' + data.izin + '</td>';
+                            row += '<td class="text-center">' + data.alfa + '</td>';
+                            row += '<td class="text-center">' + data.pers + '%</td>';
+                            row += '<td>' + data.ket + '</td>';
+                            row += '</tr>';
+
+                            table += row;
+                        }
+                    }
+
+                    table += '</tbody></table>';
+
+                    // Append the table to the div
+                    $('#dataDetail').html(table);
+                } else {
+                    // If no data, show a message
+                    $('#dataDetail').html('<p>No data available</p>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log('AJAX Error:', status, error);
+                $('#dataDetail').html('<p>Error fetching data.</p>');
+            }
+        });
+    });
+</script>
 @endsection
