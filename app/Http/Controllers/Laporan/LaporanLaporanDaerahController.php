@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absensi\Absensi;
@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class LaporanController extends Controller
+class   LaporanLaporanDaerahController extends Controller
 {
     public function __construct()
     {
@@ -53,7 +53,7 @@ class LaporanController extends Controller
         $listBulan = Tanggal::where([['tahun', $tahun], ['status', true]])->orderBy('bulan', 'ASC')->groupBy('bulan')
                  ->pluck('bulan');
 
-        return view('pages.laporan.index', compact('listTahun', 'tahun', 'listBulan', 'bulan', 'listDivisi', 'divisiId', 'divisiNama'));
+        return view('pages.laporan.laporan_daerah.index', compact('listTahun', 'tahun', 'listBulan', 'bulan', 'listDivisi', 'divisiId', 'divisiNama'));
     }
 
     public function exportExcel(Request $request)

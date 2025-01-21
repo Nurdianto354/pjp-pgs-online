@@ -153,11 +153,28 @@
                 </li>
                 @endcan
                 @can('laporan')
-                <li class="nav-item">
-                    <a href="{{ route('laporan.index') }}" class="nav-link {{ setActive('laporan/*') }}">
+                <li class="nav-item {{ setActiveMenu('laporan/*') }}">
+                    <a href="#" class="nav-link {{ setActive('laporan/*') }}">
                         <i class="nav-icon fa-solid fa-box-archive"></i>
-                        <p>Laporan</p>
+                        <p>
+                            Laporan
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('laporan.laporan_kelompok.index') }}" class="nav-link {{ setActive('laporan/laporan-kelompok/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Kelompok</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('laporan.laporan_daerah.index') }}" class="nav-link {{ setActive('laporan/laporan-daerah/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Daerah</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 @endcan
                 @can('bimbingan_konseling')

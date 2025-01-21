@@ -8,7 +8,8 @@ use App\Http\Controllers\BimbinganKonseling\LaporanDesaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KurikulumTargetController;
-use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\Laporan\LaporanLaporanDaerahController;
+use App\Http\Controllers\Laporan\LaporanLaporanKelompokController;
 use App\Http\Controllers\MasterData\DivisiController;
 use App\Http\Controllers\MasterData\KarakterController;
 use App\Http\Controllers\MasterData\KelasController;
@@ -139,9 +140,15 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('index', 'index')->name('kegiatan.index');
     });
 
-    Route::controller(LaporanController::class)->prefix('laporan')->group(function () {
-        Route::get('index', 'index')->name('laporan.index');
-        Route::get('export-excel', 'exportExcel')->name('laporan.export_excel');
+
+    Route::prefix('laporan')->group(function () {
+        Route::controller(LaporanLaporanKelompokController::class)->prefix('laporan-kelompok')->group(function () {
+            Route::get('index', 'index')->name('laporan.laporan_kelompok.index');
+        });
+        Route::controller(LaporanLaporanDaerahController::class)->prefix('laporan-daerah')->group(function () {
+            Route::get('index', 'index')->name('laporan.laporan_daerah.index');
+            Route::get('export-excel', 'exportExcel')->name('laporan.laporan_daerah.export_excel');
+        });
     });
 
     Route::prefix('bimbingan-konseling')->group(function () {

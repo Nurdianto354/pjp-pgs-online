@@ -91,10 +91,8 @@ class RekapAbsensiController extends Controller
                     ->whereNotIn('tanggal', $hariLibur)
                     ->orderBy('tanggal', 'ASC')->pluck('tanggal')->toArray();
 
-                $listAbsensi = Absensi::where([['murid_id', $request['id']], ['kelas_id', $request['kelas_id']]])
-                    ->whereIn('tanggal', $listTanggal);
-
-                $absensiCount = $listAbsensi->selectRaw('
+                $absensiCount = Absensi::where([['murid_id', $request['id']], ['kelas_id', $request['kelas_id']]])
+                    ->whereIn('tanggal', $listTanggal)->selectRaw('
                         SUM(CASE WHEN kehadiran = "H" THEN 1 ELSE 0 END) as hadir,
                         SUM(CASE WHEN kehadiran IN ("I", "S") THEN 1 ELSE 0 END) as izin
                     ')

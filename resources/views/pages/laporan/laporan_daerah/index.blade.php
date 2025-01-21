@@ -5,11 +5,14 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data Laporan</h1>
+                <h1 class="m-0">Laporan Daerah</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active"><a href="{{ route('kurikulum_target.index') }}">Data Laporan</a></li>
+                    <li class="breadcrumb-item">Laporan</li>
+                    <li class="breadcrumb-item active">
+                        <a href="{{ route('laporan.laporan_daerah.index') }}">Laporan Daerah</a>
+                    </li>
                 </ol>
             </div>
         </div>
@@ -29,7 +32,7 @@
                     <div class="card-body">
                         <div class="nav flex-column nav-tabs h-100">
                             @foreach ($listDivisi as $divisi)
-                                <form method="GET" action="{{ route('laporan.index') }}">
+                                <form method="GET" action="{{ route('laporan.laporan_daerah.index') }}">
                                     <input type="hidden" name="divisi_id" value="{{ $divisi->id }}">
                                     <input type="hidden" name="tahun" value="{{ $tahun }}">
                                     <input type="hidden" name="bulan" value="{{ $bulan }}">
@@ -55,7 +58,7 @@
                         <ul class="nav mt-2">
                             @foreach ($listTahun as $value)
                                 <li class="nav-item mx-1">
-                                    <form method="GET" action="{{ route('laporan.index') }}">
+                                    <form method="GET" action="{{ route('laporan.laporan_daerah.index') }}">
                                         <input type="hidden" name="divisi_id" value="{{ $divisiId }}">
                                         <input type="hidden" name="tahun" value="{{ $value }}">
                                         <input type="hidden" name="bulan" value="{{ $bulan }}">
@@ -71,7 +74,7 @@
                         <ul class="nav mt-2">
                             @foreach ($listBulan as $value)
                                 <li class="nav-item mx-1">
-                                    <form method="GET" action="{{ route('laporan.index') }}">
+                                    <form method="GET" action="{{ route('laporan.laporan_daerah.index') }}">
                                         <input type="hidden" name="divisi_id" value="{{ $divisiId }}">
                                         <input type="hidden" name="tahun" value="{{ $tahun }}">
                                         <input type="hidden" name="bulan" value="{{ $value }}">
@@ -86,7 +89,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
-                                <form method="GET" action="{{ route('laporan.export_excel') }}">
+                                <form method="GET" action="{{ route('laporan.laporan_daerah.export_excel') }}">
                                     <input type="hidden" name="divisi_id" value="{{ $divisiId }}">
                                     <input type="hidden" name="bulan" value="{{ $bulan }}">
                                     <input type="hidden" name="tahun" value="{{ $tahun }}">
