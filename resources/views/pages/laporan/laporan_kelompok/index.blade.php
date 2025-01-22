@@ -37,7 +37,7 @@
                         <label>Filter Data</label>
                         <form method="GET" action="{{ route('laporan.laporan_kelompok.index') }}" onsubmit="return validateForm()">
                             <div class="row">
-                                <div class="col-12 col-md-4">
+                                <div class="col-6 col-md-4">
                                     <div class="form-group">
                                         <select name="tahun" class="form-control select2-tahun select2-success" data-placeholder="Pilih Tahun" data-dropdown-css-class="select2-success">
                                             @foreach ($listTahun as $value)
@@ -46,7 +46,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">
+                                <div class="col-6 col-md-6">
                                     <div class="form-group">
                                         <select name="bulan" class="form-control select2-bulan select2-success" data-placeholder="Pilih Bulan" data-dropdown-css-class="select2-success">
                                             @foreach ($listBulan as $value)
@@ -81,7 +81,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped mb-2">
-                                    <thead>
+                                    <thead class="text-nowrap">
                                         <tr class="text-center">
                                             <th rowspan="2">Kelas</th>
                                             <th colspan="3">Murid</th>
@@ -97,7 +97,7 @@
                                             <th>Sangat Lancar</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <thead class="text-nowrap">
                                         @foreach ($listKelas as $kelas)
                                             @php
                                                 $muridCount = App\Models\Murid\Murid::where([['divisi_id', $divisi->id], ['kelas_id', $kelas->id], ['status', true]])->selectRaw('
