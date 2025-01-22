@@ -150,7 +150,7 @@
                                             }
                                         @endphp
 
-                                        @if ($total > 0)
+                                        @if ($totalMurid > 0)
                                             <tr>
                                                 <td>{{ $kelas->nama }}</td>
                                                 <td class="text-center">{{ $female }}</td>
