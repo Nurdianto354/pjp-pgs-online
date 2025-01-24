@@ -41,7 +41,7 @@ class LaporanDesaController extends Controller
         $listKategori  = LaporanDesa::listKategori;
         $listRealisasi = LaporanDesa::listRealisasi;
 
-        $datas = LaporanDesa::with('createdBy', 'updatedBy')->orderBy('created_at', 'ASC')->get();
+        $datas = LaporanDesa::where('status', true)->with('createdBy', 'updatedBy')->orderBy('created_at', 'ASC')->get();
 
         return view('pages.bimbingan_konseling.laporan_desa.index', compact('listTahun', 'listBulan', 'listKategori', 'listRealisasi', 'datas'));
     }

@@ -38,7 +38,7 @@ class LaporanDaerahController extends Controller
 
         $listBulan = $listBulanTemp;
 
-        $datas = LaporanDaerah::with('createdBy', 'updatedBy')->orderBy('created_at', 'ASC')->get();
+        $datas = LaporanDaerah::where('status', true)->with('createdBy', 'updatedBy')->orderBy('created_at', 'ASC')->get();
 
         return view('pages.bimbingan_konseling.laporan_daerah.index', compact('listTahun', 'listBulan', 'datas'));
     }

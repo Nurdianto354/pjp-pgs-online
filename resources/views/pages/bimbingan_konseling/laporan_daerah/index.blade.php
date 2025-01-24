@@ -55,66 +55,69 @@
                                 </form>
                             </div>
                         </div>
-                        <table id="dataTables" class="table table-bordered table-striped">
-                            <thead>
-                                <tr class="text-center">
-                                    <th style="width: 5%;">No</th>
-                                    <th>Periode</th>
-                                    <th>Nama</th>
-                                    <th>Usia</th>
-                                    <th>Masalah</th>
-                                    <th>Penyelesaian</th>
-                                    <th>Kondisi Terakhir</th>
-                                    <th>di Buat</th>
-                                    <th>di Perbarui</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($datas as $key => $data)
-                                    <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td class="text-center">{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] . " " . $data->tahun }}</td>
-                                        <td class="text-center">{{ $data->nama }}</td>
-                                        <td class="text-center">{{ $data->usia }}</td>
-                                        <td>{!! $data->masalah !!}</td>
-                                        <td>{!! $data->penyelesaian !!}</td>
-                                        <td>{!! $data->kondisi_terakhir !!}</td>
-                                        <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
-                                        <td>{{ $data->createdBy->nama }}</td>
-                                        <td>{{ $data->updatedBy->nama }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-warning btn-sm update-data"
-                                                    data-toggle="modal" data-target="#modalInput"
-                                                    data-id="{{ $data->id }}"
-                                                    data-tahun="{{ $data->tahun }}"
-                                                    data-bulan="{{ $data->bulan }}"
-                                                    data-nama="{{ $data->nama }}"
-                                                    data-usia="{{ $data->usia }}"
-                                                    data-masalah="{{ $data->masalah }}"
-                                                    data-penyelesaian="{{ $data->penyelesaian }}"
-                                                    data-kondisi_terakhir="{{ $data->kondisi_terakhir }}"
-                                                >
-                                                    <i class="far fa-edit"></i> Ubah
-                                                </button>
-                                                @if ($data->status == 1)
-                                                    <button type="button" class="btn btn-danger btn-sm delete-data"
+                        <div class="table-responsive">
+                            <table id="dataTables" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th style="width: 5%;">No</th>
+                                        <th>Periode</th>
+                                        <th>Nama</th>
+                                        <th>Usia</th>
+                                        <th>Masalah</th>
+                                        <th>Penyelesaian</th>
+                                        <th>Kondisi Terakhir</th>
+                                        <th>Status</th>
+                                        <th>di Buat</th>
+                                        <th>di Perbarui</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($datas as $key => $data)
+                                        <tr>
+                                            <td>{{ ++$key }}</td>
+                                            <td class="text-center">{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] . " " . $data->tahun }}</td>
+                                            <td class="text-center">{{ $data->nama }}</td>
+                                            <td class="text-center">{{ $data->usia }}</td>
+                                            <td>{!! $data->masalah !!}</td>
+                                            <td>{!! $data->penyelesaian !!}</td>
+                                            <td>{!! $data->kondisi_terakhir !!}</td>
+                                            <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
+                                            <td>{{ $data->createdBy->nama }}</td>
+                                            <td>{{ $data->updatedBy->nama }}</td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-warning btn-sm update-data"
+                                                        data-toggle="modal" data-target="#modalInput"
                                                         data-id="{{ $data->id }}"
                                                         data-tahun="{{ $data->tahun }}"
-                                                        data-bulan="{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] }}"
+                                                        data-bulan="{{ $data->bulan }}"
                                                         data-nama="{{ $data->nama }}"
                                                         data-usia="{{ $data->usia }}"
+                                                        data-masalah="{{ $data->masalah }}"
+                                                        data-penyelesaian="{{ $data->penyelesaian }}"
+                                                        data-kondisi_terakhir="{{ $data->kondisi_terakhir }}"
                                                     >
-                                                        <i class="far fa-trash-alt"></i> Hapus
+                                                        <i class="far fa-edit"></i> Ubah
                                                     </button>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                    @if ($data->status == 1)
+                                                        <button type="button" class="btn btn-danger btn-sm delete-data"
+                                                            data-id="{{ $data->id }}"
+                                                            data-tahun="{{ $data->tahun }}"
+                                                            data-bulan="{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] }}"
+                                                            data-nama="{{ $data->nama }}"
+                                                            data-usia="{{ $data->usia }}"
+                                                        >
+                                                            <i class="far fa-trash-alt"></i> Hapus
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

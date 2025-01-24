@@ -55,77 +55,79 @@
                                 </form>
                             </div>
                         </div>
-                        <table id="dataTables" class="table table-bordered table-striped">
-                            <thead>
-                                <tr class="text-center">
-                                    <th style="width: 5%;">No</th>
-                                    <th>Program</th>
-                                    <th>Periode</th>
-                                    <th>Kategori</th>
-                                    <th>Realisasi</th>
-                                    <th>Status</th>
-                                    <th>di Buat</th>
-                                    <th>di Perbarui</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($datas as $key => $data)
-                                    <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td style="width: 30%;">{{ $data->program }}</td>
-                                        <td class="text-center">{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] . " " . $data->tahun }}</td>
-                                        <td class="text-center">
-                                            <span class="badge badge-success">
-                                                {{ App\Models\BimbinganKonseling\LaporanDesa::listKategori[$data->kategori] }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            @php
-                                                if ($data->realisasi == 0) {
-                                                    $badgeColor = "badge-info";
-                                                } else if ($data->realisasi == 1) {
-                                                    $badgeColor = "badge-warning";
-                                                } else {
-                                                    $badgeColor = "badge-success";
-                                                }
-                                            @endphp
-                                            <span class="badge {{ $badgeColor }}">
-                                                {{ App\Models\BimbinganKonseling\LaporanDesa::listRealisasi[$data->realisasi] }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
-                                        <td>{{ $data->createdBy->nama }}</td>
-                                        <td>{{ $data->updatedBy->nama }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-warning btn-sm update-data"
-                                                    data-toggle="modal" data-target="#modalInput"
-                                                    data-id="{{ $data->id }}"
-                                                    data-program="{{ $data->program }}"
-                                                    data-tahun="{{ $data->tahun }}"
-                                                    data-bulan="{{ $data->bulan }}"
-                                                    data-kategori="{{ $data->kategori }}"
-                                                    data-realisasi="{{ $data->realisasi }}"
-                                                >
-                                                    <i class="far fa-edit"></i> Ubah
-                                                </button>
-                                                @if ($data->status == 1)
-                                                    <button type="button" class="btn btn-danger btn-sm delete-data"
-                                                        data-id="{{ $data->id }}"
-                                                        data-tahun="{{ $data->tahun }}"
-                                                        data-bulan="{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] }}"
-                                                        data-program="{{ $data->program }}"
-                                                    >
-                                                        <i class="far fa-trash-alt"></i> Hapus
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </td>
+                        <div class="table-responsive">
+                            <table id="dataTables" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th style="width: 5%;">No</th>
+                                        <th>Program</th>
+                                        <th>Periode</th>
+                                        <th>Kategori</th>
+                                        <th>Realisasi</th>
+                                        <th>Status</th>
+                                        <th>di Buat</th>
+                                        <th>di Perbarui</th>
+                                        <th>Aksi</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach($datas as $key => $data)
+                                        <tr>
+                                            <td>{{ ++$key }}</td>
+                                            <td style="width: 30%;">{{ $data->program }}</td>
+                                            <td class="text-center">{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] . " " . $data->tahun }}</td>
+                                            <td class="text-center">
+                                                <span class="badge badge-success">
+                                                    {{ App\Models\BimbinganKonseling\LaporanDesa::listKategori[$data->kategori] }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                @php
+                                                    if ($data->realisasi == 0) {
+                                                        $badgeColor = "badge-info";
+                                                    } else if ($data->realisasi == 1) {
+                                                        $badgeColor = "badge-warning";
+                                                    } else {
+                                                        $badgeColor = "badge-success";
+                                                    }
+                                                @endphp
+                                                <span class="badge {{ $badgeColor }}">
+                                                    {{ App\Models\BimbinganKonseling\LaporanDesa::listRealisasi[$data->realisasi] }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
+                                            <td>{{ $data->createdBy->nama }}</td>
+                                            <td>{{ $data->updatedBy->nama }}</td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-warning btn-sm update-data"
+                                                        data-toggle="modal" data-target="#modalInput"
+                                                        data-id="{{ $data->id }}"
+                                                        data-program="{{ $data->program }}"
+                                                        data-tahun="{{ $data->tahun }}"
+                                                        data-bulan="{{ $data->bulan }}"
+                                                        data-kategori="{{ $data->kategori }}"
+                                                        data-realisasi="{{ $data->realisasi }}"
+                                                    >
+                                                        <i class="far fa-edit"></i> Ubah
+                                                    </button>
+                                                    @if ($data->status == 1)
+                                                        <button type="button" class="btn btn-danger btn-sm delete-data"
+                                                            data-id="{{ $data->id }}"
+                                                            data-tahun="{{ $data->tahun }}"
+                                                            data-bulan="{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] }}"
+                                                            data-program="{{ $data->program }}"
+                                                        >
+                                                            <i class="far fa-trash-alt"></i> Hapus
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
