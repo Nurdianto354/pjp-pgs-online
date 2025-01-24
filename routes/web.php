@@ -5,6 +5,7 @@ use App\Http\Controllers\Aktivitas\HariLiburController;
 use App\Http\Controllers\Aktivitas\JadwalController;
 use App\Http\Controllers\BimbinganKonseling\LaporanDaerahController;
 use App\Http\Controllers\BimbinganKonseling\LaporanDesaController;
+use App\Http\Controllers\BimbinganKonseling\LaporanKelompokController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KurikulumTargetController;
@@ -152,6 +153,13 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::prefix('bimbingan-konseling')->group(function () {
+        Route::controller(LaporanKelompokController::class)->prefix('laporan-kelompok')->group(function () {
+            Route::get('index', 'index')->name('bimbingan_konseling.laporan_kelompok.index');
+            Route::get('create/{id?}', 'create')->name('bimbingan_konseling.laporan_kelompok.create');
+            Route::get('get-kelas', 'getKelas')->name('bimbingan_konseling.laporan_kelompok.get_kelas');
+            Route::put('store', 'store')->name('bimbingan_konseling.laporan_kelompok.store');
+            Route::post('delete/{id}', 'destroy')->name('bimbingan_konseling.laporan_kelompok.destroy');
+        });
         Route::controller(LaporanDesaController::class)->prefix('laporan-desa')->group(function () {
             Route::get('index', 'index')->name('bimbingan_konseling.laporan_desa.index');
             Route::post('create', 'create')->name('bimbingan_konseling.laporan_desa.create');

@@ -2,7 +2,7 @@
     $user  = Auth::user();
 ?>
 <aside class="main-sidebar elevation-4 sidebar-light-success">
-    <a href="{{ route('dashboard') }}" class="brand-link ml-3">
+    <a href="{{ route('dashboard') }}" class="brand-link pl-3">
         <span class="elevation-3" style="box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0) !important">PJP</span>
         <span class="brand-text font-weight-light">Online</span>
     </a>
@@ -16,7 +16,7 @@
             </div>
             <div class="info d-flex justify-content-between w-100">
                 <a href="{{ route('profil.index') }}" class="d-block">{{ ucwords(strtolower($user->nama)) }}</a>
-                <a href="{{ route('profil.index') }}" class="ml-2">
+                <a href="{{ route('profil.index') }}">
                     <i class="fa-regular fa-pen-to-square fa-sm"></i>
                 </a>
             </div>
@@ -187,6 +187,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('bimbingan_konseling.laporan_kelompok.index') }}" class="nav-link {{ setActive('bimbingan-konseling/laporan-kelompok/*') }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Kelompok</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('bimbingan_konseling.laporan_desa.index') }}" class="nav-link {{ setActive('bimbingan-konseling/laporan-desa/*') }}">
                                 <i class="far fa-circle nav-icon"></i>
