@@ -83,7 +83,7 @@
                                 <table class="table table-bordered table-striped mb-2">
                                     <thead class="text-nowrap">
                                         <tr class="text-center">
-                                            <th rowspan="2">Kelas</th>
+                                            <th rowspan="2" style="width: 10%;">Kelas</th>
                                             <th colspan="3">Murid</th>
                                             <th colspan="4">Keterangan</th>
                                         </tr>

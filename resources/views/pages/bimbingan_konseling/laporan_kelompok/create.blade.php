@@ -105,7 +105,7 @@
                                 <div class="col-12 col-md-12">
                                     <div class="form-group">
                                         <label>Tanggal Konseling / Bimbingan</label>
-                                        <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d', $data->tanggal) }}" class="form-control">
+                                        <input type="date" id="tanggal" name="tanggal" value="{{ $data->tanggal }}" class="form-control">
                                     </div>
                                 </div>
                             </div>

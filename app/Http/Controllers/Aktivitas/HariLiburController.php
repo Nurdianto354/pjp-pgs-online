@@ -70,37 +70,37 @@ class HariLiburController extends Controller
         $title  = "Data Hari Libur tanggal " . date("d-m-Y", strtotime($request->tanggal));
 
         $this->validate($request, [
-            'divisi_id' => 'required|integer',
-            'tanggal'   => 'required|date',
+            'divisi_id' => 'required',
+            'tanggal'   => 'required',
         ]);
-
 
         DB::beginTransaction();
         try {
             $tanggal = Carbon::parse($request->tanggal);
-
             $action = "menambahkan";
-            $data = new HariLibur();
-            $data->created_at = Carbon::now();
 
+            // Jika id ada, cari data untuk update
             if ($request->id != null && $request->id != '') {
-                $action = "memperbarui";
                 $data = HariLibur::findOrFail($request->id);
+                $action = "memperbarui";
             } else {
-                $checkData = HariLibur::where([['divisi_id', $request->divisi_id], ['tanggal', strtotime($tanggal)]])->first();
+                // Jika id tidak ada, cek apakah data sudah ada berdasarkan divisi_id dan tanggal
+                $checkData = HariLibur::where([
+                    ['divisi_id', $request->divisi_id],
+                    ['tanggal', $tanggal->format('Y-m-d')] // gunakan format 'Y-m-d' untuk perbandingan tanggal
+                ])->first();
 
                 if (isset($checkData) && $checkData->status == true) {
                     DB::rollBack();
-
-                    $message = "Gagal" . " " . $action . " " . $title . ", karena sudah ada";
-
+                    $message = "Gagal " . $action . ", karena sudah ada";
                     toast($message, 'error');
                     return back();
                 } else {
-                    $data = $checkData;
+                    $data = $checkData ?: new HariLibur(); // Jika data tidak ada, buat objek baru
                 }
             }
 
+            // Set data yang diterima dari request
             $data->divisi_id  = $request->divisi_id;
             $data->tanggal    = strtotime($tanggal);
             $data->hari       = $tanggal->dayOfWeek;
@@ -109,20 +109,25 @@ class HariLiburController extends Controller
             $data->keterangan = $request->keterangan;
             $data->status     = true;
             $data->updated_at = Carbon::now();
+
             $data->save();
 
             DB::commit();
 
+            // Pesan sukses
             $message = $status . " " . $action . " " . $title;
-
             toast($message, 'success');
             return back();
-        } catch (\Exception $e) {
-            DB::rollback();
 
-            toast('Gagal. Mohon cek kembali','error');
+        } catch (\Exception $e) {
+            // Log error jika terjadi exception
+            Log::error($e->getMessage());
+            DB::rollBack();
+
+            toast('Gagal. Mohon cek kembali', 'error');
             return back();
         }
+
     }
 
     public function destroy($id)

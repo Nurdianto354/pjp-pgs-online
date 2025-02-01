@@ -59,6 +59,8 @@ class LaporanKelompokController extends Controller
         $listTahun  = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')->pluck('tahun');
         $listBulan  = Tanggal::listBulan;
 
+        $data->tanggal = $data->tanggal ? date('Y-m-d', $data->tanggal) : null;
+
         return view('pages.bimbingan_konseling.laporan_kelompok.create', compact('title', 'data', 'listDivisi', 'listTahun', 'listBulan'));
     }
 
