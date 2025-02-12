@@ -9,7 +9,6 @@ use App\Models\Aktivitas\Jadwal;
 use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Kelas;
 use App\Models\MasterData\Tanggal;
-use App\Models\Murid\Murid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +102,7 @@ class RekapAbsensiController extends Controller
                 $total = count($listTanggal);
 
                 $hadirPers  = ($hadir/$total)*100;
+                $hadirPers  = number_format($hadirPers, 2);
                 $keterangan = "Nilai tidak valid";
 
                 if ($hadirPers < 40) {

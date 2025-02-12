@@ -176,7 +176,7 @@
                                                             data-kelas_nama = "{{ $kelas->nama }}"
                                                             data-divisi_id = "{{ $murid->divisi_id }}"
                                                         >
-                                                            {{ $murid->nama_lengkap }}
+                                                            {{ $murid->nama_panggilan }}
                                                         </button>
                                                     </td>
                                                     <td>{{ $murid->jenis_kelamin == 0 ? "P" : "L" }}</td>
