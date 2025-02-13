@@ -93,7 +93,7 @@ class LaporanKelompokController extends Controller
             $data->divisi_id  = $request->divisi_id;
             $data->kelas_id   = $request->kelas_id;
             $data->kasus      = $request->kasus;
-            $data->tanggal    = strtotime(Carbon::now());
+            $data->tanggal    = strtotime($request->tanggal);
             $data->status     = true;
             $data->updated_at = strtotime(Carbon::now());
             $data->updated_by = Auth::id();

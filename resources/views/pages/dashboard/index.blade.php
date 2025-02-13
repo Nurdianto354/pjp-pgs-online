@@ -43,15 +43,15 @@
                                         <tbody>
                                             @foreach($divisi->listKelas as $kelas)
                                                 @php
-                                                    $totalMurid       += $kelas->listMurid->count();
-                                                    $totalMuridMale   += $kelas->listMurid->where('jenis_kelamin', '1')->count();
-                                                    $totalMuridFemale += $kelas->listMurid->where('jenis_kelamin', '0')->count();
+                                                    $totalMurid       += $kelas->listMurid->where('status', true)->count();
+                                                    $totalMuridMale   += $kelas->listMurid->where('jenis_kelamin', '1')->where('status', true)->count();
+                                                    $totalMuridFemale += $kelas->listMurid->where('jenis_kelamin', '0')->where('status', true)->count();
                                                 @endphp
                                                 <tr>
                                                     <td style="width: 40%;">{{ $kelas->nama }}</td>
-                                                    <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->count() }}</td>
-                                                    <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('jenis_kelamin', '1')->count() }}</td>
-                                                    <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('jenis_kelamin', '0')->count() }}</td>
+                                                    <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('status', true)->count() }}</td>
+                                                    <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('jenis_kelamin', '1')->where('status', true)->count() }}</td>
+                                                    <td style="width: 20%;" class="text-center">{{ $kelas->listMurid->where('jenis_kelamin', '0')->where('status', true)->count() }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
