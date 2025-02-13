@@ -209,13 +209,14 @@
 @section('js')
 <script>
     $(".nilai-pencapaian").on("change", function() {
-        let id = $(this).data('id');
-        let kelasId = $(this).data('kelas_id');
-        let muridId = $(this).data('murid_id');
-        let kurikulumTargetDetailId = $(this).data('kurikulum_target_detail_id');
-        let bulan = $(this).data('bulan');
-        let tahun = $(this).data('tahun');
-        let target = $(this).val();
+        let inputElement = $(this);
+        let id = inputElement.data('id');
+        let kelasId = inputElement.data('kelas_id');
+        let muridId = inputElement.data('murid_id');
+        let kurikulumTargetDetailId = inputElement.data('kurikulum_target_detail_id');
+        let bulan = inputElement.data('bulan');
+        let tahun = inputElement.data('tahun');
+        let target = inputElement.val();
 
         $.ajax({
             url    : "{{ url('/pencapaian-target/store') }}",
@@ -229,11 +230,18 @@
                 bulan : bulan,
                 tahun : tahun
             },
-            success: function(response) {
-                console.log('Response from server:', response);
+            success: function(responses) {
+                if (responses.success) {
+                    let data = responses.data;
+
+                    inputElement.attr('data-id', data.id);
+                    inputElement.data('id', data.id);
+                } else {
+                    alert(responses.message);
+                }
             },
             error: function(xhr, status, error) {
-                console.log('AJAX error:', error);
+                alert('AJAX error:', error);
             }
         });
     });

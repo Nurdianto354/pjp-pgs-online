@@ -133,6 +133,10 @@ class PencapaianTargetController extends Controller
             DB::rollback();
         }
 
-        return response()->json(['success' => $success, 'message' => $message]);
+        return response()->json([
+            'data'    => $data,
+            'success' => $success,
+            'message' => $message
+        ]);
     }
 }

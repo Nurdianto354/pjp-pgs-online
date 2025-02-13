@@ -176,11 +176,12 @@
 @section('js')
 <script>
     $('.absensi').change(function(){
-        let id        = $(this).data('id');
-        let kelasId   = $(this).data('kelas_id');
-        let muridId   = $(this).data('murid_id');
-        let tanggal   = $(this).data('tanggal');
-        let kehadiran = $(this).val();
+        let selectElement = $(this);
+        let id            = selectElement.data('id');
+        let kelasId       = selectElement.data('kelas_id');
+        let muridId       = selectElement.data('murid_id');
+        let tanggal       = selectElement.data('tanggal');
+        let kehadiran     = selectElement.val();
 
         $.ajax({
             type    : "POST",
@@ -192,15 +193,18 @@
                 tanggal   : tanggal,
                 kehadiran : kehadiran
             },
-            success: function(data) {
-                if (data.success) {
-                    // alert("Data has been saved successfully!");
+            success: function(responses) {
+                if (responses.success) {
+                    let data = responses.data;
+
+                    selectElement.attr('data-id', data.id);
+                    selectElement.data('id', data.id);
                 } else {
-                    alert(data.message);
+                    alert(responses.message);
                 }
             },
             error: function(xhr, status, error) {
-                alert("An error occurred while processing your request.");
+                alert('AJAX error:', error);
             }
         });
     });
