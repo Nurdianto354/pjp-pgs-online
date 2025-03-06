@@ -159,18 +159,21 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('get-kelas', 'getKelas')->name('bimbingan_konseling.laporan_kelompok.get_kelas');
             Route::put('store', 'store')->name('bimbingan_konseling.laporan_kelompok.store');
             Route::post('delete/{id}', 'destroy')->name('bimbingan_konseling.laporan_kelompok.destroy');
+            Route::get('export-excel', 'exportExcel')->name('bimbingan_konseling.laporan_kelompok.export_excel');
         });
         Route::controller(LaporanDesaController::class)->prefix('laporan-desa')->group(function () {
             Route::get('index', 'index')->name('bimbingan_konseling.laporan_desa.index');
             Route::get('create/{id?}', 'create')->name('bimbingan_konseling.laporan_desa.create');
             Route::put('store', 'store')->name('bimbingan_konseling.laporan_desa.store');
             Route::post('delete/{id}', 'destroy')->name('bimbingan_konseling.laporan_desa.destroy');
+            Route::get('export-excel', 'exportExcel')->name('bimbingan_konseling.laporan_desa.export_excel');
         });
         Route::controller(LaporanDaerahController::class)->prefix('laporan-daerah')->group(function () {
             Route::get('index', 'index')->name('bimbingan_konseling.laporan_daerah.index');
             Route::get('create/{id?}', 'create')->name('bimbingan_konseling.laporan_daerah.create');
             Route::put('store', 'store')->name('bimbingan_konseling.laporan_daerah.store');
             Route::post('delete/{id}', 'destroy')->name('bimbingan_konseling.laporan_daerah.destroy');
+            Route::get('export-excel', 'exportExcel')->name('bimbingan_konseling.laporan_daerah.export_excel');
         });
     });
 

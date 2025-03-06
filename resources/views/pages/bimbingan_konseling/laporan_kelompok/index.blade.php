@@ -64,9 +64,11 @@ use App\Models\MasterData\Tanggal;
                                         <i class="fa fa-plus"></i> Tambah
                                     </button>
                                 </a>
-                                <form method="GET" action="#">
+                                <form method="GET" action="{{ route('bimbingan_konseling.laporan_kelompok.export_excel') }}">
+                                    <input type="hidden" name="bulan" value="{{ $bulan }}">
+                                    <input type="hidden" name="tahun" value="{{ $tahun }}">
                                     <button type="submit" class="btn btn-sm btn-outline-success ml-1">
-                                        <i class="fa-regular fa-file-excel"></i> Export Excel
+                                        <i class="fa fa-download"></i> Export Excel
                                     </button>
                                 </form>
                                 <form method="GET" action="#">

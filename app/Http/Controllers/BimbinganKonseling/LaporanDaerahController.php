@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LaporanDaerahController extends Controller
 {
@@ -139,5 +145,150 @@ class LaporanDaerahController extends Controller
                 'keterangan' => 'karena ada kesalahan di sistem'
             ]);
         }
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $tahun  = $request->has('tahun') ? $request->tahun : null;
+        $bulan  = $request->has('bulan') ? $request->bulan : null;
+
+        $style_border = [
+			'borders' => [
+				'allBorders' => [
+					'borderStyle' => Border::BORDER_THIN,
+				],
+			],
+			'alignment' => [
+				'vertical' => Alignment::VERTICAL_CENTER,
+				'wrapText' => true,
+			],
+		];
+
+		$style_header = [
+			'alignment' => [
+				'horizontal' => Alignment::HORIZONTAL_CENTER,
+				'vertical' => Alignment::VERTICAL_CENTER,
+				'wrapText' => true,
+			],
+			'fill'  => [
+				'fillType' => Fill::FILL_SOLID,
+				'startColor' => ['rgb' => 'EEEEEE'],
+			],
+			'font' => [
+				'size' => 10,
+				'bold' => true,
+			],
+		];
+
+        $style_right = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT]];
+        $style_left = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT]];
+        $style_center = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
+
+
+        $style_vertical_top = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_TOP]];
+
+        $title = "Laporan BK Daerah";
+		$spreadsheet = new Spreadsheet();
+		$spreadsheet->getProperties()->setCreator("PJP Online Pagesangan II")->setLastModifiedBy("PJP Online Pagesangan II")->setTitle($title)->setSubject($title)->setDescription($title);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $fields = [
+            ['field' => 'no', 'name' => 'No.'],
+            ['field' => 'periode', 'name' => 'Periode'],
+            ['field' => 'nama', 'name' => 'Nama'],
+            ['field' => 'usia', 'name' => 'Usia (Tahun)'],
+            ['field' => 'masalah', 'name' => 'Masalah'],
+            ['field' => 'penyelesaian', 'name' => 'Penyelesaian'],
+            ['field' => 'kondisi_terakhir', 'name' => 'Kondisi Terakhir'],
+        ];
+
+        $col = 1;
+        $row = 1;
+
+        $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setWidth(2);
+        $row++;  $col = 2;
+        $sheet->setCellValueByColumnAndRow($col, $row, $title);
+        $sheet->getStyle($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getFont()->setBold(true);
+        $sheet->mergeCellsByColumnAndRow($col, $row, $col+6, $row);
+        $row++;
+        $sheet->setCellValueByColumnAndRow($col, $row, "Periode : " . Tanggal::listBulan[$bulan] . " " . $tahun);
+        $sheet->getStyle($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getFont()->setBold(true);
+        $sheet->mergeCellsByColumnAndRow($col, $row, $col+5, $row);
+        $row++;
+        $row++;
+
+        $colAwal = $col;
+
+        foreach ($fields as $field) {
+            $sheet->setCellValueByColumnAndRow($col, $row, (string)$field['name']);
+            $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+            $col++;
+        }
+
+        $colAkhir = $col-1;
+
+        $sheet->getStyleByColumnAndRow($colAwal, $row, $col-1, $row)->applyFromArray($style_border);
+        $sheet->getStyleByColumnAndRow($colAwal, $row, $col-1, $row)->applyFromArray($style_header);
+
+        $row++;
+
+        $datas = LaporanDaerah::where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])->with('createdBy', 'updatedBy')
+            ->orderBy('created_at', 'ASC')->get();
+
+        if (!empty($datas) && count($datas) > 0) {
+            $rowAwal = $row;
+
+            foreach ($datas as $index => $data) {
+                $col = $colAwal;
+
+                foreach ($fields as $field) {
+                    if ($field['field'] == "no") {
+                        $sheet->setCellValueByColumnAndRow($col, $row, ++$index . ".");
+                        $sheet->getStyleByColumnAndRow($col, $row)->applyFromArray($style_center);
+                    } else if ($field['field'] == "periode") {
+                        $sheet->setCellValueByColumnAndRow($col, $row, Tanggal::listBulan[$data->bulan] . " " . $data->tahun);
+                        $sheet->getStyleByColumnAndRow($col, $row)->applyFromArray($style_center);
+                    } else {
+                        $sheet->setCellValueByColumnAndRow($col, $row, $data[$field['field']]);
+
+                        if ($field['field'] == "usia") {
+                            $sheet->getStyleByColumnAndRow($col, $row)->applyFromArray($style_center);
+                        }
+                    }
+
+                    $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+                    $col++;
+                }
+
+                $row++;
+            }
+
+            $rowAkhir = $row-1;
+            $sheet->getStyleByColumnAndRow($colAwal, $rowAwal, $colAkhir, $rowAkhir)->applyFromArray($style_border);
+        } else {
+            $sheet->setCellValueByColumnAndRow($colAwal, $row, "Data is empty");
+            $sheet->mergeCells($sheet->getCellByColumnAndRow($colAwal, $row)->getCoordinate().':'.$sheet->getCellByColumnAndRow($colAkhir, $row)->getCoordinate());
+            $sheet->getColumnDimension($sheet->getCell($sheet->getCellByColumnAndRow($col, $row)->getCoordinate())->getColumn())->setAutoSize(true);
+            $sheet->getStyleByColumnAndRow($colAwal, $row, $colAkhir, $row)->applyFromArray($style_border);
+            $sheet->getStyleByColumnAndRow($colAwal, $row, $colAkhir, $row)->applyFromArray($style_center);
+        }
+
+        // set sheet as the active sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $writer = new Xlsx($spreadsheet);
+        $response = new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            }
+        );
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$title.'.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 }
