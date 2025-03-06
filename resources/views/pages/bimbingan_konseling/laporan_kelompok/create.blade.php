@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <style>
     .select2-container .select2-selection--single {
         height: 38px;
@@ -59,7 +58,7 @@
                                     <div class="form-group">
                                         <select name="bulan" class="form-control select2-bulan select2-success" data-placeholder="Pilih Bulan" data-dropdown-css-class="select2-success">
                                             @foreach ($listBulan as $code => $value)
-                                                <option value="{{ $code }}" @if ($data->bulan == $code) selected @endif>{{ $value }}</option>
+                                                <option value="{{ $code }}" @if ($bulan == $code) selected @endif>{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -68,7 +67,7 @@
                                     <div class="form-group">
                                         <select name="tahun" class="form-control select2-tahun select2-success" data-placeholder="Pilih Tahun" data-dropdown-css-class="select2-success">
                                             @foreach ($listTahun as $value)
-                                                <option value="{{ $value }}" @if ($data->tahun == $value) selected @endif>{{ $value }}</option>
+                                                <option value="{{ $value }}" @if ($tahun == $value) selected @endif>{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -158,8 +157,6 @@
         let id = '{{ $data->id }}';
 
         if (id === null || id === '' || id === undefined) {
-            $('.select2-bulan').val(null).trigger('change');
-            $('.select2-tahun').val(null).trigger('change');
             $('.select2-divisi').val(null).trigger('change');
             $('.select2-kelas').val(null).trigger('change');
         } else{

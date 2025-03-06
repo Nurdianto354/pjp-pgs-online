@@ -18,35 +18,52 @@ class LaporanDesaController extends Controller
         $this->middleware(['permission:bimbingan_konseling']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $listTahun = Tanggal::where('status', true)->groupBy('tahun')->pluck('tahun');
-        $listTahunTemp = [];
+        $tahun  = $request->has('tahun') ? $request->tahun : Carbon::now()->year;
+        $bulan  = $request->has('bulan') ? $request->bulan : Carbon::now()->month;
 
-        foreach ($listTahun as $tahun) {
-            $listTahunTemp[$tahun] = $tahun;
-        }
-
-        $listTahun = $listTahunTemp;
-
-        $listBulan = Tanggal::where('status', true)->groupBy('bulan')->pluck('bulan');
-        $listBulanTemp = [];
-
-        foreach ($listBulan as $bulan) {
-            $listBulanTemp[$bulan] = Tanggal::listBulan[$bulan];
-        }
-
-        $listBulan = $listBulanTemp;
+        $listTahun = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')
+                 ->pluck('tahun');
+        $listBulan = Tanggal::where([['tahun', $tahun], ['status', true]])->orderBy('bulan', 'ASC')->groupBy('bulan')
+                 ->pluck('bulan');
 
         $listKategori  = LaporanDesa::listKategori;
         $listRealisasi = LaporanDesa::listRealisasi;
 
-        $datas = LaporanDesa::where('status', true)->with('createdBy', 'updatedBy')->orderBy('created_at', 'ASC')->get();
+        $datas = LaporanDesa::where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])
+                    ->with('createdBy', 'updatedBy')->orderBy('created_at', 'ASC')->get();
 
-        return view('pages.bimbingan_konseling.laporan_desa.index', compact('listTahun', 'listBulan', 'listKategori', 'listRealisasi', 'datas'));
+        return view('pages.bimbingan_konseling.laporan_desa.index', compact('listTahun', 'tahun', 'listBulan', 'bulan', 'listKategori', 'listRealisasi', 'datas'));
     }
 
-    public function create(Request $request)
+    public function create($id = null)
+    {
+        $title = "Create";
+        $data  = new LaporanDesa();
+
+        $tahun  = Carbon::now()->year;
+        $bulan  = Carbon::now()->month;
+
+        if (!empty($id)) {
+            $title = "Update";
+            $data = LaporanDesa::findOrFail($id);
+
+            $tahun  = $data->tahun;
+            $bulan  = $data->bulan;
+        }
+
+        $listTahun  = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')->pluck('tahun');
+        $listBulan  = Tanggal::listBulan;
+        $listKategori  = LaporanDesa::listKategori;
+        $listRealisasi = LaporanDesa::listRealisasi;
+
+        $data->tanggal = $data->tanggal ? date('Y-m-d', $data->tanggal) : null;
+
+        return view('pages.bimbingan_konseling.laporan_desa.create', compact('title', 'data', 'listTahun', 'tahun', 'listBulan', 'bulan', 'listKategori', 'listRealisasi'));
+    }
+
+    public function store(Request $request)
     {
         $status = "Berhasil";
         $action = "menambahkan";
@@ -92,7 +109,7 @@ class LaporanDesaController extends Controller
             $message = $status . " " . $action . " " . $title . " " . $periode;
 
             toast($message, 'success');
-            return back();
+            return redirect()->route('bimbingan_konseling.laporan_desa.index');
         } catch (\Exception $e) {
             DB::rollback();
 

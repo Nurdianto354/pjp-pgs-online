@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@php
+use App\Models\MasterData\Tanggal;
+@endphp
 @section('content')
 <div class="content-header">
     <div class="container-fluid">
@@ -29,7 +31,34 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12 d-flex justify-content-end">
+                            <div class="col-12 col-md-6">
+                                <form method="GET" action="{{ route('bimbingan_konseling.laporan_kelompok.index') }}">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <select class="form-control" name="tahun">
+                                                    @foreach ($listTahun as $value)
+                                                        <option value="{{ $value }}" @if ($value == $tahun) selected @endif>{{ $value }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <select class="form-control" name="bulan">
+                                                    @foreach ($listBulan as $value)
+                                                        <option value="{{ $value }}" @if ($value == $bulan) selected @endif>{{ Tanggal::listBulan[$value] }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <button type="submit" class="btn btn-success btn-sm mb-2"><i class="fa-solid fa-magnifying-glass"></i> Filter</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex justify-content-end">
                                 <a href="{{ route('bimbingan_konseling.laporan_kelompok.create') }}">
                                     <button type="button" class="btn btn-success btn-sm mb-2">
                                         <i class="fa fa-plus"></i> Tambah
@@ -69,7 +98,7 @@
                                             <td>{{ ++$key }}</td>
                                             <td>{{ $data->getDivisi->nama }}</td>
                                             <td>{{ $data->getKelas->nama }}</td>
-                                            <td class="text-center">{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] . " " . $data->tahun }}</td>
+                                            <td class="text-center">{{ Tanggal::listBulan[$data->bulan] . " " . $data->tahun }}</td>
                                             <td>{!! $data->kasus !!}</td>
                                             <td class="text-center">{{ date("d-m-Y", $data->tanggal) }}</td>
                                             <td class="text-center">{{ $data->status == 1 ? 'Active' : 'Inactive' }}</td>
@@ -84,7 +113,7 @@
                                                         <button type="button" class="btn btn-danger btn-sm delete-data"
                                                             data-id="{{ $data->id }}"
                                                             data-tahun="{{ $data->tahun }}"
-                                                            data-bulan="{{ App\Models\MasterData\Tanggal::listBulan[$data->bulan] }}"
+                                                            data-bulan="{{ Tanggal::listBulan[$data->bulan] }}"
                                                         >
                                                             <i class="far fa-trash-alt"></i> Hapus
                                                         </button>

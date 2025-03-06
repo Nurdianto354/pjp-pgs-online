@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@php
+use App\Models\MasterData\Tanggal;
+@endphp
 @section('content')
 <style>
     .select2-container .select2-selection--single {
@@ -39,10 +41,39 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12 d-flex justify-content-end">
-                                <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalInput" id="tambahData">
-                                    <i class="fa fa-plus"></i> Tambah
-                                </button>
+                            <div class="col-12 col-md-6">
+                                <form method="GET" action="{{ route('bimbingan_konseling.laporan_daerah.index') }}">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <select class="form-control" name="tahun">
+                                                    @foreach ($listTahun as $value)
+                                                        <option value="{{ $value }}" @if ($value == $tahun) selected @endif>{{ $value }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <select class="form-control" name="bulan">
+                                                    @foreach ($listBulan as $value)
+                                                        <option value="{{ $value }}" @if ($value == $bulan) selected @endif>{{ Tanggal::listBulan[$value] }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <button type="submit" class="btn btn-success btn-sm mb-2"><i class="fa-solid fa-magnifying-glass"></i> Filter</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex justify-content-end">
+                                <a href="{{ route('bimbingan_konseling.laporan_daerah.create') }}">
+                                    <button type="button" class="btn btn-success btn-sm mb-2">
+                                        <i class="fa fa-plus"></i> Tambah
+                                    </button>
+                                </a>
                                 <form method="GET" action="#">
                                     <button type="submit" class="btn btn-sm btn-outline-success ml-1">
                                         <i class="fa-regular fa-file-excel"></i> Export Excel
@@ -87,19 +118,9 @@
                                             <td>{{ $data->updatedBy->nama }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-warning btn-sm update-data"
-                                                        data-toggle="modal" data-target="#modalInput"
-                                                        data-id="{{ $data->id }}"
-                                                        data-tahun="{{ $data->tahun }}"
-                                                        data-bulan="{{ $data->bulan }}"
-                                                        data-nama="{{ $data->nama }}"
-                                                        data-usia="{{ $data->usia }}"
-                                                        data-masalah="{{ $data->masalah }}"
-                                                        data-penyelesaian="{{ $data->penyelesaian }}"
-                                                        data-kondisi_terakhir="{{ $data->kondisi_terakhir }}"
-                                                    >
+                                                    <a href="{{ route('bimbingan_konseling.laporan_daerah.create', $data->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="far fa-edit"></i> Ubah
-                                                    </button>
+                                                    </a>
                                                     @if ($data->status == 1)
                                                         <button type="button" class="btn btn-danger btn-sm delete-data"
                                                             data-id="{{ $data->id }}"

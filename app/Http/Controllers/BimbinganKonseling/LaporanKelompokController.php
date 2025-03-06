@@ -20,29 +20,20 @@ class LaporanKelompokController extends Controller
         $this->middleware(['permission:bimbingan_konseling']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $listTahun = Tanggal::where('status', true)->groupBy('tahun')->pluck('tahun');
-        $listTahunTemp = [];
+        $tahun  = $request->has('tahun') ? $request->tahun : Carbon::now()->year;
+        $bulan  = $request->has('bulan') ? $request->bulan : Carbon::now()->month;
 
-        foreach ($listTahun as $tahun) {
-            $listTahunTemp[$tahun] = $tahun;
-        }
+        $listTahun = Tanggal::where('status', true)->orderBy('tahun', 'DESC')->groupBy('tahun')
+                 ->pluck('tahun');
+        $listBulan = Tanggal::where([['tahun', $tahun], ['status', true]])->orderBy('bulan', 'ASC')->groupBy('bulan')
+                 ->pluck('bulan');
 
-        $listTahun = $listTahunTemp;
+        $datas = LaporanKelompok::with('getDivisi', 'getKelas', 'createdBy', 'updatedBy')
+            ->where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])->orderBy('kelas_id', 'ASC')->orderBy('created_at', 'ASC')->get();
 
-        $listBulan = Tanggal::where('status', true)->groupBy('bulan')->pluck('bulan');
-        $listBulanTemp = [];
-
-        foreach ($listBulan as $bulan) {
-            $listBulanTemp[$bulan] = Tanggal::listBulan[$bulan];
-        }
-
-        $listBulan = $listBulanTemp;
-
-        $datas = LaporanKelompok::with('getDivisi', 'getKelas', 'createdBy', 'updatedBy')->where('status', true)->orderBy('created_at', 'ASC')->get();
-
-        return view('pages.bimbingan_konseling.laporan_kelompok.index', compact('listTahun', 'listBulan', 'datas'));
+        return view('pages.bimbingan_konseling.laporan_kelompok.index', compact('listTahun', 'tahun', 'listBulan', 'bulan', 'datas'));
     }
 
     public function create($id = null)
@@ -50,9 +41,15 @@ class LaporanKelompokController extends Controller
         $title = "Create";
         $data  = new LaporanKelompok();
 
+        $tahun  = Carbon::now()->year;
+        $bulan  = Carbon::now()->month;
+
         if (!empty($id)) {
             $title = "Update";
             $data = LaporanKelompok::findOrFail($id);
+
+            $tahun  = $data->tahun;
+            $bulan  = $data->bulan;
         }
 
         $listDivisi = Divisi::where('status', true)->orderBy('id', 'ASC')->get();
@@ -61,7 +58,7 @@ class LaporanKelompokController extends Controller
 
         $data->tanggal = $data->tanggal ? date('Y-m-d', $data->tanggal) : null;
 
-        return view('pages.bimbingan_konseling.laporan_kelompok.create', compact('title', 'data', 'listDivisi', 'listTahun', 'listBulan'));
+        return view('pages.bimbingan_konseling.laporan_kelompok.create', compact('title', 'data', 'listDivisi', 'listTahun', 'tahun', 'listBulan', 'bulan'));
     }
 
     public function store(Request $request)
