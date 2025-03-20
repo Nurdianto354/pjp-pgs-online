@@ -103,8 +103,8 @@
                                         @foreach ($listKelas as $kelas)
                                             @php
                                                 $muridCount = App\Models\Murid\Murid::where([['divisi_id', $divisi->id], ['kelas_id', $kelas->id], ['status', true]])->selectRaw('
-                                                    SUM(CASE WHEN jenis_kelamin = "0" THEN 1 ELSE 0 END) as female,
-                                                    SUM(CASE WHEN jenis_kelamin = "1" THEN 1 ELSE 0 END) as male
+                                                    SUM(CASE WHEN jenis_kelamin = "1" THEN 1 ELSE 0 END) as female,
+                                                    SUM(CASE WHEN jenis_kelamin = "0" THEN 1 ELSE 0 END) as male
                                                 ')->first();
 
                                                 $female = $muridCount->female <= 0 ? 0 : $muridCount->female;
