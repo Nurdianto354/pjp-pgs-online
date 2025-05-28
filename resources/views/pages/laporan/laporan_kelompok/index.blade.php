@@ -201,6 +201,13 @@
                                 <hr>
                             @endif
                         @endforeach
+
+                        @if (count($datas) == 0)
+                            <span class="fs-3 text-bold">
+                                <i class="fas fa-file-signature mr-1"></i>  Laporan BK bulan ini belum ada
+                            </span>
+                            <hr>
+                        @endif
                     </div>
                 </div>
             </div>
