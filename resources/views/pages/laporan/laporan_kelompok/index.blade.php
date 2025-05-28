@@ -173,6 +173,37 @@
                     </div>
                 @endforeach
             </div>
+            <div class="col-12 col-md-12">
+                <div class="card card-success">
+                    <div class="card-header text-center">
+                        <h3 class="card-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            Laporan Divisi BK
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($listDivisi as $divisi)
+                            @php
+                                $datas = App\Models\BimbinganKonseling\LaporanKelompok::where([['divisi_id', $divisi->id], ['bulan', $bulan], ['tahun', $tahun], ['status', true]])->pluck('kasus');
+                            @endphp
+
+                            @if (count($datas) > 0)
+                                <span class="fs-3 text-bold">
+                                    <i class="fas fa-file-signature mr-1"></i>  Divisi {{ $divisi->nama }}
+                                </span>
+                                <ul>
+                                    @foreach ($datas as $kasus)
+                                        <li class="fs-5">
+                                            {{ $kasus }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <hr>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
