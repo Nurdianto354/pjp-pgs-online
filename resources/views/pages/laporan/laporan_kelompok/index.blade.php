@@ -192,6 +192,9 @@
                                         <th style="width: 80%;">Kasus</th>
                                     </tr>
                                 </thead>
+                                @php
+                                    $isEmpty = true;
+                                @endphp
                                 @foreach ($listDivisi as $divisi)
                                     @php
                                         $datas = App\Models\BimbinganKonseling\LaporanKelompok::where([['divisi_id', $divisi->id], ['bulan', $bulan], ['tahun', $tahun], ['status', true]])->count();
@@ -204,7 +207,6 @@
                                         </thead>
                                         <tbody>
                                             @php
-                                                $isEmpty = true;
                                                 $listKelas = App\Models\MasterData\Kelas::where([['divisi_id', $divisi->id], ['status', true]])->orderBy('level', 'ASC')->get();
                                                 $nomer = 0;
                                             @endphp
@@ -219,34 +221,36 @@
                                                             <tr>
                                                                 <td class="text-center">{{ ++$nomer }}</td>
                                                                 <td rowspan="{{ count($datas) }}">{{ $kelas->nama }}</td>
-                                                                <td rowspan="{{ count($datas) }}" class="text-center">{{ date("d-m-Y", $data->tanggal) }}</td>
+                                                                <td class="text-center">{{ date("d-m-Y", $data->tanggal) }}</td>
                                                                 <td>{!! $data->kasus !!}</td>
                                                             </tr>
                                                         @else
                                                             <tr>
                                                                 <td class="text-center">{{ ++$nomer }}</td>
+                                                                <td class="text-center">{{ date("d-m-Y", $data->tanggal) }}</td>
                                                                 <td>{!! $data->kasus !!}</td>
                                                             </tr>
                                                         @endif
                                                     @endforeach
-                                                    @php
-                                                        $isEmpty = false;
-                                                    @endphp
                                                 @endif
                                             @endforeach
-
-                                            @if ($isEmpty)
-                                                <tr class="text-center">
-                                                    <td colspan="4">
-                                                        <span class="fs-3 text-bold">
-                                                            <i class="fas fa-file-signature mr-1"></i>  Laporan BK belum ada
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            @endif
                                         </tbody>
+                                        @php
+                                            $isEmpty = false;
+                                        @endphp
                                     @endif
                                 @endforeach
+                                @if ($isEmpty)
+                                    <tbody>
+                                        <tr class="text-center">
+                                            <td colspan="4">
+                                                <span class="fs-3 text-bold">
+                                                    <i class="fas fa-file-signature mr-1"></i>  Laporan BK bulan ini belum ada
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                @endif
                             </table>
                         </div>
                     </div>
