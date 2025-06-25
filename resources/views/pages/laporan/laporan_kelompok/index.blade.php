@@ -182,32 +182,73 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        @foreach ($listDivisi as $divisi)
-                            @php
-                                $datas = App\Models\BimbinganKonseling\LaporanKelompok::where([['divisi_id', $divisi->id], ['bulan', $bulan], ['tahun', $tahun], ['status', true]])->pluck('kasus');
-                            @endphp
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped mb-2">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>No.</th>
+                                        <th>Kelas</th>
+                                        <th>Tanggal Konsultasi / Bimbingan</th>
+                                        <th style="width: 80%;">Kasus</th>
+                                    </tr>
+                                </thead>
+                                @foreach ($listDivisi as $divisi)
+                                    @php
+                                        $datas = App\Models\BimbinganKonseling\LaporanKelompok::where([['divisi_id', $divisi->id], ['bulan', $bulan], ['tahun', $tahun], ['status', true]])->count();
+                                    @endphp
+                                    @if ($datas > 0)
+                                        <thead class="text-nowrap">
+                                            <tr>
+                                                <th colspan="4">Divisi {{ $divisi->nama }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $isEmpty = true;
+                                                $listKelas = App\Models\MasterData\Kelas::where([['divisi_id', $divisi->id], ['status', true]])->orderBy('level', 'ASC')->get();
+                                                $nomer = 0;
+                                            @endphp
 
-                            @if (count($datas) > 0)
-                                <span class="fs-3 text-bold">
-                                    <i class="fas fa-file-signature mr-1"></i>  Divisi {{ $divisi->nama }}
-                                </span>
-                                <ul>
-                                    @foreach ($datas as $kasus)
-                                        <li class="fs-5">
-                                            {{ $kasus }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                                <hr>
-                            @endif
-                        @endforeach
+                                            @foreach ($listKelas as $kelas)
+                                                @php
+                                                    $datas = App\Models\BimbinganKonseling\LaporanKelompok::where([['kelas_id', $kelas->id], ['bulan', $bulan], ['tahun', $tahun], ['status', true]])->get();
+                                                @endphp
+                                                @if (count($datas) > 0)
+                                                    @foreach ($datas as $index => $data)
+                                                        @if ($index == 0)
+                                                            <tr>
+                                                                <td class="text-center">{{ ++$nomer }}</td>
+                                                                <td rowspan="{{ count($datas) }}">{{ $kelas->nama }}</td>
+                                                                <td rowspan="{{ count($datas) }}" class="text-center">{{ date("d-m-Y", $data->tanggal) }}</td>
+                                                                <td>{!! $data->kasus !!}</td>
+                                                            </tr>
+                                                        @else
+                                                            <tr>
+                                                                <td class="text-center">{{ ++$nomer }}</td>
+                                                                <td>{!! $data->kasus !!}</td>
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                    @php
+                                                        $isEmpty = false;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
 
-                        @if (count($datas) == 0)
-                            <span class="fs-3 text-bold">
-                                <i class="fas fa-file-signature mr-1"></i>  Laporan BK bulan ini belum ada
-                            </span>
-                            <hr>
-                        @endif
+                                            @if ($isEmpty)
+                                                <tr class="text-center">
+                                                    <td colspan="4">
+                                                        <span class="fs-3 text-bold">
+                                                            <i class="fas fa-file-signature mr-1"></i>  Laporan BK belum ada
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    @endif
+                                @endforeach
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
