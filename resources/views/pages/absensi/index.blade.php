@@ -1,6 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="loading-overlay" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        color: white;
+        font-size: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px 30px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+    ">
+        <i class="fa fa-spinner fa-spin fa-lg mr-2"></i> Memproses...
+    </div>
+</div>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -172,9 +196,11 @@
     </div>
 </section>
 @endsection
-
 @section('js')
 <script>
+    $(document).ready(function () {
+        $('#loading-overlay').fadeOut();
+    });
     $('.absensi').change(function(){
         let selectElement = $(this);
         let id            = selectElement.data('id');
@@ -182,6 +208,9 @@
         let muridId       = selectElement.data('murid_id');
         let tanggal       = selectElement.data('tanggal');
         let kehadiran     = selectElement.val();
+
+        // Show loading indicator
+        $('#loading-overlay').fadeIn();
 
         $.ajax({
             type    : "POST",
@@ -204,7 +233,11 @@
                 }
             },
             error: function(xhr, status, error) {
-                alert('AJAX error:', error);
+                alert('AJAX error: ' + error);
+            },
+            complete: function() {
+                // Hide loading indicator after request completes
+                $('#loading-overlay').fadeOut();
             }
         });
     });
