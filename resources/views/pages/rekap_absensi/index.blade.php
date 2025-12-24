@@ -14,6 +14,11 @@
         text-align: center;
         flex-grow: 1;
     }
+
+    .table-scroll {
+        max-height: 400px;   /* atur tinggi sesuai kebutuhan */
+        overflow-y: auto;    /* scroll atas–bawah */
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -223,7 +228,7 @@
                         <h4 id="kelasNama"></h4>
                     </div>
                     <div class="col-12 col-md-12">
-                        <div id="dataDetail"></div>
+                        <div id="dataDetail" class="table-scroll"></div>
                     </div>
                 </div>
             </div>
@@ -243,75 +248,78 @@
     $(document).on("click", ".get-detail", function () {
         $('.loading').show();
 
-        let id = $(this).data('id');
-        let namaLengkap = $(this).data('nama_lengkap');
-        let kelasId = $(this).data('kelas_id');
-        let kelasNama = $(this).data('kelas_nama');
-        let divisiId = $(this).data('divisi_id');
+        const id        = $(this).data('id');
+        const nama      = $(this).data('nama_lengkap');
+        const kelasId   = $(this).data('kelas_id');
+        const kelasNama = $(this).data('kelas_nama');
+        const divisiId  = $(this).data('divisi_id');
 
-        $('#namaLengkap').text(namaLengkap);
+        $('#namaLengkap').text(nama);
         $('#kelasNama').text(kelasNama);
+        $('#dataDetail').empty();
 
         $.ajax({
-            type : "GET",
-            url  : "{{ url('/rekap-absensi/detail') }}",
-            data : {
-                id: id,
+            type: "GET",
+            url: "{{ url('/rekap-absensi/detail') }}",
+            data: {
+                id,
                 kelas_id: kelasId,
                 divisi_id: divisiId
             },
             dataType: 'json',
-            success: function(responses) {
+            success(responses) {
                 $('.loading').hide();
 
-                // Clear the div before appending new data
-                $('#dataDetail').empty();
+                const datas = responses.datas;
 
-                // Check if data is not empty
-                if (responses.datas && Object.keys(responses.datas).length > 0) {
-                    // Start the table structure
-                    let table = '<table class="table table-bordered table-striped mt-3">';
-                    table += '<thead><tr class="text-center">';
-                    table += '<th>Bulan</th>';
-                    table += '<th class="text-center">H</th>';
-                    table += '<th class="text-center">I</th>';
-                    table += '<th class="text-center">A</th>';
-                    table += '<th class="text-center">%</th>';
-                    table += '<th>Keterangan</th>';
-                    table += '</tr></thead>';
-                    table += '<tbody>';
-
-                    // Loop through the data and append rows
-                    for (const key in responses.datas) {
-                        if (responses.datas.hasOwnProperty(key)) {
-                            let data = responses.datas[key];
-                            let row = '';
-
-                            row += '<tr>';
-                            row += '<td>' + data.bulan + ' ' + data.tahun + '</td>';
-                            row += '<td class="text-center">' + data.hadir + '</td>';
-                            row += '<td class="text-center">' + data.izin + '</td>';
-                            row += '<td class="text-center">' + data.alfa + '</td>';
-                            row += '<td class="text-center">' + data.pers + '%</td>';
-                            row += '<td>' + data.ket + '</td>';
-                            row += '</tr>';
-
-                            table += row;
-                        }
-                    }
-
-                    table += '</tbody></table>';
-
-                    // Append the table to the div
-                    $('#dataDetail').html(table);
-                } else {
-                    // If no data, show a message
-                    $('#dataDetail').html('<p>No data available</p>');
+                if (!datas || Object.keys(datas).length === 0) {
+                    $('#dataDetail').html('<p class="text-center">No data available</p>');
+                    return;
                 }
+
+                let table = `
+                    <table class="table table-bordered table-striped mt-3">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Bulan</th>
+                                <th>H</th>
+                                <th>I</th>
+                                <th>A</th>
+                                <th>%</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                Object.keys(datas)
+                    .sort((a, b) => b - a) // YYYYMM DESC
+                    .forEach(key => {
+                        const d = datas[key];
+
+                        table += `
+                            <tr>
+                                <td>${d.bulan} ${d.tahun}</td>
+                                <td class="text-center">${d.hadir}</td>
+                                <td class="text-center">${d.izin}</td>
+                                <td class="text-center">${d.alfa}</td>
+                                <td class="text-center">${d.pers}%</td>
+                                <td>${d.ket}</td>
+                            </tr>
+                        `;
+                    });
+
+                table += `
+                        </tbody>
+                    </table>
+                `;
+
+                $('#dataDetail').html(table);
             },
-            error: function(xhr, status, error) {
-                console.log('AJAX Error:', status, error);
-                $('#dataDetail').html('<p>Error fetching data.</p>');
+            error(xhr, status, error) {
+                $('.loading').hide();
+                console.error('AJAX Error:', status, error);
+                $('#dataDetail').html('<p class="text-danger text-center">Error fetching data</p>');
             }
         });
     });

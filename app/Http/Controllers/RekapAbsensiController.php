@@ -74,56 +74,94 @@ class RekapAbsensiController extends Controller
 
     public function detail(Request $request)
     {
-        $listTahun = Absensi::where('murid_id', $request['id'])->orderBy('tahun', 'DESC')->groupBy('tahun')->pluck('tahun')->toArray();
-        $jadwal = Jadwal::where([['divisi_id', $request['divisi_id']], ['status', true]])->pluck('hari');
+        $muridId  = $request->id;
+        $kelasId  = $request->kelas_id;
+        $divisiId = $request->divisi_id;
 
-        foreach ($listTahun as $tahun) {
-            $listBulan = Absensi::where([['murid_id', $request['id']], ['tahun', $tahun]])->groupBy('bulan')
-                ->orderBy('bulan', 'DESC')->pluck('bulan')->toArray();
+        // Ambil hari aktif jadwal (1x query)
+        $jadwalHari = Jadwal::where('divisi_id', $divisiId)
+            ->where('status', true)
+            ->pluck('hari')
+            ->toArray();
 
-            foreach ($listBulan as $bulan) {
-                $hariLibur = HariLibur::where([['divisi_id', $request['divisi_id']], ['bulan', $bulan], ['tahun', $tahun], ['status', true]])
-                    ->pluck('tanggal');
+        // Ambil tahun & bulan unik langsung (1x query)
+        $periode = Absensi::where('murid_id', $muridId)
+            ->selectRaw('tahun, bulan')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->orderByDesc('bulan')
+            ->get();
 
-                $listTanggal = Tanggal::where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])
-                    ->whereIn('hari', $jadwal)
-                    ->whereNotIn('tanggal', $hariLibur)
-                    ->orderBy('tanggal', 'ASC')->pluck('tanggal')->toArray();
+        $datas = [];
 
-                $absensiCount = Absensi::where([['murid_id', $request['id']], ['kelas_id', $request['kelas_id']]])
-                    ->whereIn('tanggal', $listTanggal)->selectRaw('
-                        SUM(CASE WHEN kehadiran = "H" THEN 1 ELSE 0 END) as hadir,
-                        SUM(CASE WHEN kehadiran IN ("I", "S") THEN 1 ELSE 0 END) as izin
-                    ')
-                    ->first();
+        foreach ($periode as $row) {
+            $tahun = $row->tahun;
+            $bulan = $row->bulan;
 
-                $hadir = $absensiCount->hadir <= 0 ? 0 : $absensiCount->hadir;
-                $izin  = $absensiCount->izin <= 0 ? 0 : $absensiCount->izin;
-                $total = count($listTanggal);
+            // Hari libur (1x per bulan)
+            $hariLibur = HariLibur::where([
+                    ['divisi_id', $divisiId],
+                    ['bulan', $bulan],
+                    ['tahun', $tahun],
+                    ['status', true],
+                ])
+                ->pluck('tanggal')
+                ->toArray();
 
-                $hadirPers  = ($hadir/$total)*100;
-                $hadirPers  = number_format($hadirPers, 2);
-                $keterangan = "Nilai tidak valid";
+            // Tanggal efektif
+            $listTanggal = Tanggal::where([
+                    ['tahun', $tahun],
+                    ['bulan', $bulan],
+                    ['status', true],
+                ])
+                ->whereIn('hari', $jadwalHari)
+                ->whereNotIn('tanggal', $hariLibur)
+                ->pluck('tanggal')
+                ->toArray();
 
-                if ($hadirPers < 40) {
-                    $keterangan = "Tidak lancar";
-                } elseif ($hadirPers >= 40 && $hadirPers < 60) {
-                    $keterangan = "Kurang lancar";
-                } elseif ($hadirPers >= 60 && $hadirPers < 80) {
-                    $keterangan = "Lancar";
-                } elseif ($hadirPers >= 80 && $hadirPers <= 100) {
-                    $keterangan = "Sangat lancar";
-                }
+            $total = count($listTanggal);
 
-                $datas[$tahun.$bulan]['tahun'] = $tahun;
-                $datas[$tahun.$bulan]['bulan'] = Tanggal::listBulan[$bulan];
-                $datas[$tahun.$bulan]['hadir'] = $hadir;
-                $datas[$tahun.$bulan]['izin'] = $izin;
-                $datas[$tahun.$bulan]['alfa'] = $total - ($hadir + $izin);
-                $datas[$tahun.$bulan]['pers'] = $hadirPers;
-                $datas[$tahun.$bulan]['ket'] = $keterangan;
-
+            if ($total === 0) {
+                continue;
             }
+
+            // Hitung absensi (1x query)
+            $absensi = Absensi::where([
+                    ['murid_id', $muridId],
+                    ['kelas_id', $kelasId],
+                ])
+                ->whereIn('tanggal', $listTanggal)
+                ->selectRaw('
+                    SUM(kehadiran = "H") as hadir,
+                    SUM(kehadiran IN ("I","S")) as izin
+                ')
+                ->first();
+
+            $hadir = (int) $absensi->hadir;
+            $izin  = (int) $absensi->izin;
+            $alfa  = $total - ($hadir + $izin);
+
+            $pers  = round(($hadir / $total) * 100, 2);
+
+            $ket = match (true) {
+                $pers < 40 => 'Tidak lancar',
+                $pers < 60 => 'Kurang lancar',
+                $pers < 80 => 'Lancar',
+                default   => 'Sangat lancar',
+            };
+
+            // Key YYYYMM (frontend sorting jadi super gampang)
+            $key = $tahun . str_pad($bulan, 2, '0', STR_PAD_LEFT);
+
+            $datas[$key] = [
+                'tahun' => $tahun,
+                'bulan' => Tanggal::listBulan[$bulan],
+                'hadir' => $hadir,
+                'izin'  => $izin,
+                'alfa'  => $alfa,
+                'pers'  => number_format($pers, 2),
+                'ket'   => $ket,
+            ];
         }
 
         return response()->json(['datas' => $datas]);
