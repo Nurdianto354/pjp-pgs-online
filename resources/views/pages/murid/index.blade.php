@@ -153,7 +153,7 @@
                     </div>
                     <small class="form-text text-danger error-jenis-kelamin" style="margin-top: -15px;">Harap pilih jenis kelamin !</small>
                     <div class="form-group">
-                        <label>Nama Divisi</label>
+                        <label>Divisi</label>
                         <select name="divisi_id" class="form-control select2-divisi select2-success" data-dropdown-css-class="select2-success">
                             @foreach ($listDivisi as $divisi)
                                 <option value="{{ $divisi->id }}">
@@ -164,7 +164,7 @@
                     </div>
                     <small class="form-text text-danger error-divisi-id" style="margin-top: -15px;">Harap pilih divisi !</small>
                     <div class="form-group">
-                        <label>Nama Kelas</label>
+                        <label>Kelas</label>
                         <select name="kelas_id" class="form-control select2-kelas select2-success" data-dropdown-css-class="select2-success">
                             @foreach ($listKelas as $kelas)
                                 <option value="{{ $kelas->id }}">

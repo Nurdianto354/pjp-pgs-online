@@ -20,7 +20,7 @@ class Kelas extends Model
 
     public function getDivisi()
     {
-        return $this->belongsTo(Divisi::class, 'id', 'divisi_id');
+        return $this->belongsTo(Divisi::class, 'divisi_id', 'id');
     }
 
     // Relasi ke model Student (Satu Kelas memiliki banyak Murid)

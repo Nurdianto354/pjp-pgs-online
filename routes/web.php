@@ -160,6 +160,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::put('store', 'store')->name('bimbingan_konseling.laporan_kelompok.store');
             Route::post('delete/{id}', 'destroy')->name('bimbingan_konseling.laporan_kelompok.destroy');
             Route::get('export-excel', 'exportExcel')->name('bimbingan_konseling.laporan_kelompok.export_excel');
+            Route::get('export-pdf', 'exportPdf')->name('bimbingan_konseling.laporan_kelompok.export_pdf');
         });
         Route::controller(LaporanDesaController::class)->prefix('laporan-desa')->group(function () {
             Route::get('index', 'index')->name('bimbingan_konseling.laporan_desa.index');

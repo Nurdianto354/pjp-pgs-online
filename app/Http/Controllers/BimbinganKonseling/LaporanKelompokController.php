@@ -7,12 +7,12 @@ use App\Models\BimbinganKonseling\LaporanKelompok;
 use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Kelas;
 use App\Models\MasterData\Tanggal;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -291,8 +291,17 @@ class LaporanKelompokController extends Controller
         return $response;
     }
 
-    public function exportPdf()
+    public function exportPdf(Request $request)
     {
+        $tahun  = $request->has('tahun') ? $request->tahun : null;
+        $bulan  = $request->has('bulan') ? $request->bulan : null;
 
+        $datas = LaporanKelompok::with('getDivisi', 'getKelas', 'createdBy', 'updatedBy')
+            ->where([['tahun', $tahun], ['bulan', $bulan], ['status', true]])->orderBy('kelas_id', 'ASC')->orderBy('created_at', 'ASC')->get();
+
+        $data = ['name' => 'John Doe', 'email' => 'john@example.com'];
+        $pdf = Pdf::loadView('pages.bimbingan_konseling.laporan_kelompok.print_pdf', $data);
+
+        return $pdf->download('yourfile.pdf');
     }
 }

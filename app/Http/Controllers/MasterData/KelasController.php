@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
+use App\Models\MasterData\Divisi;
 use App\Models\MasterData\Kelas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,16 +19,18 @@ class KelasController extends Controller
 
     public function index()
     {
-        $datas = Kelas::orderBy('created_at', 'DESC')->get();
+        $listDivisi = Divisi::select('id', 'nama')->where('status', true)->get();
 
-        return view('pages.master_data.kelas.index', compact('datas'));
+        $datas = Kelas::with('getDivisi')->orderBy('created_at', 'DESC')->get();
+
+        return view('pages.master_data.kelas.index', compact('listDivisi', 'datas'));
     }
 
     public function create(Request $request)
     {
         $status = "Berhasil";
         $action = "menambahkan";
-        $title  = "Data Kelas ".$request->nama;
+        $title  = "Data Kelas " . $request->nama;
 
         $this->validate($request, [
             'nama' => 'required|string|max:255',
@@ -35,7 +38,7 @@ class KelasController extends Controller
 
         DB::beginTransaction();
         try {
-            if($request->id != null && $request->id != '') {
+            if ($request->id != null && $request->id != '') {
                 $data = Kelas::findOrFail($request->id);
                 $action = "memperbarui";
             } else {
@@ -45,6 +48,7 @@ class KelasController extends Controller
             }
 
             $data->nama         = $request->nama;
+            $data->divisi_id    = $request->divisi_id;
             $data->updated_at   = Carbon::now();
             $data->save();
 
@@ -57,7 +61,7 @@ class KelasController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
 
-            toast('Gagal. Mohon cek kembali','error');
+            toast('Gagal. Mohon cek kembali', 'error');
             return back();
         }
     }
