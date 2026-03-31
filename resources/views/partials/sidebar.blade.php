@@ -209,6 +209,63 @@
                 </li>
                 @endcan
                 @can('master_user')
+                <li class="nav-item {{ setActiveMenu('kelompok/*') }}">
+                    <a href="#" class="nav-link {{ setActive('kelompok/*') }}">
+                        <i class="nav-icon fa fa-users"></i>
+                        <p>
+                            Data Kelompok
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item {{ setActiveMenu('kelompok/master-data*') }}">
+                            <a href="#" class="nav-link {{ setActive('kelompok/master-data*') }}">
+                                <i class="nav-icon fa fa-database"></i>
+                                <p>
+                                    Master Data
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('kelompok.master_data.kelompok.index') }}" class="nav-link  {{ setActive('kelompok/master-data/kelompok/*') }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>kelompok</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('kelompok.master_data.lokasi.index') }}" class="nav-link  {{ setActive('kelompok/master-data/lokasi/*') }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Lokasi</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('kelompok.master_data.pengajian.index') }}" class="nav-link  {{ setActive('kelompok/master-data/pengajian/*') }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pengajian</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item {{ setActiveMenu('kelompok/pengajian*') }}">
+                            <a href="#" class="nav-link {{ setActive('kelompok/pengajian*') }}">
+                                <i class="nav-icon fa fa-calendar-alt"></i>
+                                <p>
+                                    Data Pengajian
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link  {{ setActive('kelompok/pengajian/jadwal/*') }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Jadwal</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item {{ setActiveMenu('master-user/*') }}">
                     <a href="#" class="nav-link {{ setActive('master-user/*') }}">
                         <i class="nav-icon fas fa-users-cog"></i>

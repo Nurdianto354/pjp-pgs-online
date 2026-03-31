@@ -8,6 +8,10 @@ use App\Http\Controllers\BimbinganKonseling\LaporanDesaController;
 use App\Http\Controllers\BimbinganKonseling\LaporanKelompokController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\Kelompok\MasterData\KelompokController;
+use App\Http\Controllers\Kelompok\MasterData\LokasiController;
+use App\Http\Controllers\Kelompok\MasterData\PengajianController;
+use App\Http\Controllers\Kelompok\Pengajian\JadwalController as PengajianJadwalController;
 use App\Http\Controllers\KurikulumTargetController;
 use App\Http\Controllers\Laporan\LaporanLaporanDaerahController;
 use App\Http\Controllers\Laporan\LaporanLaporanKelompokController;
@@ -24,6 +28,7 @@ use App\Http\Controllers\MuridController;
 use App\Http\Controllers\PencapaianTargetController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RekapAbsensiController;
+use App\Models\Kelompok\MasterData\Pengajian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -176,6 +181,34 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('delete/{id}', 'destroy')->name('bimbingan_konseling.laporan_daerah.destroy');
             Route::get('export-excel', 'exportExcel')->name('bimbingan_konseling.laporan_daerah.export_excel');
         });
+    });
+
+
+    Route::prefix('kelompok')->group(function () {
+        Route::prefix('master-data')->group(function () {
+            Route::controller(KelompokController::class)->prefix('kelompok')->group(function () {
+                Route::get('index', 'index')->name('kelompok.master_data.kelompok.index');
+                Route::post('create', 'create')->name('kelompok.master_data.kelompok.create');
+                Route::post('delete/{id}', 'destroy')->name('kelompok.master_data.kelompok.destroy');
+            });
+            Route::controller(LokasiController::class)->prefix('lokasi')->group(function () {
+                Route::get('index', 'index')->name('kelompok.master_data.lokasi.index');
+                Route::post('create', 'create')->name('kelompok.master_data.lokasi.create');
+                Route::post('delete/{id}', 'destroy')->name('kelompok.master_data.lokasi.destroy');
+            });
+            Route::controller(PengajianController::class)->prefix('pengajian')->group(function () {
+                Route::get('index', 'index')->name('kelompok.master_data.pengajian.index');
+                Route::post('create', 'create')->name('kelompok.master_data.pengajian.create');
+                Route::post('delete/{id}', 'destroy')->name('kelompok.master_data.pengajian.destroy');
+            });
+        });
+        // Route::prefix('pengajian')->group(function () {
+        //     Route::controller(PengajianJadwalController::class)->prefix('jadwal')->group(function () {
+        //         Route::get('index', 'index')->name('kelompok.pengajian.jawdal.index');
+        //         Route::post('create', 'create')->name('kelompok.pengajian.jawdal.create');
+        //         Route::post('delete/{id}', 'destroy')->name('kelompok.pengajian.jawdal.destroy');
+        //     });
+        // });
     });
 
     Route::prefix('master-user')->group(function () {
