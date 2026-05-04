@@ -137,9 +137,10 @@
                                                         ->first();
 
                                                     $hadir = $absensiCount->hadir <= 0 ? 0 : $absensiCount->hadir;
+                                                    $izin  = $absensiCount->izin <= 0 ? 0 : $absensiCount->izin;
                                                     $total = count($listTanggal);
 
-                                                    $hadirPers  = ($hadir/$total)*100;
+                                                    $hadirPers  = (($hadir+$izin)/$total)*100;
 
                                                     if ($hadirPers < 40) {
                                                         $tidakLancar++;

@@ -141,7 +141,7 @@ class RekapAbsensiController extends Controller
             $izin  = (int) $absensi->izin;
             $alfa  = $total - ($hadir + $izin);
 
-            $pers  = round(($hadir / $total) * 100, 2);
+            $pers  = round((($hadir + $izin) / $total) * 100, 2);
 
             $ket = match (true) {
                 $pers < 40 => 'Tidak lancar',

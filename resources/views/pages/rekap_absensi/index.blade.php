@@ -157,7 +157,7 @@
                                                     $alfa  = $absensiCount->alfa <= 0 ? 0 : $absensiCount->alfa;
                                                     $total = count($listTanggal);
 
-                                                    $hadirPers = ($hadir/$total)*100;
+                                                    $hadirPers = (($hadir+$izin)/$total)*100;
                                                     $keterangan = "Nilai tidak valid";
 
                                                     if ($hadirPers < 40) {
